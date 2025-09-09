@@ -1,0 +1,65 @@
+{
+  "APIKEY": "$CCR_APIKEY",
+  "PROXY_URL": "http://127.0.0.1:7890",
+  "LOG": true,
+  "LOG_LEVEL": "debug",
+  "API_TIMEOUT_MS": 600000,
+  "NON_INTERACTIVE_MODE": false,
+  "Providers": [
+    {
+      "name": "openrouter",
+      "api_base_url": "https://openrouter.ai/api/v1/chat/completions",
+      "api_key": "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",
+      "models": [
+        "google/gemini-2.5-pro-preview",
+        "anthropic/claude-3.5-sonnet"
+      ],
+      "transformer": {
+        "use": ["openrouter"]
+      }
+    },
+    {
+      "name": "gemini",
+      "api_base_url": "https://generativelanguage.googleapis.com/v1beta/models/",
+      "api_key": "AIzaSyDKzSR1iJ0kg058qdk_0NJvffNId9A6rNg",
+      "models": [
+        "gemini-2.5-flash",
+        "gemini-2.5-pro"
+      ],
+      "transformer": {
+        "use": ["gemini"]
+      }
+    },
+    {
+      "name": "modelscope",
+      "api_base_url": "https://api-inference.modelscope.cn/v1/chat/completions",
+      "api_key": "e03a0f30-a830-4726-8e04-ca09563102f8",
+      "models": [
+        "Qwen/Qwen3-Coder-480B-A35B-Instruct",
+        "Qwen/Qwen3-235B-A22B-Thinking-2507"
+      ],
+      "transformer": {
+        "use": [
+          [
+            "maxtoken",
+            {
+              "max_tokens": 65536
+            }
+          ],
+          "enhancetool"
+        ],
+        "Qwen/Qwen3-235B-A22B-Thinking-2507": {
+          "use": ["reasoning"]
+        }
+      }
+    }
+  ],
+  "Router": {
+    "default": "openrouter,google/gemini-2.5-pro-preview",
+    "background": "ollama,qwen2.5-coder:latest",
+    "think": "openrouter,anthropic/claude-3.5-sonnet",
+    "longContext": "openrouter,google/gemini-2.5-pro-preview",
+    "longContextThreshold": 60000,
+    "webSearch": "openrouter,google/gemini-2.5-pro-preview"
+  }
+}
