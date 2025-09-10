@@ -9,7 +9,7 @@
     {
       "name": "openrouter",
       "api_base_url": "https://openrouter.ai/api/v1/chat/completions",
-      "api_key": "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",
+      "api_key": "$OPENROUTER_API_KEY",
       "models": [
         "google/gemini-2.5-pro-preview",
         "anthropic/claude-3.5-sonnet"
@@ -21,7 +21,7 @@
     {
       "name": "gemini",
       "api_base_url": "https://generativelanguage.googleapis.com/v1beta/models/",
-      "api_key": "AIzaSyDKzSR1iJ0kg058qdk_0NJvffNId9A6rNg",
+      "api_key": "$GEMINI_API_KEY",
       "models": [
         "gemini-2.5-flash",
         "gemini-2.5-pro"
@@ -33,7 +33,7 @@
     {
       "name": "modelscope",
       "api_base_url": "https://api-inference.modelscope.cn/v1/chat/completions",
-      "api_key": "e03a0f30-a830-4726-8e04-ca09563102f8",
+      "api_key": "$MODELSCOPE_API_KEY",
       "models": [
         "Qwen/Qwen3-Coder-480B-A35B-Instruct",
         "Qwen/Qwen3-235B-A22B-Thinking-2507"
@@ -55,11 +55,11 @@
     }
   ],
   "Router": {
-    "default": "openrouter,google/gemini-2.5-pro-preview",
-    "background": "ollama,qwen2.5-coder:latest",
-    "think": "openrouter,anthropic/claude-3.5-sonnet",
-    "longContext": "openrouter,google/gemini-2.5-pro-preview",
+    "default": "modelscope,Qwen/Qwen3-Coder-480B-A35B-Instruct",
+    "background": "modelscope,Qwen/Qwen3-Coder-480B-A35B-Instruct",
+    "think": "modelscope,Qwen/Qwen3-235B-A22B-Thinking-2507",
+    "longContext": "modelscope,Qwen/Qwen3-235B-A22B-Thinking-2507",
     "longContextThreshold": 60000,
-    "webSearch": "openrouter,google/gemini-2.5-pro-preview"
+    "webSearch": "modelscope,Qwen/Qwen3-235B-A22B-Thinking-2507"
   }
 }
