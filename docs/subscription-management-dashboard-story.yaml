@@ -1,0 +1,162 @@
+id: subscription-management-dashboard
+title: Subscription Management Dashboard
+status: Draft
+story: |
+  As a MkSaaS user,
+  I want to view and manage my subscription details in a dedicated dashboard,
+  so that I can easily understand my current plan, billing cycle, and manage my subscription without leaving the application.
+
+acceptance_criteria:
+  - AC1: Subscription Overview Display
+    Given I am a logged-in user with an active subscription
+    When I navigate to the subscription management dashboard
+    Then I should see:
+    - My current plan name and status (active/trialing)
+    - Current billing period start and end dates
+    - Trial end date (if applicable)
+    - Next billing amount (if applicable)
+    - Payment method details (last 4 digits of card)
+
+  - AC2: Plan Details Display
+    Given I am a logged-in user
+    When I view the subscription management dashboard
+    Then I should see:
+    - A list of all available plans with their features
+    - Clear indication of my current plan
+    - Pricing information for each plan
+
+  - AC3: Subscription Management Actions
+    Given I am a logged-in user with an active subscription
+    When I view the subscription management dashboard
+    Then I should be able to:
+    - Cancel my subscription (with confirmation)
+    - Upgrade/downgrade my plan
+    - Update my payment method
+    - View billing history
+    - Access invoices
+
+  - AC4: Free User Experience
+    Given I am a logged-in user on the free plan
+    When I view the subscription management dashboard
+    Then I should see:
+    - Clear indication that I'm on the free plan
+    - Information about the benefits of upgrading
+    - Call-to-action to view pricing plans
+
+  - AC5: Lifetime User Experience
+    Given I am a logged-in user with a lifetime plan
+    When I view the subscription management dashboard
+    Then I should see:
+    - Clear indication that I have a lifetime plan
+    - Information about what the lifetime plan includes
+    - Option to manage billing information if needed
+
+  - AC6: Error Handling
+    Given there is an issue loading subscription data
+    When I navigate to the subscription management dashboard
+    Then I should see:
+    - An appropriate error message
+    - A retry button to attempt to reload the data
+    - Guidance on what to do if the problem persists
+
+  - AC7: Loading States
+    Given I am navigating to the subscription management dashboard
+    When the subscription data is loading
+    Then I should see:
+    - Appropriate loading indicators/skeleton screens
+    - A smooth transition to the fully loaded dashboard
+
+tasks:
+  - Task 1: Create Subscription Management Dashboard Page
+    - Create a new page at `/settings/subscription` route
+    - Implement proper authentication protection
+    - Set up the basic page structure with breadcrumbs
+
+  - Task 2: Implement Subscription Overview Component
+    - Create a component to display current subscription details
+    - Fetch subscription data using existing hooks
+    - Display plan name, status, billing period, and trial information
+    - Handle loading and error states appropriately
+
+  - Task 3: Implement Plan Comparison Component
+    - Create a component to display available plans
+    - Highlight the user's current plan
+    - Show plan features and pricing
+    - Make it responsive for different screen sizes
+
+  - Task 4: Implement Subscription Actions Component
+    - Create a component with action buttons for subscription management
+    - Implement cancel subscription functionality with confirmation dialog
+    - Implement upgrade/downgrade functionality
+    - Add update payment method functionality
+    - Include access to billing history and invoices
+
+  - Task 5: Implement User-Specific Views
+    - Create views for free plan users
+    - Create views for lifetime plan users
+    - Create views for subscription users
+    - Ensure appropriate calls-to-action for each user type
+
+  - Task 6: Implement Error and Loading States
+    - Add appropriate error handling for failed data fetching
+    - Implement loading skeletons for better UX
+    - Add retry functionality for failed requests
+
+  - Task 7: Integrate with Existing Payment System
+    - Use existing payment hooks and actions
+    - Ensure consistency with current billing implementation
+    - Reuse existing components where possible (e.g., CustomerPortalButton)
+
+  - Task 8: Add Internationalization Support
+    - Add all necessary translation strings
+    - Ensure proper localization of dates and currency
+    - Test with both English and Chinese locales
+
+  - Task 9: Implement Responsive Design
+    - Ensure the dashboard works well on mobile devices
+    - Test with different screen sizes
+    - Implement appropriate layout changes for smaller screens
+
+  - Task 10: Add Accessibility Features
+    - Ensure proper keyboard navigation
+    - Add appropriate ARIA labels
+    - Test with screen readers
+    - Ensure sufficient color contrast
+
+dev_notes: |
+  1. The existing billing system in `/src/app/[locale]/(protected)/settings/billing` provides a good starting point for the subscription management dashboard.
+
+  2. The `useCurrentPlan` hook in `/src/hooks/use-payment.ts` already provides the necessary data for displaying current plan information.
+
+  3. The `CustomerPortalButton` component in `/src/components/pricing/customer-portal-button.tsx` can be reused for redirecting users to Stripe's customer portal for complex subscription management actions.
+
+  4. The existing pricing components in `/src/components/pricing/` can be referenced for consistent UI design.
+
+  5. The database schema in `/src/db/schema.ts` shows that payment information is stored in the `payment` table, which includes fields for subscription status, period dates, and customer information.
+
+  6. The Stripe integration in `/src/payment/provider/stripe.ts` handles all the backend logic for subscription management, so the frontend dashboard should primarily focus on display and user interaction.
+
+testing:
+  - Test with users on different plan types (free, subscription, lifetime)
+  - Test error scenarios (network failures, API errors)
+  - Test loading states
+  - Test all action buttons and their confirmation flows
+  - Test internationalization with both English and Chinese locales
+  - Test responsive design on different screen sizes
+  - Test accessibility features with screen readers
+
+definition_of_done: |
+  - All acceptance criteria are met
+  - Code follows MkSaaS coding standards
+  - All tests pass
+  - Internationalization is implemented
+  - Responsive design is working
+  - Accessibility features are implemented
+  - Code is reviewed and approved
+  - Documentation is updated if necessary
+
+file_list: []
+change_log: []
+completion_notes: []
+debug_log: []
+dev_agent_record: []
