@@ -1,69 +1,31 @@
-# Email Previewer Application Brownfield Enhancement PRD
+# Email Previewer Application Product Requirements Document (PRD)
 
-## Intro Project Analysis and Context
+## Goals and Background Context
 
-### Existing Project Overview
-
-#### Analysis Source
-
-- IDE-based fresh analysis
-
-#### Current Project State
-
-The existing project is the MkSaaS template, a comprehensive Next.js boilerplate designed to accelerate the development of profitable SaaS applications. It includes essential SaaS features such as authentication, payments, internationalization, newsletter management, dashboard, blog, documentation, and UI components. The primary purpose is to enable developers to build and deploy SaaS applications rapidly.
-
-### Available Documentation Analysis
-
-#### Available Documentation
-
-- [x] Tech Stack Documentation
-- [x] Source Tree/Architecture
-- [x] Coding Standards
-- [x] API Documentation
-- [x] External API Documentation
-- [ ] UX/UI Guidelines
-- [x] Technical Debt Documentation
-- Other: MkSaaS Template - BMAD Method Documentation (QWEN.md)
-
-### Enhancement Scope Definition
-
-#### Enhancement Type
-
-- [x] New Feature Addition
-
-#### Enhancement Description
-
-The enhancement involves adding an email previewing feature to the existing MkSaaS template. This feature will allow users to create, edit, and preview email templates before sending them, ensuring that emails look professional and are free of errors.
-
-#### Impact Assessment
-
-- [ ] Minimal Impact (isolated additions)
-- [x] Moderate Impact (some existing code changes)
-- [ ] Significant Impact (substantial existing code changes)
-- [ ] Major Impact (architectural changes required)
-
-### Goals and Background Context
-
-#### Goals
+### Goals
 
 - Provide a user-friendly interface for creating email templates.
 - Allow users to preview email templates in real-time.
 - Ensure email templates are responsive and look good on all devices.
 - Integrate with existing email delivery systems (Resend).
+- Reduce the time required to create and test email templates by 50%.
+- Improve the quality of emails sent by MkSaaS users.
 
-#### Background Context
+### Background Context
 
-The MkSaaS template already has a robust foundation with authentication, payments, and content management. Adding an email previewing feature will enhance its capabilities, allowing users to create and manage professional-looking emails directly within the application. This feature is particularly useful for SaaS applications that need to send regular communications to their users.
+The MkSaaS template is a comprehensive Next.js boilerplate designed to accelerate the development of profitable SaaS applications. It includes essential SaaS features such as authentication, payments, internationalization, newsletter management, dashboard, blog, documentation, and UI components.
+
+Currently, users of the MkSaaS template who wish to send emails must either use external tools or manually code and test their email templates. This process is time-consuming, error-prone, and often results in emails that don't render consistently across different email clients. The lack of an integrated email previewing solution within the MkSaaS template creates a gap in the development workflow, leading to potential delays in product launches and subpar user experiences.
+
+This PRD outlines the requirements for integrating a comprehensive email previewing feature directly into the MkSaaS template. This feature will include a user-friendly interface for creating and editing email templates, a real-time preview pane that accurately reflects how emails will appear in various email clients, and seamless integration with the existing Resend email delivery system.
 
 ### Change Log
 
-| Change | Date | Version | Description | Author |
-| :--- | :--- | :--- | :--- | :--- |
-| Initial PRD creation | 2025-09-15 | 1.0 | Created the initial PRD for the email previewer enhancement | Product Manager (John) |
+| Date | Version | Description | Author |
+| :--- | :--- | :--- | :--- |
+| 2025-09-15 | 1.0 | Initial draft of the PRD | Product Manager (John) |
 
 ## Requirements
-
-These requirements are based on my understanding of your existing system. Please review carefully and confirm they align with your project's reality.
 
 ### Functional
 
@@ -85,65 +47,71 @@ These requirements are based on my understanding of your existing system. Please
 3. NFR3: The application should be scalable to handle a large number of users.
 4. NFR4: The email previewing feature should not significantly impact the performance of the existing application.
 5. NFR5: The email previewing feature should integrate seamlessly with the existing MkSaaS template architecture.
+6. NFR6: Email templates must be sanitized to prevent XSS attacks.
 
-### Compatibility Requirements
+## User Interface Design Goals
 
-1. CR1: The new email previewing feature must integrate with the existing Better Auth authentication system.
-2. CR2: The new email previewing feature must use the existing PostgreSQL database with Drizzle ORM.
-3. CR3: The new UI components for email previewing must follow the existing design system (Radix UI, TailwindCSS).
-4. CR4: The new feature must integrate with the existing Resend email delivery system.
+### Overall UX Vision
 
-## Technical Constraints and Integration Requirements
+The UX vision is to provide a seamless and intuitive experience for creating, editing, and previewing email templates. The interface should be clean and uncluttered, with a focus on the content. The preview pane should be prominent and update in real-time as the user makes changes to the template.
 
-### Existing Technology Stack
+### Key Interaction Paradigms
 
-**Languages**: TypeScript, JavaScript
-**Frameworks**: Next.js 15, React 19
-**Database**: PostgreSQL
-**Infrastructure**: Cloudflare Workers compatible, Docker support
-**External Dependencies**: Better Auth, Stripe, Fumadocs, MDX, next-intl, React Email, Resend, Drizzle ORM, Radix UI, TailwindCSS
+- Real-time previewing: The preview pane should update immediately as the user types or makes changes to the template.
+- Template management: Users should be able to easily create, edit, list, search, and delete email templates.
+- Responsive design: The preview should accurately reflect how the email will look on different devices.
 
-### Integration Approach
+### Core Screens and Views
 
-**Database Integration Strategy**: New tables for email templates and previews will be added using Drizzle ORM migrations.
-**API Integration Strategy**: New Server Actions will be created for handling email preview requests.
-**Frontend Integration Strategy**: New UI components will be created using Radix UI primitives and TailwindCSS.
-**Testing Integration Strategy**: New tests will be added following the existing testing patterns.
+- Template List Screen: Displays a list of all email templates with options to edit, delete, and preview.
+- Create/Edit Template Screen: Provides a form for creating or editing an email template, with a prominent preview pane.
+- Preview Screen: A full-screen view of the email template preview.
 
-### Code Organization and Standards
+### Accessibility
 
-**File Structure Approach**: Follow the established directory structure with clear separation between app routes, components, and feature modules.
-**Naming Conventions**: Follow existing conventions (e.g., PascalCase for components, kebab-case for files).
-**Coding Standards**: Follow MkSaaS template conventions with TypeScript, TailwindCSS, and Radix UI.
-**Documentation Standards**: Inline comments and README.md.
+WCAG AA
 
-### Deployment and Operations
+### Branding
 
-**Build Process Integration**: Deploy as part of the existing Next.js application.
-**Deployment Strategy**: Use existing deployment pipeline.
-**Monitoring and Logging**: Use existing monitoring tools.
-**Configuration Management**: Use existing environment-based configuration.
+The email previewer should follow the existing MkSaaS branding and design system.
 
-### Risk Assessment and Mitigation
+### Target Device and Platforms
 
-**Technical Risks**: Potential for XSS vulnerabilities in email template previews.
-**Integration Risks**: Ensuring new components integrate seamlessly with existing architecture.
-**Deployment Risks**: Database migrations must be backward-compatible.
-**Mitigation Strategies**: Sanitize email templates before rendering previews, follow existing architectural patterns, ensure database migrations are backward-compatible.
+Web Responsive
 
-## Epic and Story Structure
+## Technical Assumptions
 
-Based on my analysis of your existing project, I believe this enhancement should be structured as a single epic because it represents a cohesive feature set (email previewing) that builds upon the existing email functionality. Does this align with your understanding of the work required?
+### Repository Structure
 
-### Epic Approach
+Monorepo
 
-**Epic Structure Decision**: Single epic for email previewing enhancement with rationale
+### Service Architecture
 
-## Epic 1: Email Previewing Enhancement
+Monolith (leveraging existing Next.js Server Actions)
 
-**Epic Goal**: To provide users with the ability to create, edit, and preview email templates within the application.
+### Testing Requirements
 
-**Integration Requirements**: The new feature must integrate with the existing authentication system, database, and email delivery system.
+Unit + Integration
+
+### Additional Technical Assumptions and Requests
+
+- The email previewer will be built using React, TypeScript, TailwindCSS, and Radix UI.
+- The backend will use Next.js Server Actions for data mutations.
+- The database will be PostgreSQL with Drizzle ORM.
+- The email previewer will integrate with the existing Resend email delivery system.
+- Email templates will be stored in the database.
+- The preview pane will render the email template using an iframe to ensure accurate representation across different email clients.
+- The application will be deployed using Cloudflare Workers.
+
+## Epic List
+
+1. Epic 1: Email Template Management: Establish the core functionality for creating, editing, listing, and deleting email templates.
+2. Epic 2: Email Template Previewing: Implement the real-time preview functionality for email templates.
+3. Epic 3: Email Template Integration: Integrate the email previewer with the existing Resend email delivery system and ensure seamless operation within the MkSaaS template.
+
+## Epic 1: Email Template Management
+
+**Epic Goal**: To provide users with the ability to create, edit, list, search, filter, and delete email templates within the application.
 
 ### Story 1.1 Create Email Template
 
@@ -159,12 +127,6 @@ so that I can design emails for my campaigns.
 4. AC4: User can save the template.
 5. AC5: User is redirected to the template list page after saving.
 
-#### Integration Verification
-
-1. IV1: Existing authentication system still works after creating a template.
-2. IV2: New template is correctly saved to the database.
-3. IV3: Creating a template does not negatively impact application performance.
-
 ### Story 1.2 Edit Email Template
 
 As a Content Creator,
@@ -178,12 +140,6 @@ so that I can update the content.
 3. AC3: User can modify the template name and content.
 4. AC4: User can save the changes.
 5. AC5: User is redirected to the template list page after saving.
-
-#### Integration Verification
-
-1. IV1: Existing authentication system still works after editing a template.
-2. IV2: Template changes are correctly saved to the database.
-3. IV3: Editing a template does not negatively impact application performance.
 
 ### Story 1.3 List Email Templates
 
@@ -199,12 +155,6 @@ so that I can manage them.
 4. AC4: User can click on a template to edit it.
 5. AC5: User can delete a template from the list.
 
-#### Integration Verification
-
-1. IV1: Existing authentication system still works when viewing the template list.
-2. IV2: All templates are correctly fetched from the database.
-3. IV3: Viewing the template list does not negatively impact application performance.
-
 ### Story 1.4 Delete Email Template
 
 As a Content Creator,
@@ -218,13 +168,23 @@ so that I can remove unused templates.
 3. AC3: If confirmed, the template is deleted from the database.
 4. AC4: The template list is updated to reflect the deletion.
 
-#### Integration Verification
+### Story 1.5 Search and Filter Email Templates
 
-1. IV1: Existing authentication system still works after deleting a template.
-2. IV2: Template is correctly deleted from the database.
-3. IV3: Deleting a template does not negatively impact application performance.
+As a Content Creator,
+I want to search and filter email templates,
+so that I can find specific templates quickly.
 
-### Story 1.5 Preview Email Template
+#### Acceptance Criteria
+
+1. AC1: User can search for templates by name.
+2. AC2: User can filter templates by creation date.
+3. AC3: The template list updates dynamically based on search and filter criteria.
+
+## Epic 2: Email Template Previewing
+
+**Epic Goal**: To provide users with a real-time preview of their email templates that accurately reflects how the email will look when sent.
+
+### Story 2.1 Preview Email Template
 
 As a Content Creator,
 I want to preview an email template,
@@ -238,8 +198,33 @@ so that I can see how it will look when sent.
 4. AC4: The preview is responsive and looks good on all devices.
 5. AC5: The preview accurately reflects how the email will look when sent.
 
-#### Integration Verification
+## Epic 3: Email Template Integration
 
-1. IV1: Existing authentication system still works when previewing a template.
-2. IV2: Preview is correctly generated from the template content.
-3. IV3: Previewing a template does not negatively impact application performance.
+**Epic Goal**: To integrate the email previewer with the existing Resend email delivery system and ensure seamless operation within the MkSaaS template.
+
+### Story 3.1 Integrate with Resend
+
+As a Developer,
+I want to integrate the email previewer with Resend,
+so that users can send emails directly from the application.
+
+#### Acceptance Criteria
+
+1. AC1: The email previewer can send emails using the Resend API.
+2. AC2: The integration respects the existing MkSaaS authentication and authorization mechanisms.
+3. AC3: The integration is secure and protects user data.
+4. AC4: The integration is scalable and can handle a large number of users.
+
+## Checklist Results Report
+
+This section will be populated after executing the pm-checklist.
+
+## Next Steps
+
+### UX Expert Prompt
+
+Please review the PRD and create a detailed UI/UX design for the email previewer application, focusing on the user interface design goals outlined in the PRD.
+
+### Architect Prompt
+
+Please review the PRD and create a detailed architecture document for the email previewer application, focusing on the technical assumptions and requirements outlined in the PRD.
