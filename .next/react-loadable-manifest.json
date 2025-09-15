@@ -1,0 +1,62 @@
+{
+  "../node_modules/.pnpm/@tanstack+query-devtools@5.84.0/node_modules/@tanstack/query-devtools/build/dev.js -> ./DevtoolsComponent/EDEL3XIZ.js": {
+    "id": "../node_modules/.pnpm/@tanstack+query-devtools@5.84.0/node_modules/@tanstack/query-devtools/build/dev.js -> ./DevtoolsComponent/EDEL3XIZ.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_tanstack_query-devtools_5_84_0_node_modules_tanstack_que-bc933c.js"
+    ]
+  },
+  "../node_modules/.pnpm/@tanstack+query-devtools@5.84.0/node_modules/@tanstack/query-devtools/build/dev.js -> ./DevtoolsPanelComponent/RN252AT2.js": {
+    "id": "../node_modules/.pnpm/@tanstack+query-devtools@5.84.0/node_modules/@tanstack/query-devtools/build/dev.js -> ./DevtoolsPanelComponent/RN252AT2.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_tanstack_query-devtools_5_84_0_node_modules_tanstack_que-6852f3.js"
+    ]
+  },
+  "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../algolia-UCGCELZZ.js": {
+    "id": "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../algolia-UCGCELZZ.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_fumadocs-core_15_6_7__types_react_19_0_9_next_15_2_1__ba-4c180e.js"
+    ]
+  },
+  "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../fetch-ITPHBPBE.js": {
+    "id": "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../fetch-ITPHBPBE.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_fumadocs-core_15_6_7__types_react_19_0_9_next_15_2_1__ba-a1bc11.js"
+    ]
+  },
+  "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../mixedbread-2MQ3PSN7.js": {
+    "id": "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../mixedbread-2MQ3PSN7.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_fumadocs-core_15_6_7__types_react_19_0_9_next_15_2_1__ba-6b773c.js"
+    ]
+  },
+  "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../orama-cloud-6T5Z4MZY.js": {
+    "id": "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../orama-cloud-6T5Z4MZY.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_fumadocs-core_15_6_7__types_react_19_0_9_next_15_2_1__ba-9bc69e.js"
+    ]
+  },
+  "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../static-7YX4RCT6.js": {
+    "id": "../node_modules/.pnpm/fumadocs-core@15.6.7_@types+react@19.0.9_next@15.2.1_@babel+core@7.24.5_@opentelemetry+_5eeb681333590ea69d4cf65924fb1eb7/node_modules/fumadocs-core/dist/search/client.js -> ../static-7YX4RCT6.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_fumadocs-core_15_6_7__types_react_19_0_9_next_15_2_1__ba-216a46.js"
+    ]
+  },
+  "../node_modules/.pnpm/fumadocs-ui@15.6.7_@types+react-dom@19.0.3_@types+react@19.0.9__@types+react@19.0.9_nex_da42b58032f80fba2b8e08645d548521/node_modules/fumadocs-ui/dist/provider/base.js -> ../components/dialog/search-default.js": {
+    "id": "../node_modules/.pnpm/fumadocs-ui@15.6.7_@types+react-dom@19.0.3_@types+react@19.0.9__@types+react@19.0.9_nex_da42b58032f80fba2b8e08645d548521/node_modules/fumadocs-ui/dist/provider/base.js -> ../components/dialog/search-default.js",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_fumadocs-ui_15_6_7__types_react-dom_19_0_3__types_react_-9f9b5c.js"
+    ]
+  },
+  "app/[locale]/error.tsx -> @/components/layout/error": {
+    "id": "app/[locale]/error.tsx -> @/components/layout/error",
+    "files": [
+      "static/chunks/_app-pages-browser_src_components_layout_error_tsx.js"
+    ]
+  },
+  "components/shared/captcha.tsx -> @marsidev/react-turnstile": {
+    "id": "components/shared/captcha.tsx -> @marsidev/react-turnstile",
+    "files": [
+      "static/chunks/_app-pages-browser_node_modules_pnpm_marsidev_react-turnstile_1_1_0_react-dom_19_0_0_react_19-7adbc3.js"
+    ]
+  }
+}

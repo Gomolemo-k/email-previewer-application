@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/Users/gomolemokgatitsoe/projects/email-previewer-application/src/app/[locale]/layout\":[\"static/media/9d5a263311222317-s.p.woff2\",\"static/media/1755441e3a2fa970-s.p.woff2\",\"static/media/cd333bdcb43b4c68-s.p.woff2\",\"static/media/aa6c9c5050491817-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"
