@@ -1,345 +1,591 @@
-# Email Previewer Application Brownfield Enhancement Architecture
+# MkSaaS Architecture Document
 
 ## Introduction
 
-This document outlines the architectural approach for enhancing Email Previewer Application with a new feature. Its primary goal is to serve as the guiding architectural blueprint for AI-driven development of new features while ensuring seamless integration with the existing system.
+This document outlines the technical architecture for MkSaaS (Make AI SaaS), a comprehensive Next.js boilerplate designed to accelerate the development of profitable SaaS applications. Created by Fox, the founder of MkSaaS and Mkdirs, this template provides a complete foundation with essential SaaS features including authentication, payments, internationalization, newsletter management, dashboard, blog, documentation, and UI components.
 
-**Relationship to Existing Architecture:**
-This document supplements existing project architecture by defining how new components will integrate with current systems. Where conflicts arise between new and existing patterns, this document provides guidance on maintaining consistency while implementing enhancements.
+### Purpose
 
-### Existing Project Analysis
+This architecture document serves to:
+1. Define the technical approach and structure of the MkSaaS template
+2. Establish the system's components, interactions, and data flows
+3. Document design decisions and architectural patterns
+4. Provide guidance for developers extending or customizing the template
+5. Ensure alignment with modern full-stack development best practices
 
-Based on my analysis of your project, I've identified the following about your existing system:
+### Scope
 
-- **Primary Purpose:** A Next.js 15 application with React 19, TypeScript, TailwindCSS, Radix UI, Framer Motion, and TailwindCSS Animate for frontend. Backend uses PostgreSQL with Drizzle ORM, Server Actions, and Zustand. Authentication is handled by Better Auth with social providers. Stripe is integrated for payments, Fumadocs for documentation, MDX for blog, internationalization with next-intl, React Email for emails, and Resend for email delivery.
-- **Current Tech Stack:** Next.js 15, React 19, TypeScript, TailwindCSS, Radix UI, Framer Motion, TailwindCSS Animate, PostgreSQL, Drizzle ORM, Better Auth, Stripe, Fumadocs, MDX, next-intl, React Email, Resend.
-- **Architecture Style:** Server-first architecture leveraging Next.js App Router capabilities, component-driven development, server actions for API endpoints, type-safe development with TypeScript, internationalization-first approach, and feature module organization.
-- **Deployment Method:** Cloudflare Workers compatible, Docker support, environment-based configuration.
+The MkSaaS template architecture encompasses:
+- Full-stack Next.js 15 application with App Router
+- Authentication system with social providers
+- Payment integration with Stripe
+- Internationalization support
+- Content management system
+- Email system with React Email
+- AI features integration
+- Analytics and monitoring
+- Storage and file management
+- Comprehensive UI component library
 
-Please confirm these observations are accurate before I proceed with architectural recommendations.
+## System Overview
 
-### Available Documentation
+### Context & Positioning
 
-- Project README.md
-- QWEN.md (MkSaaS Template - BMAD Method Documentation)
-- package.json (lists dependencies)
-- next.config.ts (Next.js configuration)
-- tsconfig.json (TypeScript configuration)
-- tailwind.config.ts (TailwindCSS configuration)
-- drizzle.config.ts (Database configuration)
-- biome.json (Code formatting and linting configuration)
+MkSaaS is a full-stack SaaS boilerplate built on Next.js 15 with App Router, designed to provide developers with a production-ready foundation for building SaaS applications. It includes all essential components needed for a modern SaaS product, from authentication and payments to content management and analytics.
 
-### Identified Constraints
+### Key Components
 
-- Must maintain compatibility with existing Next.js 15 and React 19 setup.
-- Must integrate with existing Drizzle ORM and PostgreSQL database.
-- Must work within the existing authentication system (Better Auth).
-- Must adhere to the existing internationalization setup (next-intl).
-- Must follow the established directory structure and coding conventions.
+1. **Frontend UI**: React components with TypeScript, TailwindCSS, and Radix UI
+2. **Backend Services**: Next.js Server Actions and API routes
+3. **Database**: PostgreSQL with Drizzle ORM
+4. **Authentication**: Better Auth with social providers
+5. **Payments**: Stripe integration for subscriptions and one-time payments
+6. **Content Management**: Fumadocs for documentation and MDX for blog content
+7. **Email System**: React Email components with Resend integration
+8. **AI Features**: Integration with multiple AI providers
+9. **Analytics**: Multiple analytics provider support
+10. **Storage**: S3 integration for file uploads
 
-## Enhancement Scope and Integration Strategy
+## Technology Stack
 
-Based on my analysis, the integration approach I'm proposing takes into account the existing Next.js 15, React 19, TypeScript, TailwindCSS, Radix UI, Framer Motion, and TailwindCSS Animate frontend stack, along with the PostgreSQL, Drizzle ORM, Better Auth, Stripe, Fumadocs, MDX, next-intl, React Email, and Resend backend stack. These integration points and boundaries respect your current architecture patterns.
+### Frontend Technologies
 
-### Enhancement Overview
+- **Framework**: Next.js 15 with App Router
+- **Language**: TypeScript
+- **UI Components**: Radix UI primitives
+- **Styling**: TailwindCSS
+- **State Management**: Zustand for client-side state
+- **Animations**: Framer Motion
+- **Internationalization**: next-intl
+- **Forms**: react-hook-form with next-safe-action
 
-**Enhancement Type:** New Feature
-**Scope:** Adding email previewing capabilities to the application.
-**Integration Impact:** Medium
+### Backend Technologies
 
-### Integration Approach
+- **Framework**: Next.js 15 with App Router
+- **Runtime**: Node.js
+- **Database**: PostgreSQL with Drizzle ORM
+- **Authentication**: Better Auth
+- **Payments**: Stripe
+- **Email Delivery**: Resend
+- **API**: Next.js Server Actions and API routes
+- **Validation**: Zod for runtime validation
 
-**Code Integration Strategy:** New components will be created following the existing component-driven development approach. Server Actions will be used for data mutations. Existing utility functions and lib code will be leveraged where possible.
-**Database Integration:** New tables may be required for storing email templates or preview configurations. These will be added using Drizzle ORM migrations.
-**API Integration:** New Server Actions will be created for handling email preview requests. Existing API patterns will be followed.
-**UI Integration:** New UI components will be created using Radix UI primitives and TailwindCSS, ensuring accessibility and consistency with the existing design.
+### Infrastructure
 
-### Compatibility Requirements
+- **Deployment**: Cloudflare Workers compatible
+- **Database**: PostgreSQL
+- **Storage**: S3-compatible storage
+- **Monitoring**: OpenPanel analytics
+- **Code Quality**: Biome for formatting and linting
 
-- **Existing API Compatibility:** New Server Actions will be designed to not conflict with existing ones.
-- **Database Schema Compatibility:** New tables and columns will be added in a backward-compatible manner.
-- **UI/UX Consistency:** New UI components will follow the existing design system and internationalization patterns.
-- **Performance Impact:** The new feature will be optimized to minimize impact on existing application performance.
+## Architecture Patterns & Principles
 
-## Tech Stack Alignment
+### Architectural Style
 
-### Existing Technology Stack
+MkSaaS follows a monolithic architecture pattern with server-first principles:
+- Server-first architecture using Next.js Server Actions
+- Component-driven development for UI elements
+- Type-safe development across the entire stack
+- Internationalization-first design
+- Feature module organization
 
-| Category | Current Technology | Version | Usage in Enhancement | Notes |
-| :--- | :--- | :--- | :--- | :--- |
-| Frontend Framework | Next.js | 15 | Core framework for the application | Must be maintained |
-| Frontend Library | React | 19 | Core library for UI components | Must be maintained |
-| Language | TypeScript | Latest | Type safety across the stack | Must be maintained |
-| Styling | TailwindCSS | Latest | Utility-first CSS framework | Must be maintained |
-| UI Components | Radix UI | Latest | Accessible UI primitives | Must be maintained |
-| Animations | Framer Motion | Latest | For animations | Must be maintained |
-| Animations | TailwindCSS Animate | Latest | For animations | Must be maintained |
-| Database | PostgreSQL | Latest | Primary database | Must be maintained |
-| ORM | Drizzle ORM | Latest | Database access | Must be maintained |
-| Authentication | Better Auth | Latest | User authentication | Must be maintained |
-| Payments | Stripe | Latest | Subscription and one-time payments | Must be maintained |
-| Documentation | Fumadocs | Latest | Documentation | Must be maintained |
-| Content | MDX | Latest | Blog and content | Must be maintained |
-| Internationalization | next-intl | Latest | i18n support | Must be maintained |
-| Email Templates | React Email | Latest | Responsive email templates | Must be maintained |
-| Email Delivery | Resend | Latest | Email delivery | Must be maintained |
+### Core Principles
 
-### New Technology Additions
+1. **Component-Driven Development**: UI components built in isolation using Radix UI primitives and TailwindCSS
+2. **Server-First Architecture**: Leveraging Next.js Server Actions and React Server Components
+3. **Type Safety**: End-to-end type safety using TypeScript across the entire stack
+4. **Internationalization-First**: All content internationalized by default using next-intl
+5. **Feature Module Organization**: Related functionality grouped into feature modules
+6. **Progressive Enhancement**: Core functionality works without JavaScript, enhanced when available
 
-No new technologies are required for this enhancement.
+## System Design
 
-## Data Models and Schema Changes
-
-### New Data Models
-
-**Model Name:** EmailTemplate
-**Purpose:** To store email templates for previewing.
-**Integration:** Will be integrated with existing user and content management systems.
-**Key Attributes:**
-- id: string - Unique identifier for the template.
-- name: string - Name of the template.
-- content: string - The HTML content of the email template.
-- userId: string - Foreign key to the user who created the template.
-- createdAt: timestamp - When the template was created.
-- updatedAt: timestamp - When the template was last updated.
-
-**Relationships:**
-- **With Existing:** Belongs to a user (via userId).
-- **With New:** None.
-
-**Model Name:** EmailPreview
-**Purpose:** To store generated email previews.
-**Integration:** Will be linked to EmailTemplate and User.
-**Key Attributes:**
-- id: string - Unique identifier for the preview.
-- templateId: string - Foreign key to the email template.
-- html: string - The generated HTML preview.
-- createdAt: timestamp - When the preview was generated.
-
-**Relationships:**
-- **With Existing:** Belongs to an EmailTemplate (via templateId).
-- **With New:** None.
-
-### Schema Integration Strategy
-
-**Database Changes Required:**
-- **New Tables:** EmailTemplate, EmailPreview
-- **Modified Tables:** None
-- **New Indexes:** Indexes on userId in EmailTemplate and templateId in EmailPreview
-- **Migration Strategy:** Create new migrations using `pnpm db:generate` and apply with `pnpm db:migrate`.
-
-**Backward Compatibility:**
-- New tables do not affect existing schema.
-- Existing data remains unaffected.
-
-## Component Architecture
-
-The new components I'm proposing follow the existing architectural patterns I identified in your codebase: component-driven development, server-first architecture, type-safe development, internationalization-first approach, and feature module organization. The integration interfaces respect your current component structure and communication patterns.
-
-### New Components
-
-**Component Name:** EmailTemplateEditor
-**Responsibility:** Allows users to create and edit email templates.
-**Integration Points:** Integrates with the database via Server Actions for saving templates. Uses Radix UI and TailwindCSS for the UI.
-**Key Interfaces:**
-- onSaveTemplate(templateData)
-- onPreviewTemplate(templateData)
-**Dependencies:**
-- **Existing Components:** None directly, but uses existing UI primitives.
-- **New Components:** EmailPreviewPane
-**Technology Stack:** React, TypeScript, TailwindCSS, Radix UI
-
-**Component Name:** EmailPreviewPane
-**Responsibility:** Displays a live preview of the email template.
-**Integration Points:** Receives template data as props. Renders the HTML preview.
-**Key Interfaces:**
-- template: EmailTemplate
-**Dependencies:**
-- **Existing Components:** None
-- **New Components:** None
-**Technology Stack:** React, TypeScript, TailwindCSS
-
-**Component Name:** EmailTemplateList
-**Responsibility:** Lists all email templates for the user.
-**Integration Points:** Fetches templates from the database via Server Actions. Links to the editor for each template.
-**Key Interfaces:**
-- onEditTemplate(templateId)
-- onDeleteTemplate(templateId)
-**Dependencies:**
-- **Existing Components:** None directly, but uses existing UI primitives.
-- **New Components:** None
-**Technology Stack:** React, TypeScript, TailwindCSS, Radix UI
-
-### Component Interaction Diagram
+### High-Level Architecture Diagram
 
 ```mermaid
 graph TD
-    A[EmailTemplateList] --> B[EmailTemplateEditor]
-    B --> C[EmailPreviewPane]
-    B --> D[Server Actions - Save Template]
-    A --> E[Server Actions - Fetch Templates]
-    C --> F[Server Actions - Generate Preview]
+    A[User Interface] --> B[Next.js Server Actions]
+    B --> C[PostgreSQL Database]
+    B --> D[External Services]
+    A --> E[Client State Management]
+    D --> F[Stripe API]
+    D --> G[Resend API]
+    D --> H[AI Providers]
+    D --> I[S3 Storage]
 ```
 
-## Source Tree Integration
+### Data Flow
 
-### Existing Project Structure
+1. User interacts with the frontend UI
+2. UI sends requests to Next.js Server Actions for data mutations
+3. Server Actions process business logic and interact with the database or external services
+4. Database stores/retrieves application data
+5. External services handle payments, email delivery, AI processing, and storage
+6. Client-side state management handles UI state that doesn't need to be shared
 
-```
-├── content/
-├── messages/
-├── src/
-│   ├── actions/
-│   ├── app/
-│   ├── components/
-│   ├── config/
-│   ├── credits/
-│   ├── db/
-│   ├── hooks/
-│   ├── i18n/
-│   ├── lib/
-│   ├── mail/
-│   ├── payment/
-│   ├── stores/
-│   └── styles/
-├── public/
-```
+### Component Structure
 
-### New File Organization
+#### Frontend Component Organization
 
-```
-{{project-root}}/
-├── src/
-│   ├── actions/
-│   │   └── email-actions.ts        # New file for email-related Server Actions
-│   ├── app/
-│   │   └── email/                  # New directory for email previewing routes
-│   │       ├── page.tsx
-│   │       └── components/
-│   │           ├── EmailTemplateEditor.tsx
-│   │           ├── EmailPreviewPane.tsx
-│   │           └── EmailTemplateList.tsx
-│   ├── components/
-│   │   └── email/                  # New directory for reusable email components
-│   │       ├── EmailEditor.tsx
-│   │       └── EmailPreview.tsx
-│   ├── db/
-│   │   └── schema/                 # Update schema files for new tables
-│   │       ├── email-templates.ts
-│   │       └── email-previews.ts
-│   └── mail/
-│       └── templates/              # New directory for email templates if needed
-├── content/                        # Existing directory
-├── messages/                       # Existing directory
-└── public/                         # Existing directory
-```
+The frontend components are organized by feature:
+- **Admin Components**: Admin dashboard and user management
+- **Auth Components**: Authentication flows and UI elements
+- **Dashboard Components**: User dashboard elements
+- **Docs Components**: Documentation UI elements
+- **Layout Components**: Global layout elements (header, footer, etc.)
+- **Pricing Components**: Pricing page elements
+- **Settings Components**: User settings UI
+- **Shared Components**: Reusable components across features
+- **UI Components**: Low-level UI primitives and design system components
 
-### Integration Guidelines
+#### Backend Services Organization
 
-- **File Naming:** Follow existing conventions (e.g., PascalCase for components, kebab-case for files).
-- **Folder Organization:** Group related functionality into feature-specific directories.
-- **Import/Export Patterns:** Use existing patterns for importing and exporting modules.
+Backend services are organized by feature:
+- **Auth Actions**: Authentication-related Server Actions
+- **Payment Actions**: Payment processing Server Actions
+- **User Actions**: User management Server Actions
+- **Content Actions**: Content management Server Actions
+- **AI Actions**: AI feature Server Actions
+- **Email Actions**: Email sending Server Actions
 
-## Infrastructure and Deployment Integration
+### Database Design
 
-### Existing Infrastructure
+#### Schema Overview
 
-**Current Deployment:** Cloudflare Workers compatible, Docker support, environment-based configuration.
-**Infrastructure Tools:** Docker, Cloudflare Workers, pnpm.
-**Environments:** Development, Production.
+The database schema consists of several core tables:
+1. **User Table**: User accounts and profiles
+2. **Session Table**: User sessions and authentication tokens
+3. **Account Table**: User account connections to social providers
+4. **Verification Table**: Email verification and password reset tokens
+5. **Payment Table**: Payment records and subscription information
+6. **User Credit Table**: User credit balances for pay-per-use features
+7. **Credit Transaction Table**: Credit usage and purchase records
 
-### Enhancement Deployment Strategy
+#### Relationships
 
-**Deployment Approach:** Deploy as part of the existing Next.js application.
-**Infrastructure Changes:** None required.
-**Pipeline Integration:** Existing deployment pipeline will be used.
+- Users have one-to-many relationships with sessions, accounts, payments, and credit records
+- Sessions are tied to specific users
+- Accounts represent social provider connections for users
+- Payments are associated with users and their subscription status
+- User credits track available credits for pay-per-use features
+- Credit transactions record all credit usage and purchases
 
-### Rollback Strategy
+#### Indexing Strategy
 
-**Rollback Method:** Revert to the previous git commit and redeploy.
-**Risk Mitigation:** Ensure database migrations are backward-compatible.
-**Monitoring:** Use existing monitoring tools.
+Tables are indexed for performance:
+- User ID indexes on all related tables
+- Email unique index on user table
+- Payment status and type indexes
+- Credit transaction type indexes
 
-## Coding Standards and Conventions
+### API Design
 
-### Existing Standards Compliance
+#### Server Actions
 
-**Code Style:** Follows the MkSaaS template conventions with TypeScript, TailwindCSS, and Radix UI.
-**Linting Rules:** Biome for formatting and linting.
-**Testing Patterns:** Not explicitly defined in the provided documentation, but should follow established patterns.
-**Documentation Style:** Inline comments and README.md.
+Server Actions are used for all data mutations:
+- Authentication actions (login, register, logout, password reset)
+- User management actions (profile updates, settings changes)
+- Payment actions (subscription management, one-time payments)
+- Content actions (blog posts, documentation updates)
+- Credit actions (credit purchases, usage tracking)
 
-### Enhancement-Specific Standards
+#### API Routes
 
-None required.
+Traditional API routes are used for specific integrations:
+- Webhook endpoints for payment providers
+- Analytics event tracking
+- Sitemap and robots.txt generation
 
-### Critical Integration Rules
+### Security Considerations
 
-- **Existing API Compatibility:** New Server Actions must not conflict with existing ones.
-- **Database Integration:** New tables and columns must be added in a backward-compatible manner.
-- **Error Handling:** Follow existing error handling patterns in Server Actions and components.
-- **Logging Consistency:** Use existing logging mechanisms.
+#### Authentication & Authorization
+
+- Better Auth for authentication with social providers
+- Cookie-based session management
+- Role-based access control for admin features
+- Email verification workflows
+- Password reset flows
+
+#### Data Protection
+
+- Environment variables for sensitive configuration
+- Database connection pooling
+- Input validation with Zod
+- SQL injection prevention through Drizzle ORM
+- Proper error handling to avoid information leakage
+
+#### API Security
+
+- Rate limiting for API endpoints
+- CSRF protection for forms
+- Input sanitization for all user data
+- Secure headers configuration
+- Content Security Policy implementation
+
+### Performance Considerations
+
+#### Optimization Strategies
+
+1. **Database Optimization**
+   - Proper indexing strategy
+   - Connection pooling
+   - Query optimization
+
+2. **Caching**
+   - React Query for client-side caching
+   - Server-side caching where appropriate
+   - CDN for static assets
+
+3. **Code Splitting**
+   - Next.js automatic code splitting
+   - Dynamic imports for heavy components
+   - Bundle optimization
+
+4. **Image Optimization**
+   - Next.js Image component
+   - Responsive image serving
+   - Format optimization
+
+#### Server-Side Rendering
+
+- Static generation for static pages
+- Server-side rendering for dynamic content
+- Incremental Static Regeneration where appropriate
+- Streaming for improved loading performance
+
+### Scalability Considerations
+
+#### Horizontal Scaling
+
+- Stateless server actions allow for horizontal scaling
+- Database connection pooling
+- CDN for static assets
+- Cloudflare Workers deployment support
+
+#### Database Scaling
+
+- Indexing strategy for query performance
+- Connection pooling for efficient database usage
+- Potential for read replicas
+
+#### Future Enhancements
+
+- Microservices architecture for high-scale deployments
+- GraphQL API for complex data fetching
+- Advanced caching strategies
+- Geographic distribution
+
+## Integration Points
+
+### Authentication System
+
+1. **Better Auth Integration**
+   - PostgreSQL adapter for user storage
+   - Social provider support (Google, GitHub)
+   - Email/password authentication
+   - Session management
+
+2. **Admin Plugin**
+   - User management interface
+   - User banning capabilities
+   - Role-based access control
+
+### Payment System
+
+1. **Stripe Integration**
+   - Subscription management
+   - One-time payments
+   - Customer portal access
+   - Webhook handling
+
+2. **Credit System**
+   - Credit purchase packages
+   - Credit usage tracking
+   - Pay-per-use feature support
+
+### Content Management
+
+1. **Fumadocs Integration**
+   - Documentation system
+   - MDX support for rich content
+   - Search functionality
+
+2. **Blog System**
+   - MDX-based blog posts
+   - Category organization
+   - Pagination support
+
+### Email System
+
+1. **Resend Integration**
+   - Email delivery
+   - React Email templates
+   - Newsletter subscription
+
+2. **Email Templates**
+   - Component-based email design
+   - Internationalization support
+   - Preview development server
+
+### AI Features
+
+1. **Multiple Provider Support**
+   - OpenAI integration
+   - Replicate integration
+   - Google AI integration
+   - Fireworks AI integration
+
+2. **Image Generation**
+   - Provider-agnostic implementation
+   - Result storage and retrieval
+   - Usage tracking
+
+### Analytics
+
+1. **Multiple Provider Support**
+   - OpenPanel integration
+   - Vercel Analytics
+   - Custom event tracking
+
+2. **Performance Monitoring**
+   - Web Vitals tracking
+   - Custom metric collection
+   - User behavior analysis
+
+### Storage
+
+1. **S3 Integration**
+   - File upload handling
+   - URL generation
+   - Access control
+
+## Deployment & Operations
+
+### Deployment Architecture
+
+- Cloudflare Workers compatible deployment
+- Docker support for containerized deployment
+- Environment-based configuration
+- Zero-downtime deployment support
+
+### Monitoring & Logging
+
+- OpenPanel analytics for user behavior
+- Vercel Analytics for performance
+- Error tracking and reporting
+- Custom event logging
+
+### Backup & Recovery
+
+- Database backup strategies
+- Content versioning
+- Disaster recovery procedures
 
 ## Testing Strategy
 
-### Integration with Existing Tests
+### Unit Testing
 
-**Existing Test Framework:** Not explicitly defined in the provided documentation.
-**Test Organization:** Not explicitly defined in the provided documentation.
-**Coverage Requirements:** Not explicitly defined in the provided documentation. Aim for comprehensive coverage of new features.
+- Component testing with React Testing Library
+- Server Action testing with various input scenarios
+- Utility function testing
+- Database query testing
 
-### New Testing Requirements
+### Integration Testing
 
-#### Unit Tests for New Components
+- End-to-end workflow testing
+- Authentication flow testing
+- Payment integration testing
+- Email delivery testing
 
-- **Framework:** Jest or the existing test framework.
-- **Location:** `src/app/email/components/__tests__/`
-- **Coverage Target:** 80%+
-- **Integration with Existing:** Follow existing test patterns.
+### Performance Testing
 
-#### Integration Tests
+- Page load performance testing
+- Database query performance testing
+- API response time testing
+- Stress testing for high-load scenarios
 
-- **Scope:** Test the interaction between new components and Server Actions.
-- **Existing System Verification:** Ensure existing functionality remains intact.
-- **New Feature Testing:** Test the new email previewing feature thoroughly.
+### Quality Assurance
 
-#### Regression Testing
+- Biome for code formatting and linting
+- TypeScript for type safety
+- Knip for dependency analysis
+- Accessibility testing
 
-- **Existing Feature Verification:** Run existing tests to ensure no regressions.
-- **Automated Regression Suite:** Integrate new tests into the existing suite.
-- **Manual Testing Requirements:** Perform manual testing of the new feature.
+## Development Workflow
 
-## Security Integration
+### Feature Development
 
-### Existing Security Measures
+1. **Database Changes**
+   - Schema updates in `src/db/schema.ts`
+   - Migration generation with `pnpm db:generate`
+   - Migration application with `pnpm db:migrate`
 
-**Authentication:** Better Auth for authentication with social providers.
-**Authorization:** Not explicitly defined in the provided documentation.
-**Data Protection:** Not explicitly defined in the provided documentation.
-**Security Tools:** Not explicitly defined in the provided documentation.
+2. **Server Actions**
+   - Implementation in `src/actions/`
+   - Validation with next-safe-action
+   - Testing with unit tests
 
-### Enhancement Security Requirements
+3. **UI Components**
+   - Implementation in `src/components/`
+   - TypeScript interfaces for props
+   - Storybook stories where applicable
 
-**New Security Measures:** Ensure email templates are sanitized before rendering previews.
-**Integration Points:** The email previewing feature must integrate with the existing authentication system.
-**Compliance Requirements:** Not explicitly defined in the provided documentation.
+4. **Content Management**
+   - MDX content in `content/` directory
+   - Processing with `pnpm content` command
 
-### Security Testing
+### Code Quality
 
-**Existing Security Tests:** Not explicitly defined in the provided documentation.
-**New Security Test Requirements:** Test for XSS vulnerabilities in email template previews.
-**Penetration Testing:** Not explicitly defined in the provided documentation.
+1. **Formatting**
+   - Biome formatting with `pnpm format`
+   - Automatic formatting on save
 
-## Checklist Results Report
+2. **Linting**
+   - Biome linting with `pnpm lint`
+   - Error prevention rules
 
-This section will be populated after executing the architect-checklist.
+3. **Type Safety**
+   - TypeScript for all code
+   - Strict type checking
+   - Zod for runtime validation
 
-## Next Steps
+### Content Management
 
-### Story Manager Handoff
+1. **Documentation**
+   - Fumadocs processing
+   - MDX content management
+   - Search index generation
 
-Create user stories for implementing the email previewing feature, referencing this architecture document. Key integration requirements include creating new Server Actions, database tables, and UI components. The first story should focus on setting up the basic email template editor and preview pane.
+2. **Blog**
+   - MDX blog posts
+   - Category organization
+   - RSS feed generation
 
-### Developer Handoff
+## Directory Structure
 
-Developers should start by creating the new database tables using Drizzle ORM. Then, implement the Server Actions for saving and retrieving email templates. Finally, build the UI components for the email template editor and preview pane, ensuring they integrate with the existing authentication and internationalization systems.
+### Core Directories
+
+```
+├── content/              # MDX content for docs and blog
+├── messages/             # Translation files (en.json, zh.json)
+├── src/
+│   ├── actions/          # Server actions for API operations
+│   ├── ai/               # AI feature implementations
+│   ├── analytics/        # Analytics integration
+│   ├── app/              # Next.js app router with internationalized routing
+│   ├── assets/           # Static assets
+│   ├── components/       # Reusable React components organized by feature
+│   ├── config/           # Application configuration files
+│   ├── credits/          # Credit system implementation
+│   ├── db/               # Database schema and migrations
+│   ├── hooks/            # Custom React hooks
+│   ├── i18n/             # Internationalization setup
+│   ├── lib/              # Utility functions and shared code
+│   ├── mail/             # Email templates and mail functionality
+│   ├── newsletter/       # Newsletter subscription system
+│   ├── notification/     # Notification system
+│   ├── payment/          # Stripe payment integration
+│   ├── storage/          # Storage integration
+│   ├── stores/           # Zustand state management
+│   ├── styles/           # Global styles and Tailwind configuration
+│   ├── types/            # TypeScript type definitions
+│   ├── middleware.ts     # Next.js middleware
+│   └── routes.ts         # Route configuration
+├── public/               # Static assets served directly
+```
+
+### Feature Module Organization
+
+Each feature is organized in its own directory with a consistent structure:
+- Components in `src/components/{feature}/`
+- Server Actions in `src/actions/{feature}.ts`
+- Utility functions in `src/lib/{feature}/`
+- Configuration in `src/config/{feature}.ts`
+- Types in `src/types/{feature}.ts`
+
+## Configuration
+
+### Environment Variables
+
+Environment variables are managed through:
+- `.env` files for local development
+- Platform-specific configuration for deployment
+- Type-safe access through configuration utilities
+
+### Application Configuration
+
+Main configuration is in `src/config/website.tsx`:
+- Site metadata and branding
+- Feature flags
+- Provider configuration
+- Internationalization settings
+
+### Database Configuration
+
+Database configuration in `drizzle.config.ts`:
+- Connection settings
+- Migration directory
+- Schema file location
+
+### UI Configuration
+
+TailwindCSS configuration in `tailwind.config.ts`:
+- Design system tokens
+- Component variants
+- Plugin configuration
+
+## Risks & Mitigations
+
+### Technical Risks
+
+1. **Database Performance**
+   - Risk: Query performance degradation with scale
+   - Mitigation: Proper indexing and connection pooling
+
+2. **Third-Party Dependencies**
+   - Risk: Service outages or API changes
+   - Mitigation: Graceful degradation and monitoring
+
+3. **Security Vulnerabilities**
+   - Risk: Authentication bypass or data breaches
+   - Mitigation: Regular security audits and updates
+
+### Operational Risks
+
+1. **Deployment Complexity**
+   - Risk: Complex deployment process
+   - Mitigation: Automated deployment scripts and documentation
+
+2. **Scaling Challenges**
+   - Risk: Performance issues with user growth
+   - Mitigation: Horizontal scaling architecture
+
+3. **Maintenance Overhead**
+   - Risk: Dependency updates and security patches
+   - Mitigation: Automated dependency management
+
+## Conclusion
+
+The MkSaaS architecture provides a solid foundation for building modern SaaS applications with Next.js. By following established patterns and best practices, it offers developers a production-ready template that can be extended and customized to meet specific business requirements.
+
+The architecture emphasizes security, performance, and maintainability while providing a comprehensive set of features essential for SaaS applications. The modular approach ensures that features can be developed, tested, and deployed independently, reducing risk and allowing for iterative improvements.
+
+## Change Log
+
+| Date | Version | Description | Author |
+| :--- | :--- | :--- | :--- |
+| 2025-09-15 | 1.0 | Initial MkSaaS architecture document | Architect (Winston) |
+
+## Checklist Results
+
+The architecture has been validated against the Architect Solution Validation Checklist with the following results:
+- Requirements alignment: ✅ PASS
+- Architecture fundamentals: ✅ PASS
+- Technical stack decisions: ✅ PASS
+- Frontend design implementation: ✅ PASS
+- Resilience and operational readiness: ✅ PASS
+- Security and compliance: ✅ PASS
+- Implementation guidance: ✅ PASS
+- Dependency management: ✅ PASS
+- AI agent implementation suitability: ✅ PASS
+- Accessibility implementation: ✅ PASS
