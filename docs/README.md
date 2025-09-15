@@ -1,3 +1,19 @@
+# Project Context
+
+This repository contains the **MkSaaS Template** (Next.js 15 SaaS starter kit).  
+
+⚠️ Important:
+- Do **NOT** assume the project scope based on the repository or folder name.  
+- The folder name `email-previewer-application` is misleading — the actual project is **MkSaaS**, a full-stack SaaS starter kit.  
+- Always refer to:
+  - [`CLAUDE.md`](../CLAUDE.md) for development workflow and commands  
+  - [`docs/architecture.md`](./architecture.md) for core architecture  
+  - [`docs/frontend-architecture.md`](./frontend-architecture.md) for frontend-specific details  
+
+These are the **single sources of truth** for the project identity and architecture.
+
+---
+
 # MkSaaS Architecture Documentation
 
 This directory contains the comprehensive architecture documentation for the MkSaaS template.
