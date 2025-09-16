@@ -1,10 +1,10 @@
 # Project Context
 
-This repository contains the **MkSaaS Template** (Next.js 15 SaaS starter kit).  
+This repository contains the SaaS application.  
 
 ⚠️ Important:
 - Do **NOT** assume the project scope based on the repository or folder name.  
-- The folder name `email-previewer-application` is misleading — the actual project is **MkSaaS**, a full-stack SaaS starter kit.  
+- The folder name `email-previewer-application` is misleading — the actual project is a full-stack SaaS application.  
 - Always refer to:
   - [`CLAUDE.md`](../CLAUDE.md) for development workflow and commands  
   - [`docs/architecture.md`](./architecture.md) for core architecture  
@@ -14,15 +14,15 @@ These are the **single sources of truth** for the project identity and architect
 
 ---
 
-# MkSaaS Architecture Documentation
+# Application Architecture Documentation
 
-This directory contains the comprehensive architecture documentation for the MkSaaS template.
+This directory contains the comprehensive architecture documentation for the SaaS application.
 
 ## Documents
 
 ### [architecture.md](./architecture.md)
 
-The main architecture document that describes the overall system design, technology stack, component structure, and integration points of the MkSaaS template.
+The main architecture document that describes the overall system design, technology stack, component structure, and integration points of the application.
 
 Key sections include:
 - System overview and context
@@ -58,12 +58,12 @@ Key sections include:
 ## Purpose
 
 These documents serve to:
-1. Define the technical approach and structure of the MkSaaS template
+1. Define the technical approach and structure of the application
 2. Establish the system's components, interactions, and data flows
 3. Document design decisions and architectural patterns
-4. Provide guidance for developers extending or customizing the template
+4. Provide guidance for developers extending or customizing the system
 5. Ensure alignment with modern full-stack development best practices
 
 ## Maintenance
 
-These documents should be updated whenever significant architectural changes are made to the MkSaaS template to ensure they remain accurate and useful for developers.
+These documents should be updated whenever significant architectural changes are made to the application to ensure they remain accurate and useful for developers.

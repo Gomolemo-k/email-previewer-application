@@ -2,7 +2,7 @@ id: subscription-management-dashboard
 title: Subscription Management Dashboard
 status: Draft
 story: |
-  As a MkSaaS user,
+  As a user of this SaaS application,
   I want to view and manage my subscription details in a dedicated dashboard,
   so that I can easily understand my current plan, billing cycle, and manage my subscription without leaving the application.
 
@@ -147,7 +147,7 @@ testing:
 
 definition_of_done: |
   - All acceptance criteria are met
-  - Code follows MkSaaS coding standards
+  - Code follows application coding standards
   - All tests pass
   - Internationalization is implemented
   - Responsive design is working

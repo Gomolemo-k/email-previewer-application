@@ -1,8 +1,8 @@
-# MkSaaS Frontend Architecture Document
+# Application Frontend Architecture Document
 
 ## Introduction
 
-This document details the frontend architecture for MkSaaS (Make AI SaaS), a comprehensive Next.js boilerplate designed to accelerate the development of profitable SaaS applications. It complements the main architecture document by providing specific guidance on the frontend implementation, component structure, state management, and UI/UX patterns.
+This document details the frontend architecture for this SaaS application, a comprehensive Next.js system. It complements the main architecture document by providing specific guidance on the frontend implementation, component structure, state management, and UI/UX patterns.
 
 ### Purpose
 
@@ -28,7 +28,7 @@ The frontend architecture covers:
 
 ### Framework & Core Libraries
 
-The MkSaaS frontend follows modern React and Next.js patterns:
+The application frontend follows modern React and Next.js patterns:
 - **Framework**: Next.js 15 with App Router
 - **Language**: TypeScript for type safety
 - **Styling**: TailwindCSS with utility-first approach
@@ -39,7 +39,7 @@ The MkSaaS frontend follows modern React and Next.js patterns:
 
 ### Component Architecture
 
-MkSaaS follows a feature-based component architecture:
+The application follows a feature-based component architecture:
 1. **Atomic Design Principles**: Components organized from atoms to pages
 2. **Feature-Based Organization**: Components grouped by functionality
 3. **Reusability**: Shared components available across features
@@ -577,7 +577,7 @@ Error prevention strategies:
 
 | Date | Version | Description | Author |
 | :--- | :--- | :--- | :--- |
-| 2025-09-15 | 1.0 | Initial MkSaaS frontend architecture document | Architect (Winston) |
+| 2025-09-15 | 1.0 | Initial application frontend architecture document | Architect (Winston) |
 
 ## Checklist Results
 

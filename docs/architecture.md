@@ -1,21 +1,21 @@
-# MkSaaS Architecture Document
+# Application Architecture Document
 
 ## Introduction
 
-This document outlines the technical architecture for MkSaaS (Make AI SaaS), a comprehensive Next.js boilerplate designed to accelerate the development of profitable SaaS applications. Created by Fox, the founder of MkSaaS and Mkdirs, this template provides a complete foundation with essential SaaS features including authentication, payments, internationalization, newsletter management, dashboard, blog, documentation, and UI components.
+This document outlines the technical architecture for this SaaS application, a comprehensive Next.js system designed to provide essential SaaS features including authentication, payments, internationalization, newsletter management, dashboard, blog, documentation, and UI components.
 
 ### Purpose
 
 This architecture document serves to:
-1. Define the technical approach and structure of the MkSaaS template
+1. Define the technical approach and structure of the application
 2. Establish the system's components, interactions, and data flows
 3. Document design decisions and architectural patterns
-4. Provide guidance for developers extending or customizing the template
+4. Provide guidance for developers extending or customizing the system
 5. Ensure alignment with modern full-stack development best practices
 
 ### Scope
 
-The MkSaaS template architecture encompasses:
+The application architecture encompasses:
 - Full-stack Next.js 15 application with App Router
 - Authentication system with social providers
 - Payment integration with Stripe
@@ -31,7 +31,7 @@ The MkSaaS template architecture encompasses:
 
 ### Context & Positioning
 
-MkSaaS is a full-stack SaaS boilerplate built on Next.js 15 with App Router, designed to provide developers with a production-ready foundation for building SaaS applications. It includes all essential components needed for a modern SaaS product, from authentication and payments to content management and analytics.
+This is a full-stack SaaS application built on Next.js 15 with App Router, designed to provide a production-ready foundation for SaaS products. It includes all essential components needed for a modern SaaS product, from authentication and payments to content management and analytics.
 
 ### Key Components
 
@@ -82,7 +82,7 @@ MkSaaS is a full-stack SaaS boilerplate built on Next.js 15 with App Router, des
 
 ### Architectural Style
 
-MkSaaS follows a monolithic architecture pattern with server-first principles:
+The application follows a monolithic architecture pattern with server-first principles:
 - Server-first architecture using Next.js Server Actions
 - Component-driven development for UI elements
 - Type-safe development across the entire stack
@@ -566,7 +566,7 @@ TailwindCSS configuration in `tailwind.config.ts`:
 
 ## Conclusion
 
-The MkSaaS architecture provides a solid foundation for building modern SaaS applications with Next.js. By following established patterns and best practices, it offers developers a production-ready template that can be extended and customized to meet specific business requirements.
+The application architecture provides a solid foundation for building modern SaaS applications with Next.js. By following established patterns and best practices, it offers a production-ready system that can be extended and customized to meet specific business requirements.
 
 The architecture emphasizes security, performance, and maintainability while providing a comprehensive set of features essential for SaaS applications. The modular approach ensures that features can be developed, tested, and deployed independently, reducing risk and allowing for iterative improvements.
 
@@ -574,7 +574,7 @@ The architecture emphasizes security, performance, and maintainability while pro
 
 | Date | Version | Description | Author |
 | :--- | :--- | :--- | :--- |
-| 2025-09-15 | 1.0 | Initial MkSaaS architecture document | Architect (Winston) |
+| 2025-09-15 | 1.0 | Initial application architecture document | Architect (Winston) |
 
 ## Checklist Results
 
