@@ -12,7 +12,7 @@ Based on my analysis of the application, I've identified the following about the
 - **Primary Purpose:** Comprehensive Next.js application for SaaS functionality
 - **Current Tech Stack:** Next.js 15 with App Router, TypeScript, TailwindCSS, Radix UI, PostgreSQL with Drizzle ORM, Better Auth, Stripe integration
 - **Architecture Style:** Monolithic architecture with server-first principles using Next.js Server Actions
-- **Deployment Method:** Cloudflare Workers compatible deployment
+- **Deployment Method:** Deployment (to be defined)
 
 **Available Documentation:**
 - Main architecture document detailing the overall system design
@@ -252,7 +252,7 @@ src/
 ## Infrastructure and Deployment Integration
 
 ### Existing Infrastructure
-- **Current Deployment:** Cloudflare Workers compatible deployment
+- **Current Deployment:** Deployment (to be defined)
 - **Infrastructure Tools:** Docker support, environment-based configuration
 - **Environments:** Development, staging, and production environments
 
