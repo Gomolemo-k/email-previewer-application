@@ -72,7 +72,7 @@ This is a full-stack SaaS application built on Next.js 15 with App Router, desig
 
 ### Infrastructure
 
-- **Deployment**: Cloudflare Workers compatible
+- **Deployment**: Deployment (to be defined)
 - **Database**: PostgreSQL
 - **Storage**: S3-compatible storage
 - **Monitoring**: OpenPanel analytics
@@ -260,7 +260,6 @@ Traditional API routes are used for specific integrations:
 - Stateless server actions allow for horizontal scaling
 - Database connection pooling
 - CDN for static assets
-- Cloudflare Workers deployment support
 
 #### Database Scaling
 
@@ -358,28 +357,6 @@ Traditional API routes are used for specific integrations:
    - File upload handling
    - URL generation
    - Access control
-
-## Deployment & Operations
-
-### Deployment Architecture
-
-- Cloudflare Workers compatible deployment
-- Docker support for containerized deployment
-- Environment-based configuration
-- Zero-downtime deployment support
-
-### Monitoring & Logging
-
-- OpenPanel analytics for user behavior
-- Vercel Analytics for performance
-- Error tracking and reporting
-- Custom event logging
-
-### Backup & Recovery
-
-- Database backup strategies
-- Content versioning
-- Disaster recovery procedures
 
 ## Testing Strategy
 
