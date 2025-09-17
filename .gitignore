@@ -56,4 +56,9 @@ next-env.d.ts
 # fumadocs
 .source
 
+# .env
+.env
 
+
+# .next
+.next
