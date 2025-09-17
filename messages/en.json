@@ -487,10 +487,24 @@
       "settings": "Settings"
     }
   },
-  "Dashboard": {
-    "dashboard": {
-      "title": "Dashboard"
-    },
+"Dashboard": {
+  "dashboard": {
+    "title": "Dashboard",
+    "emailPreview": {
+      "dashboard": {
+        "title": "Dashboard"
+      },
+      "components": {
+        "title": "Components"
+      },
+      "preview": {
+        "title": "Preview"
+      },
+      "services": {
+        "title": "Services"
+      }
+    }
+  },
     "admin": {
       "title": "Admin",
       "users": {

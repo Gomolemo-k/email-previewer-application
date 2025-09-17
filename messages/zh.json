@@ -487,9 +487,23 @@
       "settings": "设置"
     }
   },
-  "Dashboard": {
+   "Dashboard": {
     "dashboard": {
-      "title": "仪表盘"
+      "title": "仪表板",
+      "emailPreview": {
+        "dashboard": {
+          "title": "仪表板"
+        },
+        "components": {
+          "title": "组件"
+        },
+        "preview": {
+          "title": "预览"
+        },
+        "services": {
+          "title": "服务"
+        }
+      }
     },
     "admin": {
       "title": "系统管理",
