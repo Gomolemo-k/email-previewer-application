@@ -5,18 +5,18 @@ import { Routes } from '@/routes';
 import type { NestedMenuItem } from '@/types';
 import {
   BellIcon,
+  BoxIcon,
   CircleUserRoundIcon,
   CoinsIcon,
   CreditCardIcon,
+  FileTextIcon,
+  LayersIcon,
   LayoutDashboardIcon,
   LockKeyholeIcon,
+  ServerIcon,
   Settings2Icon,
   SettingsIcon,
   UsersRoundIcon,
-  FileTextIcon,
-  LayersIcon,
-  BoxIcon,
-  ServerIcon,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { websiteConfig } from './website';
@@ -44,19 +44,19 @@ export function getSidebarLinks(): NestedMenuItem[] {
           external: false,
         },
         {
-          title: ('dashboard.emailPreview.components.title'),
+          title: t('dashboard.emailPreview.components.title'),
           icon: <LayersIcon className="size-4 shrink-0" />,
           href: Routes.DashboardEmailPreviewComponents,
           external: false,
         },
         {
-          title: ('dashboard.emailPreview.preview.title'),
+          title: t('dashboard.emailPreview.preview.title'),
           icon: <BoxIcon className="size-4 shrink-0" />,
           href: Routes.DashboardEmailPreviewPreview,
           external: false,
         },
         {
-          title: ('dashboard.emailPreview.services.title'),
+          title: t('dashboard.emailPreview.services.title'),
           icon: <ServerIcon className="size-4 shrink-0" />,
           href: Routes.DashboardEmailPreviewServices,
           external: false,
