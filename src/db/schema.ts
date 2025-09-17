@@ -117,3 +117,18 @@ export const creditTransaction = pgTable("credit_transaction", {
 	creditTransactionUserIdIdx: index("credit_transaction_user_id_idx").on(table.userId),
 	creditTransactionTypeIdx: index("credit_transaction_type_idx").on(table.type),
 }));
+
+export const emails = pgTable("emails", {
+	id: text("id").primaryKey(),
+	userId: text("user_id").notNull().references(() => user.id, { onDelete: 'cascade' }),
+	filename: text("filename").notNull(),
+	blobUrl: text("blob_url").notNull(),
+	contentType: text("content_type").notNull(),
+	fileSize: integer("file_size").notNull(),
+	status: text("status").notNull(),
+	createdAt: timestamp("created_at").notNull().defaultNow(),
+	updatedAt: timestamp("updated_at").notNull().defaultNow(),
+}, (table) => ({
+	emailsUserIdIdx: index("emails_user_id_idx").on(table.userId),
+	emailsStatusIdx: index("emails_status_idx").on(table.status),
+}));
