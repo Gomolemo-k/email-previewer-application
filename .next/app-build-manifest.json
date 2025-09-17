@@ -50,6 +50,81 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/manifest.webmanifest/route.js"
+    ],
+    "/[locale]/(protected)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/layout.js"
+    ],
+    "/[locale]/(protected)/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/dashboard/page.js"
+    ],
+    "/[locale]/(protected)/settings/billing/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/settings/billing/layout.js"
+    ],
+    "/[locale]/(protected)/settings/billing/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/settings/billing/page.js"
+    ],
+    "/[locale]/(marketing)/pricing/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(marketing)/pricing/layout.js"
+    ],
+    "/[locale]/(marketing)/pricing/loading": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(marketing)/pricing/loading.js"
+    ],
+    "/[locale]/(marketing)/pricing/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(marketing)/pricing/page.js"
+    ],
+    "/[locale]/auth/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/auth/layout.js"
+    ],
+    "/[locale]/auth/loading": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/auth/loading.js"
+    ],
+    "/[locale]/auth/login/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/auth/login/page.js"
+    ],
+    "/[locale]/[...rest]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/[...rest]/page.js"
+    ],
+    "/_not-found/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/_not-found/page.js"
+    ],
+    "/[locale]/(protected)/settings/credits/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/settings/credits/layout.js"
+    ],
+    "/[locale]/(protected)/settings/credits/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/settings/credits/page.js"
+    ],
+    "/api/upload-email/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/upload-email/route.js"
     ]
   }
 }
