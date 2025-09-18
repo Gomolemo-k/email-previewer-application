@@ -1,9 +1,6 @@
 {
   "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
-  "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/[locale]/[...rest]/page": "app/[locale]/[...rest]/page.js",
+  "/[locale]/(marketing)/(home)/page": "app/[locale]/(marketing)/(home)/page.js",
   "/[locale]/(protected)/dashboard/page": "app/[locale]/(protected)/dashboard/page.js",
-  "/[locale]/auth/login/page": "app/[locale]/auth/login/page.js",
-  "/[locale]/(marketing)/(home)/page": "app/[locale]/(marketing)/(home)/page.js"
+  "/[locale]/auth/login/page": "app/[locale]/auth/login/page.js"
 }
