@@ -1,14 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
-
-// Ensure the upload directory exists
-const UPLOAD_DIR = join(process.cwd(), 'uploads');
+import { getDb } from '@/db/index';
+import { emailFile } from '@/db/schema';
+import { auth } from '@/lib/auth';
+import { eq } from 'drizzle-orm';
+import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(request: NextRequest) {
   try {
-    // Create upload directory if it doesn't exist
-    await mkdir(UPLOAD_DIR, { recursive: true });
+    // Authenticate the user
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+    
+    if (!session || !session.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
 
     const formData = await request.formData();
     const file = formData.get('file') as File | null;
@@ -45,19 +54,24 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate unique filename
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const filename = `${file.name.replace(/\.[^/.]+$/, '')}-${uniqueSuffix}.${fileExtension}`;
-    const filepath = join(UPLOAD_DIR, filename);
+    // Get database connection
+    const db = await getDb();
 
-    // Save file to disk
-    await writeFile(filepath, buffer);
+    // Insert file into database
+    const newEmailFile = await db.insert(emailFile).values({
+      id: uuidv4(),
+      userId: session.user.id,
+      filename: file.name,
+      fileType: fileExtension || '',
+      fileSize: file.size,
+      content: buffer,
+    }).returning();
 
     return NextResponse.json({
       success: true,
       message: 'File uploaded successfully',
-      filename,
-      filepath
+      fileId: newEmailFile[0].id,
+      filename: newEmailFile[0].filename,
     });
   } catch (error) {
     console.error('Upload error:', error);
@@ -68,6 +82,43 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET() {
-  return NextResponse.json({ message: 'Email upload endpoint' });
+export async function GET(request: NextRequest) {
+  try {
+    // Authenticate the user
+    const session = await auth.api.getSession({
+      headers: request.headers,
+    });
+    
+    if (!session || !session.user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    // Get database connection
+    const db = await getDb();
+
+    // Get all email files for the user
+    const userFiles = await db.select().from(emailFile).where(
+      eq(emailFile.userId, session.user.id)
+    );
+
+    return NextResponse.json({
+      message: 'Email files retrieved successfully',
+      files: userFiles.map(file => ({
+        id: file.id,
+        filename: file.filename,
+        fileType: file.fileType,
+        fileSize: file.fileSize,
+        createdAt: file.createdAt,
+      })),
+    });
+  } catch (error) {
+    console.error('Error retrieving files:', error);
+    return NextResponse.json(
+      { error: 'Failed to retrieve files' },
+      { status: 500 }
+    );
+  }
 }
