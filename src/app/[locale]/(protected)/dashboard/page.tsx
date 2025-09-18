@@ -2,8 +2,8 @@
 
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 import { EmailUpload } from '@/components/dashboard/email-upload';
+import { EmailFileTable } from '@/components/dashboard/email-file-table';
 import { useTranslations } from 'next-intl';
-import { useState } from 'react';
 
 /**
  * Dashboard page
@@ -13,7 +13,6 @@ import { useState } from 'react';
  */
 export default function DashboardPage() {
   const t = useTranslations();
-  const [uploadedFiles, setUploadedFiles] = useState<{id: string, filename: string}[]>([]);
 
   const breadcrumbs = [
     {
@@ -22,8 +21,10 @@ export default function DashboardPage() {
     },
   ];
 
-  const handleUploadSuccess = (fileId: string, filename: string) => {
-    setUploadedFiles(prev => [...prev, { id: fileId, filename }]);
+  const handleUploadSuccess = () => {
+    // Refresh the file table after upload
+    const event = new CustomEvent('fileUploaded');
+    window.dispatchEvent(event);
   };
 
   return (
@@ -36,20 +37,11 @@ export default function DashboardPage() {
             <div className="px-4 lg:px-6">
               <EmailUpload onUploadSuccess={handleUploadSuccess} />
             </div>
-            {uploadedFiles.length > 0 && (
-              <div className="px-4 lg:px-6">
-                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                  <h3 className="text-lg font-medium text-green-800">Recently Uploaded Files</h3>
-                  <ul className="mt-2 list-disc pl-5 space-y-1">
-                    {uploadedFiles.map((file) => (
-                      <li key={file.id} className="text-green-700">
-                        {file.filename}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
+            
+            {/* Show email file table */}
+            <div className="px-4 lg:px-6">
+              <EmailFileTable />
+            </div>
           </div>
         </div>
       </div>
