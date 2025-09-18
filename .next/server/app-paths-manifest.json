@@ -1,6 +1,9 @@
 {
+  "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
   "/api/get-email-files/route": "app/api/get-email-files/route.js",
-  "/[locale]/auth/login/page": "app/[locale]/auth/login/page.js",
+  "/api/delete-email-file/[id]/route": "app/api/delete-email-file/[id]/route.js",
+  "/api/upload-email/route": "app/api/upload-email/route.js",
   "/[locale]/(protected)/dashboard/page": "app/[locale]/(protected)/dashboard/page.js",
+  "/[locale]/auth/login/page": "app/[locale]/auth/login/page.js",
   "/[locale]/(marketing)/(home)/page": "app/[locale]/(marketing)/(home)/page.js"
 }

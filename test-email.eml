@@ -1,8 +1,0 @@
-From: test@example.com
-To: recipient@example.com
-Subject: Test Email
-Date: Mon, 18 Sep 2025 10:00:00 +0000
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-
-This is a test email for verifying the email preview functionality.
