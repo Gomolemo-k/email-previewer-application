@@ -72,8 +72,19 @@
       "description": "查看和管理您上传的邮件文件",
       "no-files": "尚未上传邮件文件",
       "view": "查看",
+      "filename": "文件名",
+      "file-type": "类型",
+      "file-size": "大小",
+      "upload-date": "上传日期",
+      "actions": "操作",
       "fetch-error": "获取文件失败",
-      "fetch-error-description": "无法获取您的邮件文件，请重试。"
+      "fetch-error-description": "无法获取您的邮件文件，请重试。",
+      "delete-success": "文件已删除",
+      "delete-success-description": "文件 {filename} 已成功删除",
+      "delete-error": "删除文件失败",
+      "delete-error-description": "无法删除文件，请重试。",
+      "preview-not-available": "预览不可用",
+      "preview-not-available-description": "文件预览功能将在未来的更新中实现。"
     },
     "admin": {
       "title": "系统管理",
