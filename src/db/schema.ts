@@ -1,4 +1,4 @@
-import { boolean, integer, pgTable, text, timestamp, index, bytea } from "drizzle-orm/pg-core";
+import { boolean, integer, pgTable, text, timestamp, index } from "drizzle-orm/pg-core";
 
 export const user = pgTable("user", {
 	id: text("id").primaryKey(),
@@ -122,16 +122,5 @@ export const creditTransaction = pgTable("credit_transaction", {
 	creditTransactionTypeIdx: index("credit_transaction_type_idx").on(table.type),
 }));
 
-export const emailFile = pgTable("email_file", {
-	id: text("id").primaryKey(),
-	userId: text("user_id").notNull().references(() => user.id, { onDelete: 'cascade' }),
-	filename: text("filename").notNull(),
-	fileType: text("file_type").notNull(), // 'eml' or 'html'
-	fileSize: integer("file_size").notNull(),
-	content: bytea("content").notNull(), // Store the file content as binary data
-	createdAt: timestamp("created_at").notNull().defaultNow(),
-	updatedAt: timestamp("updated_at").notNull().defaultNow(),
-}, (table) => ({
-	emailFileUserIdIdx: index("email_file_user_id_idx").on(table.userId),
-	emailFileFilenameIdx: index("email_file_filename_idx").on(table.filename),
-}));
+// Note: We're not including the emailFile table right now due to issues with bytea import
+// We'll store files in the database in a different way or use a file storage service
