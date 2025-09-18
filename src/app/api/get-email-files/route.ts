@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDb } from '@/db/index';
-import { emailFile } from '@/db/schema';
+import { readdir, stat } from 'fs/promises';
+import { join } from 'path';
 import { auth } from '@/lib/auth';
-import { eq } from 'drizzle-orm';
+
+// Upload directory
+const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,24 +20,53 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Get database connection
-    const db = await getDb();
+    // Check if upload directory exists
+    try {
+      const files = await readdir(UPLOAD_DIR);
+      
+      // Filter files that belong to the current user
+      // Format: originalName-userId-uuid.extension
+      const userFiles = files.filter(file => 
+        file.includes(`-${session.user.id}-`) && 
+        (file.endsWith('.eml') || file.endsWith('.html'))
+      );
+      
+      const emailFiles = await Promise.all(
+        userFiles.map(async (file) => {
+          const filePath = join(UPLOAD_DIR, file);
+          const fileStat = await stat(filePath);
+          
+          // Extract original filename and ID from the file name
+          // Format: originalName-userId-uuid.extension
+          const fileNameParts = file.split('.');
+          const fileExtension = fileNameParts.pop() || '';
+          const nameAndIds = fileNameParts.join('.');
+          const parts = nameAndIds.split('-');
+          const fileId = parts.pop() || '';
+          const userId = parts.pop() || '';
+          const originalFileName = parts.join('-') + '.' + fileExtension;
+          
+          return {
+            id: fileId,
+            filename: originalFileName,
+            fileType: fileExtension,
+            fileSize: fileStat.size,
+            createdAt: fileStat.birthtime,
+          };
+        })
+      );
 
-    // Get all email files for the user
-    const userFiles = await db.select().from(emailFile).where(
-      eq(emailFile.userId, session.user.id)
-    );
-
-    return NextResponse.json({
-      message: 'Email files retrieved successfully',
-      files: userFiles.map(file => ({
-        id: file.id,
-        filename: file.filename,
-        fileType: file.fileType,
-        fileSize: file.fileSize,
-        createdAt: file.createdAt,
-      })),
-    });
+      return NextResponse.json({
+        message: 'Email files retrieved successfully',
+        files: emailFiles,
+      });
+    } catch (error) {
+      // If directory doesn't exist, return empty array
+      return NextResponse.json({
+        message: 'Email files retrieved successfully',
+        files: [],
+      });
+    }
   } catch (error) {
     console.error('Error retrieving files:', error);
     return NextResponse.json(

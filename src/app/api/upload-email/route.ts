@@ -61,9 +61,9 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate unique filename
+    // Generate unique filename with user ID
     const uniqueId = uuidv4();
-    const filename = `${file.name.replace(/\.[^/.]+$/, '')}-${uniqueId}.${fileExtension}`;
+    const filename = `${file.name.replace(/\.[^/.]+$/, '')}-${session.user.id}-${uniqueId}.${fileExtension}`;
     const filepath = join(UPLOAD_DIR, filename);
 
     // Save file to disk

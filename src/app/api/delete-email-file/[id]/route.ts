@@ -8,9 +8,12 @@ const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    // Await params before accessing properties
+    const { id: fileId } = await params;
+    
     // Authenticate the user
     const session = await auth.api.getSession({
       headers: request.headers,
@@ -23,8 +26,6 @@ export async function DELETE(
       );
     }
 
-    const fileId = params.id;
-    
     if (!fileId) {
       return NextResponse.json(
         { error: 'File ID is required' },
@@ -34,11 +35,9 @@ export async function DELETE(
 
     // Find the file in the upload directory that matches the file ID and user ID
     const files = await readdir(UPLOAD_DIR);
-    const fileToDelete = files.find(file => {
-      // Check if the file contains the user ID and file ID in the correct format
-      // Format: originalName-userId-fileId.extension
-      return file.includes(`-${session.user.id}-${fileId}.`);
-    });
+    const fileToDelete = files.find(file => 
+      file.includes(`-${session.user.id}-${fileId}.`)
+    );
     
     if (!fileToDelete) {
       return NextResponse.json(
