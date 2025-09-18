@@ -72,8 +72,19 @@
       "description": "View and manage your uploaded email files",
       "no-files": "No email files uploaded yet",
       "view": "View",
+      "filename": "Filename",
+      "file-type": "Type",
+      "file-size": "Size",
+      "upload-date": "Upload Date",
+      "actions": "Actions",
       "fetch-error": "Failed to fetch files",
-      "fetch-error-description": "Could not retrieve your email files. Please try again."
+      "fetch-error-description": "Could not retrieve your email files. Please try again.",
+      "delete-success": "File deleted",
+      "delete-success-description": "File {filename} has been deleted successfully",
+      "delete-error": "Failed to delete file",
+      "delete-error-description": "Could not delete the file. Please try again.",
+      "preview-not-available": "Preview not available",
+      "preview-not-available-description": "File preview functionality will be implemented in a future update."
     },
     "admin": {
       "title": "Admin",
