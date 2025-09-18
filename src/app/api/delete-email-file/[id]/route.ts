@@ -12,7 +12,7 @@ export async function DELETE(
 ) {
   try {
     // Await params before accessing properties
-    const { id: fileId } = await params;
+    const { id } = await params;
     
     // Authenticate the user
     const session = await auth.api.getSession({
@@ -26,7 +26,7 @@ export async function DELETE(
       );
     }
 
-    if (!fileId) {
+    if (!id) {
       return NextResponse.json(
         { error: 'File ID is required' },
         { status: 400 }
@@ -36,7 +36,7 @@ export async function DELETE(
     // Find the file in the upload directory that matches the file ID and user ID
     const files = await readdir(UPLOAD_DIR);
     const fileToDelete = files.find(file => 
-      file.includes(`-${session.user.id}-${fileId}.`)
+      file.includes(`-${session.user.id}-${id}.`)
     );
     
     if (!fileToDelete) {
