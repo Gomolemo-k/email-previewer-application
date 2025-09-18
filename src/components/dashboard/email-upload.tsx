@@ -5,11 +5,11 @@ import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { authClient } from '@/lib/auth-client';
 
 interface EmailUploadProps {
-  onUploadSuccess?: (file: File) => void;
+  onUploadSuccess?: (fileId: string, filename: string) => void;
 }
 
 export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
@@ -50,6 +50,12 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
   const handleUpload = async (file: File) => {
     setIsUploading(true);
     try {
+      // Check if user is authenticated
+      const session = await authClient.getSession();
+      if (!session.data?.user) {
+        throw new Error('User not authenticated');
+      }
+
       // Create FormData object to send file to backend
       const formData = new FormData();
       formData.append('file', file);
@@ -58,6 +64,9 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
       const response = await fetch('/api/upload-email', {
         method: 'POST',
         body: formData,
+        headers: {
+          // Include auth headers if needed
+        },
       });
 
       const result = await response.json();
@@ -70,7 +79,7 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
         description: t('upload-success-description', { fileName: file.name })
       });
       
-      onUploadSuccess?.(file);
+      onUploadSuccess?.(result.fileId, result.filename);
     } catch (error: any) {
       console.error('Upload error:', error);
       toast.error(t('upload-error'), {
