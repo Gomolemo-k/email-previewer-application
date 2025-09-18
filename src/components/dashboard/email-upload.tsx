@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 
 interface EmailUploadProps {
-  onUploadSuccess?: (fileId: string, filename: string) => void;
+  onUploadSuccess?: () => void;
 }
 
 export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
@@ -76,7 +76,7 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
         description: t('upload-success-description', { fileName: file.name })
       });
       
-      onUploadSuccess?.(result.fileId, result.filename);
+      onUploadSuccess?.();
     } catch (error: any) {
       console.error('Upload error:', error);
       toast.error(t('upload-error'), {

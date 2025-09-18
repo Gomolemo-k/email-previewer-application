@@ -35,6 +35,17 @@ export function EmailFileTable() {
 
   useEffect(() => {
     fetchFiles();
+    
+    // Listen for file upload events
+    const handleFileUploaded = () => {
+      fetchFiles();
+    };
+    
+    window.addEventListener('fileUploaded', handleFileUploaded);
+    
+    return () => {
+      window.removeEventListener('fileUploaded', handleFileUploaded);
+    };
   }, []);
 
   const fetchFiles = async () => {
