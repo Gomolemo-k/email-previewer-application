@@ -1794,6 +1794,9 @@
   .h-\[1\.15rem\] {
     height: 1.15rem;
   }
+  .h-\[60vh\] {
+    height: 60vh;
+  }
   .h-\[100cqh\] {
     height: 100cqh;
   }
@@ -1820,6 +1823,9 @@
   }
   .h-\[calc\(100\%-2\.75rem\)\] {
     height: calc(100% - 2.75rem);
+  }
+  .h-\[calc\(100vh-120px\)\] {
+    height: calc(100vh - 120px);
   }
   .h-\[var\(--radix-navigation-menu-viewport-height\)\] {
     height: var(--radix-navigation-menu-viewport-height);
