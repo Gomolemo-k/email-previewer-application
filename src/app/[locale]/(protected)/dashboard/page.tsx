@@ -1,14 +1,9 @@
 'use client';
 
-import { ChartAreaInteractive } from '@/components/dashboard/chart-area-interactive';
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
-import { DataTable } from '@/components/dashboard/data-table';
-import { SectionCards } from '@/components/dashboard/section-cards';
 import { EmailUpload } from '@/components/dashboard/email-upload';
 import { useTranslations } from 'next-intl';
 import { useState } from 'react';
-
-import data from './data.json';
 
 /**
  * Dashboard page
@@ -55,11 +50,6 @@ export default function DashboardPage() {
                 </div>
               </div>
             )}
-            <SectionCards />
-            <div className="px-4 lg:px-6">
-              <ChartAreaInteractive />
-            </div>
-            <DataTable data={data} />
           </div>
         </div>
       </div>
