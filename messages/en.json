@@ -67,6 +67,14 @@
       "upload-error": "Upload failed",
       "upload-error-description": "Failed to upload file. Please try again."
     },
+    "email-files": {
+      "title": "Your Email Files",
+      "description": "View and manage your uploaded email files",
+      "no-files": "No email files uploaded yet",
+      "view": "View",
+      "fetch-error": "Failed to fetch files",
+      "fetch-error-description": "Could not retrieve your email files. Please try again."
+    },
     "admin": {
       "title": "Admin",
       "users": {
