@@ -64,9 +64,6 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
       const response = await fetch('/api/upload-email', {
         method: 'POST',
         body: formData,
-        headers: {
-          // Include auth headers if needed
-        },
       });
 
       const result = await response.json();
