@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
- import { Download, ExternalLink, Monitor, Tablet, Smartphone } from 'lucide-react';
+ import { Download, ExternalLink, Monitor, Tablet, Smartphone, ArrowLeft } from 'lucide-react';
 
 interface EmailFile {
   id: string;
@@ -143,6 +143,10 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
     }
   };
 
+  const handleGoBack = () => {
+    router.back();
+  };
+
   if (loading) {
     return (
       <div className="flex flex-1 flex-col p-4 md:p-6">
@@ -181,7 +185,13 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <div className="flex items-center gap-4">
+          <Button onClick={handleGoBack} variant="outline" size="sm">
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            {t('go-back')}
+          </Button>
+          <h1 className="text-2xl font-bold">{t('title')}</h1>
+        </div>
         <div className="flex gap-2">
           <Button onClick={handleDownload} variant="outline">
             <Download className="h-4 w-4 mr-2" />
