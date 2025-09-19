@@ -27,7 +27,7 @@ export default function DashboardPage() {
     window.dispatchEvent(event);
   };
 
-  return (
+  return (  
     <>
       <DashboardHeader breadcrumbs={breadcrumbs} />
 

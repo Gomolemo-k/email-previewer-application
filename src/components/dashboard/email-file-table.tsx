@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Minimize2, Maximize2, X, Trash2 } from 'lucide-react';
+import { ExternalLink, Minimize2, Maximize2, X, Trash2 } from 'lucide-react';
 
 interface EmailFile {
   id: string;
@@ -199,6 +199,13 @@ export function EmailFileTable() {
                       onClick={() => handleFilePreview(file)}
                     >
                       {t('view')}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => window.open(`/dashboard/email-preview/${file.id}`, '_blank')}
+                    >
+                      <ExternalLink className="h-4 w-4" />
                     </Button>
                     <Button 
                       variant="outline" 
