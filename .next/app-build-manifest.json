@@ -61,10 +61,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/(protected)/dashboard/page.js"
     ],
-    "/api/upload-email/route": [
+    "/api/get-email-files/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/upload-email/route.js"
+      "static/chunks/app/api/get-email-files/route.js"
+    ],
+    "/[locale]/[...rest]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/[...rest]/page.js"
     ],
     "/[locale]/auth/layout": [
       "static/chunks/webpack.js",
@@ -81,25 +86,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/auth/login/page.js"
     ],
-    "/[locale]/[...rest]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/[...rest]/page.js"
-    ],
     "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/_not-found/page.js"
-    ],
-    "/api/get-email-files/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/get-email-files/route.js"
-    ],
-    "/api/delete-email-file/[id]/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/delete-email-file/[id]/route.js"
     ]
   }
 }
