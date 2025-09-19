@@ -86,6 +86,27 @@
       "preview-not-available": "Preview not available",
       "preview-not-available-description": "File preview functionality will be implemented in a future update."
     },
+    "email-preview": {
+      "title": "Email Preview",
+      "file-not-found": "File not found",
+      "go-back": "Go Back",
+      "download": "Download",
+      "file-type": "File Type",
+      "file-size": "File Size",
+      "upload-date": "Upload Date",
+      "fetch-error": "Failed to fetch file",
+      "fetch-error-description": "Could not retrieve the email file. Please try again.",
+      "content-fetch-error": "Failed to fetch file content",
+      "content-fetch-error-description": "Could not retrieve the email file content. Please try again.",
+      "download-success": "Download started",
+      "download-success-description": "Your file download has started",
+      "download-error": "Download failed",
+      "download-error-description": "Could not download the file. Please try again.",
+      "preview-title": "Responsive Preview",
+      "desktop": "Desktop",
+      "tablet": "Tablet",
+      "mobile": "Mobile"
+    },
     "admin": {
       "title": "Admin",
       "users": {
