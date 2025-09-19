@@ -56,40 +56,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/(protected)/layout.js"
     ],
-    "/[locale]/(protected)/dashboard/page": [
+    "/[locale]/(protected)/payment/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(protected)/dashboard/page.js"
+      "static/chunks/app/[locale]/(protected)/payment/layout.js"
     ],
-    "/api/get-email-files/route": [
+    "/[locale]/(protected)/payment/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/get-email-files/route.js"
-    ],
-    "/[locale]/[...rest]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/[...rest]/page.js"
-    ],
-    "/[locale]/auth/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/auth/layout.js"
-    ],
-    "/[locale]/auth/loading": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/auth/loading.js"
-    ],
-    "/[locale]/auth/login/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/auth/login/page.js"
-    ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
+      "static/chunks/app/[locale]/(protected)/payment/page.js"
     ]
   }
 }

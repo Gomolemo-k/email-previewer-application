@@ -983,6 +983,9 @@
   .inset-y-\[-30\%\] {
     inset-block: -30%;
   }
+  .-top-2 {
+    top: calc(var(--spacing) * -2);
+  }
   .-top-3 {
     top: calc(var(--spacing) * -3);
   }
@@ -1894,6 +1897,9 @@
   }
   .min-h-\[60vh\] {
     min-height: 60vh;
+  }
+  .min-h-\[80vh\] {
+    min-height: 80vh;
   }
   .min-h-\[100dvh\] {
     min-height: 100dvh;
@@ -3172,6 +3178,9 @@
   .border-gray-400\/30 {
     border-color: color-mix(in oklab, var(--color-gray-400) 30%, transparent);
   }
+  .border-gray-900 {
+    border-color: var(--color-gray-900);
+  }
   .border-gray-950\/\[\.1\] {
     border-color: color-mix(in oklab, var(--color-gray-950) 10%, transparent);
   }
@@ -3363,6 +3372,9 @@
   }
   .bg-primary-foreground {
     background-color: var(--primary-foreground);
+  }
+  .bg-primary\/5 {
+    background-color: color-mix(in oklab, var(--primary) 5%, transparent);
   }
   .bg-primary\/10 {
     background-color: color-mix(in oklab, var(--primary) 10%, transparent);
