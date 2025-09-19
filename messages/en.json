@@ -107,6 +107,17 @@
       "tablet": "Tablet",
       "mobile": "Mobile"
     },
+    "landing": {
+      "title": "Welcome",
+      "welcomeTitle": "Welcome to Email Previewer",
+      "welcomeDescription": "Get started by subscribing to our Pro plan to unlock all features and start previewing your email templates.",
+      "perMonth": "per month",
+      "perYear": "per year",
+      "save": "Save",
+      "getStarted": "Get Started",
+      "existingUser": "Already have an account?",
+      "signIn": "Sign in"
+    },
     "admin": {
       "title": "Admin",
       "users": {
