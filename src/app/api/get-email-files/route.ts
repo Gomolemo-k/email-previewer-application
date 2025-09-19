@@ -38,13 +38,24 @@ export async function GET(request: NextRequest) {
           
           // Extract original filename and ID from the file name
           // Format: originalName-userId-uuid.extension
+          // We need to extract the parts carefully to handle filenames that may contain dashes
           const fileNameParts = file.split('.');
           const fileExtension = fileNameParts.pop() || '';
           const nameAndIds = fileNameParts.join('.');
-          const parts = nameAndIds.split('-');
-          const fileId = parts.pop() || '';
-          const userId = parts.pop() || '';
-          const originalFileName = parts.join('-') + '.' + fileExtension;
+          
+          // Find the last occurrence of userId in the filename
+          const userIdIndex = nameAndIds.lastIndexOf(`-${session.user.id}-`);
+          if (userIdIndex === -1) {
+            // This shouldn't happen if our filter worked correctly, but just in case
+            throw new Error('Invalid filename format');
+          }
+          
+          // Extract original filename (everything before the last userId)
+          const originalFileName = nameAndIds.substring(0, userIdIndex) + '.' + fileExtension;
+          
+          // Extract the part after userId to get the fileId
+          const idsPart = nameAndIds.substring(userIdIndex + session.user.id.length + 2); // +2 for the two dashes
+          const fileId = idsPart; // The remaining part is the fileId
           
           return {
             id: fileId,

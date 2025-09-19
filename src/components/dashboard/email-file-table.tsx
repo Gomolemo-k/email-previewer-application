@@ -16,6 +16,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { ExternalLink, Minimize2, Maximize2, X, Trash2 } from 'lucide-react';
+import { LocaleLink } from '@/i18n/navigation';
 
 interface EmailFile {
   id: string;
@@ -196,16 +197,20 @@ export function EmailFileTable() {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={() => handleFilePreview(file)}
+                      asChild
                     >
-                      {t('view')}
+                      <LocaleLink href={`/email-preview/${file.id}`}>
+                        {t('view')}
+                      </LocaleLink>
                     </Button>
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      onClick={() => window.open(`/dashboard/email-preview/${file.id}`, '_blank')}
+                      asChild
                     >
-                      <ExternalLink className="h-4 w-4" />
+                      <LocaleLink href={`/email-preview/${file.id}`}>
+                        <ExternalLink className="h-4 w-4" />
+                      </LocaleLink>
                     </Button>
                     <Button 
                       variant="outline" 

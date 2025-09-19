@@ -42,8 +42,9 @@ export async function GET(
     
     // Check if the file belongs to the current user
     // The filename format is: originalName-userId-fileId.extension
-    // So we need to check if the filename contains the user ID
-    if (!nameAndIds.includes(`-${session.user.id}-`)) {
+    // So we need to check if the filename contains the user ID in the correct position
+    const userIdIndex = nameAndIds.lastIndexOf(`-${session.user.id}-`);
+    if (userIdIndex === -1) {
       return NextResponse.json(
         { error: 'Unauthorized' },
         { status: 401 }
