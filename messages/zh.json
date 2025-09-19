@@ -86,6 +86,27 @@
       "preview-not-available": "预览不可用",
       "preview-not-available-description": "文件预览功能将在未来的更新中实现。"
     },
+    "email-preview": {
+      "title": "邮件预览",
+      "file-not-found": "文件未找到",
+      "go-back": "返回",
+      "download": "下载",
+      "file-type": "文件类型",
+      "file-size": "文件大小",
+      "upload-date": "上传日期",
+      "fetch-error": "获取文件失败",
+      "fetch-error-description": "无法获取邮件文件，请重试。",
+      "content-fetch-error": "获取文件内容失败",
+      "content-fetch-error-description": "无法获取邮件文件内容，请重试。",
+      "download-success": "开始下载",
+      "download-success-description": "文件下载已开始",
+      "download-error": "下载失败",
+      "download-error-description": "无法下载文件，请重试。",
+      "preview-title": "响应式预览",
+      "desktop": "桌面端",
+      "tablet": "平板端",
+      "mobile": "移动端"
+    },
     "admin": {
       "title": "系统管理",
       "users": {
