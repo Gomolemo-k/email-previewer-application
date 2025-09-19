@@ -82,26 +82,18 @@ export function PaymentCard() {
     }
   }, [paymentCheck, status]);
 
-  // Handle auto-redirect for success, if status is success, redirect to callback url
+  // Handle auto-redirect for success, if status is success, redirect to callback url or dashboard
   useEffect(() => {
-    if (status === 'success' && callback) {
-      // Invalidate relevant cache based on callback destination
-      if (callback === Routes.SettingsCredits) {
-        // Invalidate credits related queries
-        queryClient.invalidateQueries({
-          queryKey: ['credits'],
-        });
-        console.log('Invalidated credits cache for credits page');
-      } else if (callback === Routes.SettingsBilling) {
-        // Invalidate payment/subscription related queries
-        queryClient.invalidateQueries({
-          queryKey: ['payment'],
-        });
-        console.log('Invalidated payment cache for billing page');
-      }
-
-      // Redirect to callback url
-      localeRouter.push(callback);
+    if (status === 'success') {
+      // Invalidate relevant cache
+      queryClient.invalidateQueries({
+        queryKey: ['payment'],
+      });
+      console.log('Invalidated payment cache');
+      
+      // Redirect to callback url if provided, otherwise redirect to dashboard
+      const redirectUrl = callback || Routes.Dashboard;
+      localeRouter.push(redirectUrl);
     }
   }, [status, localeRouter, callback, queryClient]);
 

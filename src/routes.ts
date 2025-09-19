@@ -91,4 +91,4 @@ export const protectedRoutes = [
  * The default redirect path after logging in
  */
 export const DEFAULT_LOGIN_REDIRECT =
-  websiteConfig.routes.defaultLoginRedirect ?? Routes.Dashboard;
+  websiteConfig.routes.defaultLoginRedirect ?? Routes.Payment;

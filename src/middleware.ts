@@ -13,6 +13,7 @@ import {
   DEFAULT_LOGIN_REDIRECT,
   protectedRoutes,
   routesNotAllowedByLoggedInUsers,
+  Routes,
 } from './routes';
 
 const intlMiddleware = createMiddleware(routing);

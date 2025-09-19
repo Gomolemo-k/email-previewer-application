@@ -1,4 +1,5 @@
-import { randomUUID } from 'crypto';
+// Use crypto.randomUUID() which is available in Edge Runtime
+const randomUUID = () => crypto.randomUUID();
 import { websiteConfig } from '@/config/website';
 import { getDb } from '@/db';
 import { creditTransaction, userCredit } from '@/db/schema';
