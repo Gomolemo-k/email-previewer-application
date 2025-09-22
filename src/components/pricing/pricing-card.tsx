@@ -123,7 +123,9 @@ export function PricingCard({
             variant="default"
             className="bg-primary text-primary-foreground"
           >
-            {t('popular')}
+            {interval === PlanIntervals.YEAR && plan.id === 'pro' 
+              ? t('twoMonthsFree') 
+              : t('popular')}
           </Badge>
         </div>
       )}
