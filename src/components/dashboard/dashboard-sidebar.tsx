@@ -20,7 +20,6 @@ import { useTranslations } from 'next-intl';
 import type * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Logo } from '../layout/logo';
-import { UpgradeCard } from './upgrade-card';
 
 /**
  * Dashboard sidebar
@@ -33,7 +32,6 @@ export function DashboardSidebar({
   const { data: session, isPending } = authClient.useSession();
   const currentUser = session?.user;
   const { state } = useSidebar();
-  // console.log('sidebar currentUser:', currentUser);
 
   const sidebarLinks = useSidebarLinks();
   const filteredSidebarLinks = sidebarLinks.filter((link) => {
@@ -75,9 +73,6 @@ export function DashboardSidebar({
         {/* Only show UI components when not in loading state */}
         {!isPending && mounted && (
           <>
-            {/* show upgrade card if user is not a member, and sidebar is not collapsed */}
-            {currentUser && state !== 'collapsed' && <UpgradeCard />}
-
             {/* show user profile if user is logged in */}
             {currentUser && <SidebarUser user={currentUser} />}
           </>
