@@ -1,8 +1,11 @@
 {
   "/api/auth/[...all]/route": "app/api/auth/[...all]/route.js",
+  "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js",
+  "/api/get-email-files/route": "app/api/get-email-files/route.js",
   "/[locale]/(protected)/landing/page": "app/[locale]/(protected)/landing/page.js",
+  "/[locale]/auth/login/page": "app/[locale]/auth/login/page.js",
+  "/[locale]/(protected)/dashboard/page": "app/[locale]/(protected)/dashboard/page.js",
+  "/[locale]/(marketing)/pricing/page": "app/[locale]/(marketing)/pricing/page.js",
   "/[locale]/(protected)/payment/page": "app/[locale]/(protected)/payment/page.js",
-  "/[locale]/(protected)/settings/security/page": "app/[locale]/(protected)/settings/security/page.js",
-  "/[locale]/(protected)/settings/billing/page": "app/[locale]/(protected)/settings/billing/page.js",
-  "/[locale]/(marketing)/pricing/page": "app/[locale]/(marketing)/pricing/page.js"
+  "/[locale]/(protected)/settings/credits/page": "app/[locale]/(protected)/settings/credits/page.js"
 }

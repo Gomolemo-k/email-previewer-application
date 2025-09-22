@@ -111,25 +111,25 @@
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/(protected)/payment/page.js"
     ],
-    "/api/check-payment-status/route": [
+    "/[locale]/(protected)/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/check-payment-status/route.js"
+      "static/chunks/app/[locale]/(protected)/dashboard/page.js"
     ],
-    "/[locale]/[...rest]/page": [
+    "/api/get-email-files/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/[...rest]/page.js"
+      "static/chunks/app/api/get-email-files/route.js"
     ],
-    "/[locale]/(protected)/settings/security/layout": [
+    "/[locale]/(protected)/settings/credits/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(protected)/settings/security/layout.js"
+      "static/chunks/app/[locale]/(protected)/settings/credits/layout.js"
     ],
-    "/[locale]/(protected)/settings/security/page": [
+    "/[locale]/(protected)/settings/credits/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(protected)/settings/security/page.js"
+      "static/chunks/app/[locale]/(protected)/settings/credits/page.js"
     ]
   }
 }
