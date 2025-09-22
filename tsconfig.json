@@ -24,6 +24,6 @@
       "@/public/*": ["./public/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/[locale]/(protected)/payment/page.tsx", "src/app/[locale]/(protected)/payment/layout.tsx"],
   "exclude": ["node_modules"]
 }

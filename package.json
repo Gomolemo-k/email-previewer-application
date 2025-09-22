@@ -22,7 +22,10 @@
     "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
     "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
-    "knip": "knip"
+    "knip": "knip",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run"
   },
   "dependencies": {
     "@ai-sdk/deepseek": "^1.0.0",
@@ -149,18 +152,27 @@
     "@biomejs/biome": "1.9.4",
     "@tailwindcss/postcss": "^4.0.14",
     "@tanstack/eslint-plugin-query": "^5.83.1",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/mdx": "^2.0.13",
     "@types/node": "^20.19.0",
     "@types/pg": "^8.11.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/react-syntax-highlighter": "^15.5.13",
+    "@vitejs/plugin-react": "^4.7.0",
+    "@vitest/ui": "^3.2.4",
     "drizzle-kit": "^0.30.4",
+    "jsdom": "^26.1.0",
     "knip": "^5.61.2",
     "postcss": "^8",
     "react-email": "3.0.7",
     "tailwindcss": "^4.0.14",
     "tsx": "^4.19.3",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vite": "^6.2.0",
+    "vitest": "^3.2.4"
   }
 }
