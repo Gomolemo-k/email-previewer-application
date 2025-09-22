@@ -133,25 +133,25 @@ export const websiteConfig: WebsiteConfig = {
           expireDays: 30,
         },
       },
-      lifetime: {
-        id: 'lifetime',
-        prices: [
-          {
-            type: PaymentTypes.ONE_TIME,
-            priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LIFETIME!,
-            amount: 19900,
-            currency: 'USD',
-            allowPromotionCode: true,
-          },
-        ],
-        isFree: false,
-        isLifetime: true,
-        credits: {
-          enable: true,
-          amount: 1000,
-          expireDays: 30,
-        },
-      },
+      // lifetime: {
+      //   id: 'lifetime',
+      //   prices: [
+      //     {
+      //       type: PaymentTypes.ONE_TIME,
+      //       priceId: process.env.NEXT_PUBLIC_STRIPE_PRICE_LIFETIME!,
+      //       amount: 19900,
+      //       currency: 'USD',
+      //       allowPromotionCode: true,
+      //     },
+      //   ],
+      //   isFree: false,
+      //   isLifetime: true,
+      //   credits: {
+      //     enable: true,
+      //     amount: 1000,
+      //     expireDays: 30,
+      //   },
+      // },
     },
   },
   credits: {
