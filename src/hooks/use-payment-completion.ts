@@ -1,6 +1,8 @@
 import { checkPaymentCompletionAction } from '@/actions/check-payment-completion';
+import { verifyPaymentAction } from '@/actions/verify-payment';
 import { PAYMENT_POLL_INTERVAL } from '@/lib/constants';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 
 // Query keys for payment completion
 export const paymentCompletionKeys = {
@@ -14,7 +16,9 @@ export function usePaymentCompletion(
   sessionId: string | null,
   enablePolling = false
 ) {
-  return useQuery({
+  const retryCount = useRef(0);
+  
+  const query = useQuery({
     queryKey: paymentCompletionKeys.session(sessionId || ''),
     queryFn: async () => {
       if (!sessionId) {
@@ -34,6 +38,19 @@ export function usePaymentCompletion(
       const { isPaid } = result.data;
       console.log('<<< Check payment completion success:', isPaid);
 
+      // If payment is not paid and we haven't retried too many times, try to verify with Stripe directly
+      if (!isPaid && retryCount.current < 3) {
+        retryCount.current++;
+        console.log('Payment not paid, trying to verify with Stripe directly, attempt:', retryCount.current);
+        const verifyResult = await verifyPaymentAction({ sessionId });
+        if (verifyResult?.data?.success && verifyResult.data.isPaid) {
+          console.log('Payment verified with Stripe directly');
+          return {
+            isPaid: true,
+          };
+        }
+      }
+
       return {
         isPaid,
       };
@@ -44,4 +61,11 @@ export function usePaymentCompletion(
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
   });
+  
+  // Reset retry count when sessionId changes
+  useEffect(() => {
+    retryCount.current = 0;
+  }, [sessionId]);
+
+  return query;
 }

@@ -11,6 +11,7 @@ import { useLocaleRouter } from '@/i18n/navigation';
 import { PAYMENT_MAX_POLL_TIME, PAYMENT_POLL_INTERVAL } from '@/lib/constants';
 import { Routes } from '@/routes';
 import { setPaymentVerifiedCookieAction } from '@/actions/set-payment-verified-cookie';
+import { verifyPaymentAction } from '@/actions/verify-payment';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   AlertCircleIcon,
@@ -41,7 +42,7 @@ export function PaymentCard() {
   const sessionId = searchParams.get('session_id');
 
   // Check payment completion using the existing hook
-  const { data: paymentCheck } = usePaymentCompletion(
+  const { data: paymentCheck, refetch } = usePaymentCompletion(
     sessionId,
     status === 'processing' && !!sessionId
   );
@@ -55,7 +56,23 @@ export function PaymentCard() {
         if (pollStartTime.current) {
           const elapsed = Date.now() - pollStartTime.current;
           if (elapsed > PAYMENT_MAX_POLL_TIME) {
-            setStatus('timeout');
+            // When timeout occurs, try to verify payment directly with Stripe
+            const verifyPayment = async () => {
+              if (sessionId) {
+                console.log('Payment verification timeout, trying to verify with Stripe directly');
+                const result = await verifyPaymentAction({ sessionId });
+                if (result?.data?.success && result.data.isPaid) {
+                  console.log('Payment verified with Stripe directly after timeout');
+                  setStatus('success');
+                } else {
+                  setStatus('timeout');
+                }
+              } else {
+                setStatus('timeout');
+              }
+            };
+            
+            verifyPayment();
             return;
           }
         }

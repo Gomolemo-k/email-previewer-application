@@ -18,6 +18,7 @@ const checkoutSchema = z.object({
   userId: z.string().min(1, { error: 'User ID is required' }),
   planId: z.string().min(1, { error: 'Plan ID is required' }),
   priceId: z.string().min(1, { error: 'Price ID is required' }),
+  callbackUrl: z.string().optional(),
   metadata: z.record(z.string(), z.string()).optional(),
 });
 
@@ -27,7 +28,7 @@ const checkoutSchema = z.object({
 export const createCheckoutAction = userActionClient
   .schema(checkoutSchema)
   .action(async ({ parsedInput, ctx }) => {
-    const { planId, priceId, metadata } = parsedInput;
+    const { planId, priceId, callbackUrl, metadata } = parsedInput;
     const currentUser = (ctx as { user: User }).user;
 
     try {
@@ -60,9 +61,12 @@ export const createCheckoutAction = userActionClient
           cookieStore.get('datafast_session_id')?.value ?? '';
       }
 
+      // Determine the callback URL, default to dashboard
+      const resolvedCallbackUrl = callbackUrl || Routes.Dashboard;
+
       // Create the checkout session with localized URLs
       const successUrl = getUrlWithLocale(
-        `${Routes.Payment}?session_id={CHECKOUT_SESSION_ID}&callback=${Routes.SettingsBilling}`,
+        `${Routes.Payment}?session_id={CHECKOUT_SESSION_ID}&callback=${resolvedCallbackUrl}`,
         locale
       );
       const cancelUrl = getUrlWithLocale(Routes.SettingsBilling, locale);

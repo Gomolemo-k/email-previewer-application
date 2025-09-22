@@ -23,6 +23,8 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   const [file, setFile] = useState<EmailFile | null>(null);
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [contentLoading, setContentLoading] = useState(false);
+  const [contentError, setContentError] = useState<string | null>(null);
   const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
@@ -70,6 +72,9 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
 
   const fetchFileContent = async (file: EmailFile, sessionData: any) => {
     try {
+      setContentLoading(true);
+      setContentError(null);
+      
       // Construct the filename as it's stored on the server
       // Format: originalName-userId-fileId.extension
       const fileExtension = file.fileType;
@@ -79,16 +84,20 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
       const response = await fetch(`/api/get-email-file-content/${formattedFileName}`);
       
       if (!response.ok) {
-        throw new Error('Failed to fetch file content');
+        const errorResult = await response.json();
+        throw new Error(errorResult.error || 'Failed to fetch file content');
       }
       
       const content = await response.text();
       setFileContent(content);
     } catch (error: any) {
       console.error('Error fetching file content:', error);
+      setContentError(error.message || t('content-fetch-error-description'));
       toast.error(t('content-fetch-error'), {
         description: error.message || t('content-fetch-error-description')
       });
+    } finally {
+      setContentLoading(false);
     }
   };
 
@@ -226,7 +235,19 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
           </div>
         </CardHeader>
         <CardContent>
-          {fileContent ? (
+          {contentLoading ? (
+            <div className="flex justify-center items-center h-32">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          ) : contentError ? (
+            <div className="flex flex-col justify-center items-center h-32 gap-4">
+              <p className="text-red-500">{t('content-fetch-error')}</p>
+              <p className="text-muted-foreground text-sm">{contentError}</p>
+              <Button onClick={() => file && session && fetchFileContent(file, session)}>
+                {t('retry')}
+              </Button>
+            </div>
+          ) : fileContent ? (
             <div className="space-y-6">
               {/* Preview Panes Header */}
               <div className="flex items-center gap-4">
@@ -255,7 +276,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                     <Monitor className="h-4 w-4" />
                     {t('desktop')} (1200px)
                   </div>
-                  <div className="border rounded-lg p-4 bg-white">
+                  <div className="border rounded-lg p-4 bg-white overflow-auto">
                     {file.fileType === 'html' ? (
                       <iframe 
                         srcDoc={fileContent} 
@@ -277,7 +298,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                     <Tablet className="h-4 w-4" />
                     {t('tablet')} (768px)
                   </div>
-                  <div className="border rounded-lg p-4 bg-white">
+                  <div className="border rounded-lg p-4 bg-white overflow-auto">
                     {file.fileType === 'html' ? (
                       <iframe 
                         srcDoc={fileContent} 
@@ -299,7 +320,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                     <Smartphone className="h-4 w-4" />
                     {t('mobile')} (375px)
                   </div>
-                  <div className="border rounded-lg p-4 bg-white">
+                  <div className="border rounded-lg p-4 bg-white overflow-auto">
                     {file.fileType === 'html' ? (
                       <iframe 
                         srcDoc={fileContent} 

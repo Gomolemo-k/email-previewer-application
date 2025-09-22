@@ -143,10 +143,31 @@ export const LoginForm = ({
           // console.log("login, response:", ctx.response);
           setIsPending(false);
         },
-        onSuccess: (ctx) => {
+        onSuccess: async (ctx) => {
           // console.log("login, success:", ctx.data);
           // setSuccess("Login successful");
-          // router.push(callbackUrl || "/dashboard");
+          // If no callbackUrl was provided, we need to determine where to redirect the user
+          if (!callbackUrl || callbackUrl === defaultCallbackUrl) {
+            // Check if the user has an active subscription
+            try {
+              // Fetch the user's subscription status using the session
+              const response = await fetch('/api/check-payment-status');
+              const result = await response.json();
+              
+              if (result?.hasPaid) {
+                // User has an active subscription, redirect to dashboard
+                window.location.href = '/dashboard';
+              } else {
+                // User doesn't have an active subscription, redirect to landing page
+                window.location.href = '/';
+              }
+            } catch (error) {
+              console.error('Error checking subscription status:', error);
+              // Fallback to dashboard if there's an error
+              window.location.href = '/dashboard';
+            }
+          }
+          // If a callbackUrl was provided, the auth client will handle the redirect automatically
         },
         onError: (ctx) => {
           // console.error('login, error:', ctx.error);

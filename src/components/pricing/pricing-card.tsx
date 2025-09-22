@@ -186,13 +186,14 @@ export function PricingCard({
               userId={currentUser.id}
               planId={plan.id}
               priceId={price.priceId}
+              callbackUrl="/dashboard"
               metadata={metadata}
               className="mt-4 w-full cursor-pointer"
             >
               {plan.isLifetime ? t('getLifetimeAccess') : t('getStarted')}
             </CheckoutButton>
           ) : (
-            <LoginWrapper mode="modal" asChild callbackUrl={currentPath}>
+            <LoginWrapper mode="modal" asChild callbackUrl="/dashboard">
               <Button variant="default" className="mt-4 w-full cursor-pointer">
                 {t('getStarted')}
               </Button>

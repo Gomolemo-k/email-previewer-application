@@ -22,6 +22,7 @@ import { cn } from '@/lib/utils';
 import { Routes } from '@/routes';
 import { CheckCircleIcon, ClockIcon, RefreshCwIcon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 
 /**
@@ -30,6 +31,7 @@ import { useCallback } from 'react';
 export default function BillingCard() {
   const t = useTranslations('Dashboard.settings.billing');
   const mounted = useMounted();
+  const currentPath = usePathname();
 
   // Get user session for customer ID
   const { data: session, isPending: isLoadingSession } =
@@ -211,7 +213,9 @@ export default function BillingCard() {
         {/* user is on free plan, show upgrade plan button */}
         {isFreePlan && (
           <Button variant="default" className="cursor-pointer" asChild>
-            <LocaleLink href={Routes.Pricing}>{t('upgradePlan')}</LocaleLink>
+            <LocaleLink href={`${Routes.Pricing}?callback=${Routes.Dashboard}`}>
+              {t('upgradePlan')}
+            </LocaleLink>
           </Button>
         )}
 

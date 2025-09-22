@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { websiteConfig } from '@/config/website';
 import { Loader2Icon } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -12,6 +13,7 @@ interface CheckoutButtonProps {
   userId: string;
   planId: string;
   priceId: string;
+  callbackUrl?: string;
   metadata?: Record<string, string>;
   variant?:
     | 'default'
@@ -38,6 +40,7 @@ export function CheckoutButton({
   userId,
   planId,
   priceId,
+  callbackUrl,
   metadata,
   variant = 'default',
   size = 'default',
@@ -46,6 +49,7 @@ export function CheckoutButton({
 }: CheckoutButtonProps) {
   const t = useTranslations('PricingPage.CheckoutButton');
   const [isLoading, setIsLoading] = useState(false);
+  const currentPath = usePathname();
 
   const handleClick = async () => {
     try {
@@ -88,11 +92,17 @@ export function CheckoutButton({
         }
       }
 
+      // Determine the callback URL to use
+      // If a specific callback URL is provided, use it
+      // Otherwise, default to the dashboard for a better user experience
+      const resolvedCallbackUrl = callbackUrl || '/dashboard';
+
       // Create checkout session using server action
       const result = await createCheckoutAction({
         userId,
         planId,
         priceId,
+        callbackUrl: resolvedCallbackUrl,
         metadata:
           Object.keys(mergedMetadata).length > 0 ? mergedMetadata : undefined,
       });

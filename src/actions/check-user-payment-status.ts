@@ -2,8 +2,9 @@
 
 import { getDb } from '@/db';
 import { payment } from '@/db/schema';
+import { PaymentTypes, type PaymentStatus } from '@/payment/types';
 import { userActionClient } from '@/lib/safe-action';
-import { eq, or } from 'drizzle-orm';
+import { and, eq, gte, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 const checkUserPaymentStatusSchema = z.object({
@@ -11,7 +12,7 @@ const checkUserPaymentStatusSchema = z.object({
 });
 
 /**
- * Check if a user has paid for a subscription
+ * Check if a user has paid for an active subscription
  */
 export const checkUserPaymentStatusAction = userActionClient
   .schema(checkUserPaymentStatusSchema)
@@ -19,19 +20,68 @@ export const checkUserPaymentStatusAction = userActionClient
     try {
       const db = await getDb();
       
-      // Check if user has any paid subscriptions or one-time payments
-      const paymentRecords = await db
+      // Check for active subscriptions (recurring)
+      const activeSubscriptions = await db
         .select()
         .from(payment)
-        .where(eq(payment.userId, userId))
-        .limit(10); // Get up to 10 payment records
+        .where(
+          and(
+            eq(payment.userId, userId),
+            eq(payment.type, PaymentTypes.SUBSCRIPTION),
+            or(
+              eq(payment.status, 'active'),
+              and(
+                eq(payment.status, 'trialing'),
+                // Trial is still valid if end date is in the future
+                payment.trialEnd ? gte(payment.trialEnd, new Date()) : undefined
+              )
+            )
+          )
+        )
+        .limit(1);
       
-      // Check if any payment record shows the user has paid
-      const hasPaid = paymentRecords.some(record => 
-        record.paid === true || 
-        (record.status === 'active' && record.type === 'subscription') ||
-        (record.status === 'completed' && record.type === 'one_time')
-      );
+      // Check for completed one-time payments (lifetime purchases)
+      const completedOneTimePayments = await db
+        .select()
+        .from(payment)
+        .where(
+          and(
+            eq(payment.userId, userId),
+            eq(payment.type, PaymentTypes.ONE_TIME),
+            eq(payment.status, 'completed')
+          )
+        )
+        .limit(1);
+      
+      // Check for paid subscriptions (in case status is not 'active' but paid is true)
+      const paidSubscriptions = await db
+        .select()
+        .from(payment)
+        .where(
+          and(
+            eq(payment.userId, userId),
+            eq(payment.paid, true),
+            eq(payment.type, PaymentTypes.SUBSCRIPTION)
+          )
+        )
+        .limit(1);
+      
+      // User has paid if they have:
+      // 1. An active subscription, OR
+      // 2. A trialing subscription that's still valid, OR
+      // 3. A completed one-time payment (lifetime), OR
+      // 4. Any paid subscription record
+      const hasPaid = 
+        activeSubscriptions.length > 0 || 
+        completedOneTimePayments.length > 0 ||
+        paidSubscriptions.length > 0;
+      
+      console.log(`checkUserPaymentStatusAction for userId: ${userId}`, {
+        activeSubscriptions: activeSubscriptions.length,
+        completedOneTimePayments: completedOneTimePayments.length,
+        paidSubscriptions: paidSubscriptions.length,
+        hasPaid
+      });
       
       return {
         success: true,
