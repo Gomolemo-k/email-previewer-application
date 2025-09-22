@@ -108,6 +108,16 @@ export default async function middleware(req: NextRequest) {
     );
   }
 
+  // If user is logged in but trying to access dashboard without payment, redirect to landing
+  if (isLoggedIn && pathnameWithoutLocale === Routes.Dashboard) {
+    // Check if the user has a payment verification cookie
+    const paymentVerified = req.cookies.get('payment_verified');
+    if (!paymentVerified) {
+      console.log('<< middleware end, redirecting to landing page');
+      return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
+    }
+  }
+
   // Apply intlMiddleware for all routes
   console.log('<< middleware end, applying intlMiddleware');
   return intlMiddleware(req);
