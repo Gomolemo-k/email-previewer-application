@@ -51,31 +51,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/manifest.webmanifest/route.js"
     ],
-    "/[locale]/(protected)/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(protected)/layout.js"
-    ],
-    "/[locale]/(protected)/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(protected)/dashboard/page.js"
-    ],
-    "/api/get-email-files/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/get-email-files/route.js"
-    ],
-    "/[locale]/(protected)/payment/layout": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(protected)/payment/layout.js"
-    ],
-    "/[locale]/(protected)/payment/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(protected)/payment/page.js"
-    ],
     "/[locale]/auth/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -91,15 +66,10 @@
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/auth/login/page.js"
     ],
-    "/[locale]/(protected)/email-preview/[fileId]/page": [
+    "/[locale]/(protected)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(protected)/email-preview/[fileId]/page.js"
-    ],
-    "/api/get-email-file-content/[filename]/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/get-email-file-content/[filename]/route.js"
+      "static/chunks/app/[locale]/(protected)/layout.js"
     ],
     "/[locale]/(protected)/landing/page": [
       "static/chunks/webpack.js",
@@ -130,6 +100,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/(marketing)/pricing/page.js"
+    ],
+    "/[locale]/(protected)/payment/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/payment/layout.js"
+    ],
+    "/[locale]/(protected)/payment/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/payment/page.js"
     ]
   }
 }
