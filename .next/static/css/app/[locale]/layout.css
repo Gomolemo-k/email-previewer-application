@@ -3178,9 +3178,6 @@
   .border-gray-400\/30 {
     border-color: color-mix(in oklab, var(--color-gray-400) 30%, transparent);
   }
-  .border-gray-900 {
-    border-color: var(--color-gray-900);
-  }
   .border-gray-950\/\[\.1\] {
     border-color: color-mix(in oklab, var(--color-gray-950) 10%, transparent);
   }
