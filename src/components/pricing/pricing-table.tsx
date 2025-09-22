@@ -37,7 +37,10 @@ export function PricingTable({
 
   // Get price plans with translations
   const pricePlans = usePricePlans();
-  const plans = Object.values(pricePlans);
+  // Filter out the lifetime plan and only show free and pro plans
+  const plans = Object.values(pricePlans).filter(
+    (plan) => plan.id === 'free' || plan.id === 'pro'
+  );
 
   // Current plan ID for comparison
   const currentPlanId = currentPlan?.id || null;

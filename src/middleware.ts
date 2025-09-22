@@ -110,11 +110,41 @@ export default async function middleware(req: NextRequest) {
 
   // If user is logged in but trying to access dashboard without payment, redirect to landing
   if (isLoggedIn && pathnameWithoutLocale === Routes.Dashboard) {
-    // Check if the user has a payment verification cookie
-    const paymentVerified = req.cookies.get('payment_verified');
-    if (!paymentVerified) {
-      console.log('<< middleware end, redirecting to landing page');
-      return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
+    // First check if there's a payment verification cookie
+    const paymentVerifiedCookie = req.cookies.get('payment_verified');
+    if (paymentVerifiedCookie?.value === 'true') {
+      // If cookie exists and is valid, allow access to dashboard
+      console.log('<< middleware end, payment verified via cookie, allowing access to dashboard');
+    } else {
+      // If no cookie or invalid cookie, check database
+      try {
+        // Import auth and get user session directly
+        const { auth } = await import('@/lib/auth');
+        const session = await auth.api.getSession({
+          headers: {
+            cookie: req.headers.get('cookie') || '',
+          },
+        });
+        
+        if (session?.user?.id) {
+          // Import the payment check action
+          const { checkUserPaymentStatusAction } = await import('@/actions/check-user-payment-status');
+          const result = await checkUserPaymentStatusAction({ userId: session.user.id });
+          
+          if (!result.success || !result.hasPaid) {
+            console.log('<< middleware end, user has not paid, redirecting to landing page');
+            return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
+          }
+        } else {
+          // If we can't verify the user, be safe and redirect to landing
+          console.log('<< middleware end, could not verify user, redirecting to landing page');
+          return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
+        }
+      } catch (error) {
+        // If there's an error checking payment status, be safe and redirect to landing
+        console.log('<< middleware end, error checking payment status, redirecting to landing page');
+        return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
+      }
     }
   }
 

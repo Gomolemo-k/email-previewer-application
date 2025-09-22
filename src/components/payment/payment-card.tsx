@@ -10,6 +10,7 @@ import { usePaymentCompletion } from '@/hooks/use-payment-completion';
 import { useLocaleRouter } from '@/i18n/navigation';
 import { PAYMENT_MAX_POLL_TIME, PAYMENT_POLL_INTERVAL } from '@/lib/constants';
 import { Routes } from '@/routes';
+import { setPaymentVerifiedCookieAction } from '@/actions/set-payment-verified-cookie';
 import { useQueryClient } from '@tanstack/react-query';
 import {
   AlertCircleIcon,
@@ -19,7 +20,7 @@ import {
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 type PaymentStatus = 'processing' | 'success' | 'failed' | 'timeout';
 
@@ -85,15 +86,27 @@ export function PaymentCard() {
   // Handle auto-redirect for success, if status is success, redirect to callback url or dashboard
   useEffect(() => {
     if (status === 'success') {
-      // Invalidate relevant cache
-      queryClient.invalidateQueries({
-        queryKey: ['payment'],
-      });
-      console.log('Invalidated payment cache');
+      const handleRedirect = async () => {
+        // Invalidate relevant cache
+        queryClient.invalidateQueries({
+          queryKey: ['payment'],
+        });
+        console.log('Invalidated payment cache');
+        
+        // Set payment verified cookie
+        await setPaymentVerifiedCookieAction({ verified: true });
+        
+        // Redirect to callback url if provided, otherwise redirect to dashboard
+        const redirectUrl = callback || Routes.Dashboard;
+        // If we're redirecting to the dashboard, we want to ensure the user can access it now
+        if (redirectUrl === Routes.Dashboard) {
+          // We set a cookie to indicate payment verification
+          console.log('Payment successful, redirecting to dashboard');
+        }
+        localeRouter.push(redirectUrl);
+      };
       
-      // Redirect to callback url if provided, otherwise redirect to dashboard
-      const redirectUrl = callback || Routes.Dashboard;
-      localeRouter.push(redirectUrl);
+      handleRedirect();
     }
   }, [status, localeRouter, callback, queryClient]);
 
