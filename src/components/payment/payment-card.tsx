@@ -110,6 +110,16 @@ export function PaymentCard() {
         });
         console.log('Invalidated payment cache');
         
+        // Also invalidate the specific current plan query for this user
+        if (sessionId) {
+          // We don't have the user ID directly, but we can invalidate all payment-related queries
+          queryClient.invalidateQueries({
+            predicate: (query) => 
+              query.queryKey[0] === 'payment'
+          });
+        }
+        console.log('Invalidated specific payment queries');
+        
         // Set payment verified cookie
         await setPaymentVerifiedCookieAction({ verified: true });
         
