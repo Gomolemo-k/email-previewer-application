@@ -120,6 +120,26 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/(marketing)/pricing/page.js"
+    ],
+    "/[locale]/(protected)/settings/billing/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/settings/billing/layout.js"
+    ],
+    "/[locale]/(protected)/settings/billing/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/settings/billing/page.js"
+    ],
+    "/[locale]/(protected)/payment/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/payment/layout.js"
+    ],
+    "/[locale]/(protected)/payment/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/payment/page.js"
     ]
   }
 }
