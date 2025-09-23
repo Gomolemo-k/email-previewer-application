@@ -8,7 +8,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import { useQueryClient } from '@tanstack/react-query';
-import { Download, ExternalLink, Monitor, Tablet, Smartphone, ArrowLeft } from 'lucide-react';
+import { Download, ExternalLink, Monitor, Tablet, Smartphone, ArrowLeft, Laptop, MonitorSpeaker } from 'lucide-react';
+import { MultiSelect, MultiSelectItem, MultiSelectContext } from '@/components/ui/multi-select';
 
 interface EmailFile {
   id: string;
@@ -16,6 +17,14 @@ interface EmailFile {
   fileType: string;
   fileSize: number;
   createdAt: Date;
+}
+
+// Screen resolution types
+interface ScreenResolution {
+  id: string;
+  name: string;
+  width: number;
+  icon: React.ReactNode;
 }
 
 export default function EmailPreviewPage({ params }: { params: { fileId: string } }) {
@@ -28,6 +37,19 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   const [contentLoading, setContentLoading] = useState(false);
   const [contentError, setContentError] = useState<string | null>(null);
   const [session, setSession] = useState<any>(null);
+  const [selectedResolutions, setSelectedResolutions] = useState<string[]>(['desktop', 'tablet', 'mobile']);
+  const [availableEmails, setAvailableEmails] = useState<EmailFile[]>([]);
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
+
+  // Available screen resolutions
+  const screenResolutions: ScreenResolution[] = [
+    { id: '4k', name: t('4k'), width: 3840, icon: <MonitorSpeaker className="h-4 w-4" /> },
+    { id: 'laptop', name: t('laptop'), width: 1440, icon: <Laptop className="h-4 w-4" /> },
+    { id: 'desktop', name: t('desktop'), width: 1200, icon: <Monitor className="h-4 w-4" /> },
+    { id: 'tablet', name: t('tablet'), width: 768, icon: <Tablet className="h-4 w-4" /> },
+    { id: 'mobile', name: t('mobile'), width: 375, icon: <Smartphone className="h-4 w-4" /> },
+    { id: 'small-mobile', name: t('small-mobile'), width: 320, icon: <Smartphone className="h-4 w-4" /> },
+  ];
 
   // ✅ useSession must be called at top level
   const { data: sessionData } = authClient.useSession();
@@ -43,7 +65,35 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
 
   useEffect(() => {
     fetchFileData();
+    fetchAllEmails();
   }, [params.fileId]);
+
+  const fetchAllEmails = async () => {
+    try {
+      const sessionData = await authClient.getSession();
+      if (!sessionData.data?.user) {
+        throw new Error('User not authenticated');
+      }
+
+      const response = await fetch('/api/get-email-files');
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to fetch files');
+      }
+
+      setAvailableEmails(result.files);
+      // Set the current file as selected by default
+      if (params.fileId) {
+        setSelectedEmails([params.fileId]);
+      }
+    } catch (error: any) {
+      console.error('Error fetching emails:', error);
+      toast.error(t('fetch-error'), {
+        description: error.message || t('fetch-error-description'),
+      });
+    }
+  };
 
   const fetchFileData = async () => {
     try {
@@ -168,6 +218,21 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
     router.back();
   };
 
+  const handleResolutionChange = (resolutions: string[]) => {
+    setSelectedResolutions(resolutions);
+  };
+
+  const handleEmailChange = (emails: string[]) => {
+    setSelectedEmails(emails);
+    // If only one email is selected, navigate to its preview page
+    if (emails.length === 1) {
+      const selectedFile = availableEmails.find(f => f.id === emails[0]);
+      if (selectedFile) {
+        router.push(`/email-preview/${selectedFile.id}`);
+      }
+    }
+  };
+
   // ✅ render logic unchanged
   if (loading) {
     return (
@@ -200,6 +265,11 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
     );
   }
 
+  // Filter resolutions based on selection
+  const filteredResolutions = screenResolutions.filter(res => 
+    selectedResolutions.includes(res.id)
+  );
+
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
       <div className="flex justify-between items-center mb-6">
@@ -217,6 +287,55 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
           </Button>
         </div>
       </div>
+
+      {/* Filters Section */}
+      <Card className="w-full mb-6">
+        <CardHeader>
+          <CardTitle className="text-lg">{t('filters-title')}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Email Selection */}
+            <div>
+              <label className="text-sm font-medium mb-2 block">{t('select-emails')}</label>
+              <MultiSelectContext.Provider value={{ value: selectedEmails, onValueChange: handleEmailChange }}>
+                <MultiSelect
+                  value={selectedEmails}
+                  onValueChange={handleEmailChange}
+                  placeholder={t('select-emails-placeholder')}
+                >
+                  {availableEmails.map((email) => (
+                    <MultiSelectItem key={email.id} value={email.id}>
+                      {email.filename}
+                    </MultiSelectItem>
+                  ))}
+                </MultiSelect>
+              </MultiSelectContext.Provider>
+            </div>
+
+            {/* Resolution Selection */}
+            <div>
+              <label className="text-sm font-medium mb-2 block">{t('select-resolutions')}</label>
+              <MultiSelectContext.Provider value={{ value: selectedResolutions, onValueChange: handleResolutionChange }}>
+                <MultiSelect
+                  value={selectedResolutions}
+                  onValueChange={handleResolutionChange}
+                  placeholder={t('select-resolutions-placeholder')}
+                >
+                  {screenResolutions.map((resolution) => (
+                    <MultiSelectItem key={resolution.id} value={resolution.id}>
+                      <div className="flex items-center gap-2">
+                        {resolution.icon}
+                        {resolution.name} ({resolution.width}px)
+                      </div>
+                    </MultiSelectItem>
+                  ))}
+                </MultiSelect>
+              </MultiSelectContext.Provider>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
 
       <Card className="w-full">
         <CardHeader>
@@ -261,89 +380,42 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
               {/* Preview Panes Header */}
               <div className="flex items-center gap-4">
                 <h2 className="text-lg font-semibold">{t('preview-title')}</h2>
-                <div className="flex gap-2">
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Monitor className="h-4 w-4" />
-                    {t('desktop')}
-                  </div>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Tablet className="h-4 w-4" />
-                    {t('tablet')}
-                  </div>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Smartphone className="h-4 w-4" />
-                    {t('mobile')}
-                  </div>
+                <div className="flex gap-2 flex-wrap">
+                  {screenResolutions.map((resolution) => (
+                    selectedResolutions.includes(resolution.id) && (
+                      <div key={resolution.id} className="flex items-center gap-1 text-sm text-muted-foreground">
+                        {resolution.icon}
+                        {resolution.name}
+                      </div>
+                    )
+                  ))}
                 </div>
               </div>
 
               {/* Preview Panes */}
-              <div className="flex flex-col lg:flex-row gap-4">
-                {/* Desktop Preview */}
-                <div className="flex-1 min-w-[300px]">
-                  <div className="text-sm font-medium mb-2 flex items-center gap-2">
-                    <Monitor className="h-4 w-4" />
-                    {t('desktop')} (1200px)
+              <div className={`grid gap-4 ${filteredResolutions.length > 1 ? 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
+                {filteredResolutions.map((resolution) => (
+                  <div key={resolution.id} className="flex-1 min-w-[300px]">
+                    <div className="text-sm font-medium mb-2 flex items-center gap-2">
+                      {resolution.icon}
+                      {resolution.name} ({resolution.width}px)
+                    </div>
+                    <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
+                      {file.fileType === 'html' ? (
+                        <iframe
+                          srcDoc={fileContent}
+                          className="w-full h-full"
+                          style={{ minWidth: '300px', width: `${resolution.width}px`, maxWidth: '100%' }}
+                          title={`${resolution.name} Preview`}
+                        />
+                      ) : (
+                        <pre className="whitespace-pre-wrap break-words" style={{ width: `${resolution.width}px`, maxWidth: '100%', height: '100%', overflow: 'auto' }}>
+                          {fileContent}
+                        </pre>
+                      )}
+                    </div>
                   </div>
-                  <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
-                    {file.fileType === 'html' ? (
-                      <iframe
-                        srcDoc={fileContent}
-                        className="w-full h-full"
-                        style={{ minWidth: '300px', maxWidth: '1200px' }}
-                        title="Desktop Preview"
-                      />
-                    ) : (
-                      <pre className="whitespace-pre-wrap break-words max-w-full h-full overflow-auto">
-                        {fileContent}
-                      </pre>
-                    )}
-                  </div>
-                </div>
-
-                {/* Tablet Preview */}
-                <div className="flex-1 min-w-[300px]">
-                  <div className="text-sm font-medium mb-2 flex items-center gap-2">
-                    <Tablet className="h-4 w-4" />
-                    {t('tablet')} (768px)
-                  </div>
-                  <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
-                    {file.fileType === 'html' ? (
-                      <iframe
-                        srcDoc={fileContent}
-                        className="w-full h-full"
-                        style={{ minWidth: '300px', width: '768px', maxWidth: '100%' }}
-                        title="Tablet Preview"
-                      />
-                    ) : (
-                      <pre className="whitespace-pre-wrap break-words w-[768px] max-w-full h-full overflow-auto">
-                        {fileContent}
-                      </pre>
-                    )}
-                  </div>
-                </div>
-
-                {/* Mobile Preview */}
-                <div className="flex-1 min-w-[300px]">
-                  <div className="text-sm font-medium mb-2 flex items-center gap-2">
-                    <Smartphone className="h-4 w-4" />
-                    {t('mobile')} (375px)
-                  </div>
-                  <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
-                    {file.fileType === 'html' ? (
-                      <iframe
-                        srcDoc={fileContent}
-                        className="w-full h-full"
-                        style={{ minWidth: '300px', width: '375px', maxWidth: '100%' }}
-                        title="Mobile Preview"
-                      />
-                    ) : (
-                      <pre className="whitespace-pre-wrap break-words w-[375px] max-w-full h-full overflow-auto">
-                        {fileContent}
-                      </pre>
-                    )}
-                  </div>
-                </div>
+                ))}
               </div>
             </div>
           ) : (
