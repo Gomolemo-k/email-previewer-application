@@ -13,6 +13,7 @@ import { CreditsBalanceButton } from '../layout/credits-balance-button';
 import LocaleSwitcher from '../layout/locale-switcher';
 import { ModeSwitcher } from '../layout/mode-switcher';
 import { ThemeSelector } from '../layout/theme-selector';
+import { UpgradeButton } from '../layout/upgrade-button';
 
 interface DashboardBreadcrumbItem {
   label: string;
@@ -74,6 +75,7 @@ export function DashboardHeader({
           {actions}
 
           <CreditsBalanceButton />
+          <UpgradeButton />
           <ModeSwitcher />
           <LocaleSwitcher />
           {isDemo && <ThemeSelector />}
