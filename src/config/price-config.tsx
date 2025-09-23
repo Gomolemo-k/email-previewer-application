@@ -52,8 +52,10 @@ export function usePricePlans(): Record<string, PricePlan> {
         t('pro.features.feature-3'),
         t('pro.features.feature-4'),
         t('pro.features.feature-5'),
+        t('pro.features.feature-6'),
+        t('pro.features.feature-7'),
+        t('pro.features.feature-8'),
       ],
-      limits: [t('pro.limits.limit-1'), t('pro.limits.limit-2')],
     };
   }
 
