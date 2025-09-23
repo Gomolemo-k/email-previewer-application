@@ -269,23 +269,23 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
               </div>
               
               {/* Preview Panes */}
-              <div className="flex flex-col lg:flex-row gap-4 overflow-x-auto">
+              <div className="flex flex-col lg:flex-row gap-4">
                 {/* Desktop Preview */}
-                <div className="flex-1 min-w-[375px]">
+                <div className="flex-1 min-w-[300px]">
                   <div className="text-sm font-medium mb-2 flex items-center gap-2">
                     <Monitor className="h-4 w-4" />
                     {t('desktop')} (1200px)
                   </div>
-                  <div className="border rounded-lg p-4 bg-white overflow-auto">
+                  <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
                     {file.fileType === 'html' ? (
                       <iframe 
                         srcDoc={fileContent} 
-                        className="w-full h-[70vh]"
-                        style={{ minWidth: '375px', maxWidth: '1200px' }}
+                        className="w-full h-full"
+                        style={{ minWidth: '300px', maxWidth: '1200px' }}
                         title="Desktop Preview"
                       />
                     ) : (
-                      <pre className="whitespace-pre-wrap break-words max-w-full overflow-x-auto">
+                      <pre className="whitespace-pre-wrap break-words max-w-full h-full overflow-auto">
                         {fileContent}
                       </pre>
                     )}
@@ -293,21 +293,21 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                 </div>
                 
                 {/* Tablet Preview */}
-                <div className="flex-1 min-w-[375px]">
+                <div className="flex-1 min-w-[300px]">
                   <div className="text-sm font-medium mb-2 flex items-center gap-2">
                     <Tablet className="h-4 w-4" />
                     {t('tablet')} (768px)
                   </div>
-                  <div className="border rounded-lg p-4 bg-white overflow-auto">
+                  <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
                     {file.fileType === 'html' ? (
                       <iframe 
                         srcDoc={fileContent} 
-                        className="w-full h-[70vh]"
-                        style={{ minWidth: '375px', width: '768px', maxWidth: '768px' }}
+                        className="w-full h-full"
+                        style={{ minWidth: '300px', width: '768px', maxWidth: '100%' }}
                         title="Tablet Preview"
                       />
                     ) : (
-                      <pre className="whitespace-pre-wrap break-words max-w-[768px] overflow-x-auto">
+                      <pre className="whitespace-pre-wrap break-words w-[768px] max-w-full h-full overflow-auto">
                         {fileContent}
                       </pre>
                     )}
@@ -315,21 +315,21 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                 </div>
                 
                 {/* Mobile Preview */}
-                <div className="flex-1 min-w-[375px]">
+                <div className="flex-1 min-w-[300px]">
                   <div className="text-sm font-medium mb-2 flex items-center gap-2">
                     <Smartphone className="h-4 w-4" />
                     {t('mobile')} (375px)
                   </div>
-                  <div className="border rounded-lg p-4 bg-white overflow-auto">
+                  <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
                     {file.fileType === 'html' ? (
                       <iframe 
                         srcDoc={fileContent} 
-                        className="w-full h-[70vh]"
-                        style={{ minWidth: '375px', width: '375px', maxWidth: '375px' }}
+                        className="w-full h-full"
+                        style={{ minWidth: '300px', width: '375px', maxWidth: '100%' }}
                         title="Mobile Preview"
                       />
                     ) : (
-                      <pre className="whitespace-pre-wrap break-words max-w-[375px] overflow-x-auto">
+                      <pre className="whitespace-pre-wrap break-words w-[375px] max-w-full h-full overflow-auto">
                         {fileContent}
                       </pre>
                     )}
