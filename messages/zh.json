@@ -410,31 +410,32 @@
       "name": "免费版",
       "description": "适用于个人使用的基本功能",
       "features": {
-        "feature-1": "最多3个项目",
-        "feature-2": "1GB存储空间",
-        "feature-3": "基础分析功能",
+        "feature-1": "最多5个邮件文件",
+        "feature-2": "5MB文件大小限制",
+        "feature-3": "基础邮件预览",
         "feature-4": "社区支持"
       },
       "limits": {
-        "limit-1": "不支持自定义域名",
-        "limit-2": "不支持自定义品牌",
-        "limit-3": "不支持终身更新"
+        "limit-1": "限制5个文件",
+        "limit-2": "5MB文件大小限制",
+        "limit-3": "仅支持基本文件格式",
+        "limit-4": "无优先支持"
       }
     },
     "pro": {
       "name": "专业版",
       "description": "专业人士的高级功能",
       "features": {
-        "feature-1": "无限项目",
-        "feature-2": "10GB存储空间",
-        "feature-3": "高级分析功能",
+        "feature-1": "最多50个邮件文件",
+        "feature-2": "20MB文件大小限制",
+        "feature-3": "高级邮件预览",
         "feature-4": "优先支持",
-        "feature-5": "自定义域名"
+        "feature-5": "支持所有邮件文件格式",
+        "feature-6": "增强分析功能",
+        "feature-7": "无文件限制",
+        "feature-8": "无限制访问"
       },
-      "limits": {
-        "limit-1": "不支持自定义品牌",
-        "limit-2": "不支持终身更新"
-      }
+      "limits": {}
     },
     "lifetime": {
       "name": "终身版",

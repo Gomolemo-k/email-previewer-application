@@ -431,12 +431,11 @@
         "feature-3": "Advanced email preview",
         "feature-4": "Priority support",
         "feature-5": "All email file formats supported",
-        "feature-6": "Enhanced analytics"
+        "feature-6": "Enhanced analytics",
+        "feature-7": "No file limits",
+        "feature-8": "Unlimited access"
       },
-      "limits": {
-        "limit-1": "No custom branding",
-        "limit-2": "No lifetime updates"
-      }
+      "limits": {}
     },
     "lifetime": {
       "name": "Lifetime",
