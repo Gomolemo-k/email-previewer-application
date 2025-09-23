@@ -46,8 +46,7 @@ export function UpgradeButton() {
     >
       <LocaleLink href={`${Routes.SettingsBilling}?callback=${Routes.Dashboard}`}>
         <RocketIcon className="h-4 w-4" />
-        <span className="hidden md:inline">{t('upgrade')}</span>
-        <span className="inline md:hidden">{t('upgradeShort')}</span>
+        <span>{t('upgrade')}</span>
       </LocaleLink>
     </Button>
   );
