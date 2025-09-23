@@ -21,6 +21,8 @@ import type * as React from 'react';
 import { useEffect, useState } from 'react';
 import { Logo } from '../layout/logo';
 import { UpgradeCard } from './upgrade-card';
+import { useCurrentPlan } from '@/hooks/use-payment';
+import { websiteConfig } from '@/config/website';
 
 /**
  * Dashboard sidebar
@@ -33,6 +35,8 @@ export function DashboardSidebar({
   const { data: session, isPending } = authClient.useSession();
   const currentUser = session?.user;
   const { state } = useSidebar();
+  const { data: paymentData, isLoading: isPaymentLoading } = useCurrentPlan(currentUser?.id);
+  
   // console.log('sidebar currentUser:', currentUser);
 
   const sidebarLinks = useSidebarLinks();
@@ -46,6 +50,20 @@ export function DashboardSidebar({
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Check if the user has a paid plan (Pro, Lifetime, etc.)
+  const isMember = paymentData?.currentPlan && (
+    paymentData.currentPlan.isLifetime || 
+    !paymentData.currentPlan.isFree
+  );
+
+  // Determine if we should show the upgrade card
+  const shouldShowUpgradeCard = websiteConfig.features.enableUpgradeCard && 
+    currentUser && 
+    state !== 'collapsed' && 
+    !isPaymentLoading && 
+    paymentData && 
+    !isMember;
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -76,7 +94,7 @@ export function DashboardSidebar({
         {!isPending && mounted && (
           <>
             {/* show upgrade card if user is not a member, and sidebar is not collapsed */}
-            {currentUser && state !== 'collapsed' && <UpgradeCard />}
+            {shouldShowUpgradeCard && <UpgradeCard />}
 
             {/* show user profile if user is logged in */}
             {currentUser && <SidebarUser user={currentUser} />}

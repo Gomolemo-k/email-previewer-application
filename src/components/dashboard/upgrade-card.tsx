@@ -31,16 +31,18 @@ export function UpgradeCard() {
     setMounted(true);
   }, []);
 
-  // Don't show the upgrade card if the user has a lifetime membership or a subscription
-  const isMember =
-    paymentData?.currentPlan?.isLifetime || !!paymentData?.subscription;
+  // Check if the user has a paid plan (Pro, Lifetime, etc.)
+  const isMember = paymentData?.currentPlan && (
+    paymentData.currentPlan.isLifetime || 
+    !paymentData.currentPlan.isFree
+  );
 
   // Ensure the upgrade card is only shown when the data is loaded
   if (!mounted || isLoading || !paymentData) {
     return null;
   }
 
-  // If the user is a member, don't show the upgrade card
+  // If the user is a member (has any paid plan), don't show the upgrade card
   if (isMember) {
     return null;
   }
