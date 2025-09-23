@@ -53,15 +53,15 @@
     },
     "email-upload": {
       "title": "Upload Email Files",
-      "description": "Upload your .eml or .html email files for preview",
+      "description": "Upload your email files for preview",
       "drag-and-drop": "Drag and drop your email files here",
       "drop-here": "Drop your email files here",
       "browse-files": "Browse Files",
-      "file-types": "Supports .eml and .html files",
+      "file-types": "Supports .eml, .msg, .mbox, .mbx, .html, .htm, .txt, .pst, .ost files",
       "max-file-size": "Maximum file size: 10MB",
       "uploading": "Uploading...",
       "invalid-file-type": "Invalid file type",
-      "invalid-file-type-description": "Only .eml and .html files are allowed",
+      "invalid-file-type-description": "Supported file types: {supportedTypes}",
       "file-too-large": "File too large",
       "file-too-large-description": "Maximum file size is 10MB",
       "upload-success": "Upload successful",
@@ -410,30 +410,32 @@
       "name": "Free",
       "description": "Basic features for personal use",
       "features": {
-        "feature-1": "Up to 3 projects",
-        "feature-2": "1 GB storage",
-        "feature-3": "Basic analytics",
+        "feature-1": "Up to 5 email files",
+        "feature-2": "5MB file size limit",
+        "feature-3": "Basic email preview",
         "feature-4": "Community support"
       },
       "limits": {
-        "limit-1": "Custom domains",
-        "limit-2": "Custom branding",
-        "limit-3": "Lifetime updates"
+        "limit-1": "Limited to 5 files",
+        "limit-2": "5MB file size limit",
+        "limit-3": "Basic file formats only",
+        "limit-4": "No priority support"
       }
     },
     "pro": {
       "name": "Pro",
       "description": "Advanced features for professionals",
       "features": {
-        "feature-1": "Unlimited projects",
-        "feature-2": "10 GB storage",
-        "feature-3": "Advanced analytics",
+        "feature-1": "Up to 50 email files",
+        "feature-2": "20MB file size limit",
+        "feature-3": "Advanced email preview",
         "feature-4": "Priority support",
-        "feature-5": "Custom domains"
+        "feature-5": "All email file formats supported",
+        "feature-6": "Enhanced analytics"
       },
       "limits": {
-        "limit-1": "Custom branding",
-        "limit-2": "Lifetime updates"
+        "limit-1": "No custom branding",
+        "limit-2": "No lifetime updates"
       }
     },
     "lifetime": {
