@@ -51,10 +51,13 @@ export function DashboardSidebar({
     setMounted(true);
   }, []);
 
-  // Check if the user has a paid plan (Pro, Lifetime, etc.)
-  const isMember = paymentData?.currentPlan && (
+  // Check if the user has a paid plan (Pro or Lifetime)
+  // A user is considered to have a paid plan if:
+  // 1. They have a lifetime plan (isLifetime = true), or
+  // 2. They have a subscription to a non-free plan (isFree = false)
+  const hasPaidPlan = paymentData?.currentPlan && (
     paymentData.currentPlan.isLifetime || 
-    !paymentData.currentPlan.isFree
+    (!paymentData.currentPlan.isFree && paymentData.subscription)
   );
 
   // Determine if we should show the upgrade card
@@ -63,7 +66,7 @@ export function DashboardSidebar({
     state !== 'collapsed' && 
     !isPaymentLoading && 
     paymentData && 
-    !isMember;
+    !hasPaidPlan;
 
   return (
     <Sidebar collapsible="icon" {...props}>
@@ -93,7 +96,7 @@ export function DashboardSidebar({
         {/* Only show UI components when not in loading state */}
         {!isPending && mounted && (
           <>
-            {/* show upgrade card if user is not a member, and sidebar is not collapsed */}
+            {/* show upgrade card if user doesn't have a paid plan, and sidebar is not collapsed */}
             {shouldShowUpgradeCard && <UpgradeCard />}
 
             {/* show user profile if user is logged in */}
