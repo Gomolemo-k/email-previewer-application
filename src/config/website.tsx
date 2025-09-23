@@ -100,6 +100,12 @@ export const websiteConfig: WebsiteConfig = {
         prices: [],
         isFree: true,
         isLifetime: false,
+        features: {
+          fileUpload: {
+            maxFileSize: 5, // 5MB
+            maxFiles: 5, // 5 files
+          },
+        },
         credits: {
           enable: true,
           amount: 50,
@@ -127,6 +133,12 @@ export const websiteConfig: WebsiteConfig = {
         isFree: false,
         isLifetime: false,
         popular: true,
+        features: {
+          fileUpload: {
+            maxFileSize: 20, // 20MB
+            maxFiles: 50, // 50 files
+          },
+        },
         credits: {
           enable: true,
           amount: 1000,

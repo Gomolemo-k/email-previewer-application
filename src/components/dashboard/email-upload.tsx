@@ -1,27 +1,49 @@
 'use client';
 
-import { useState, useRef, useCallback, DragEvent } from 'react';
+import { useState, useRef, useCallback, DragEvent, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
+import { useCurrentPlan } from '@/hooks/use-payment';
 
 interface EmailUploadProps {
   onUploadSuccess?: () => void;
 }
+
+// Supported email file extensions
+const SUPPORTED_EXTENSIONS = [
+  '.eml',    // Email Message File
+  '.msg',    // Outlook Message File
+  '.mbox',   // Mailbox File
+  '.mbx',    // Mailbox File (alternative extension)
+  '.html',   // HTML File
+  '.htm',    // HTML File (alternative extension)
+  '.txt',    // Text File
+  '.pst',    // Outlook Personal Storage Table
+  '.ost'     // Outlook Offline Storage Table
+];
 
 export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
   const t = useTranslations('Dashboard.email-upload');
   const [isDragging, setIsDragging] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Get current user plan
+  const { data: session } = authClient.useSession();
+  const { data: paymentData, isLoading: isPaymentLoading } = useCurrentPlan(session?.user?.id);
+  
+  // Get plan limits
+  const planLimits = paymentData?.currentPlan?.features?.fileUpload || { maxFileSize: 5, maxFiles: 5 };
+  const maxFileSizeMB = planLimits.maxFileSize || 5;
+  const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024;
 
   const validateFileType = (file: File): boolean => {
-    const validTypes = ['.eml', '.html'];
     const fileName = file.name.toLowerCase();
-    return validTypes.some(type => fileName.endsWith(type));
+    return SUPPORTED_EXTENSIONS.some(ext => fileName.endsWith(ext));
   };
 
   const handleFiles = useCallback((files: FileList) => {
@@ -31,21 +53,23 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
     
     if (!validateFileType(file)) {
       toast.error(t('invalid-file-type'), {
-        description: t('invalid-file-type-description')
+        description: t('invalid-file-type-description', { 
+          supportedTypes: SUPPORTED_EXTENSIONS.join(', ') 
+        })
       });
       return;
     }
 
-    // Check file size (limit to 10MB)
-    if (file.size > 10 * 1024 * 1024) {
+    // Check file size against user's plan limit
+    if (file.size > maxFileSizeBytes) {
       toast.error(t('file-too-large'), {
-        description: t('file-too-large-description')
+        description: t('file-too-large-description', { maxFileSize: maxFileSizeMB })
       });
       return;
     }
 
     handleUpload(file);
-  }, [t, onUploadSuccess]);
+  }, [t, maxFileSizeBytes, maxFileSizeMB]);
 
   const handleUpload = async (file: File) => {
     setIsUploading(true);
@@ -128,6 +152,14 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
     fileInputRef.current?.click();
   };
 
+  // Create accept string for input element
+  const acceptString = SUPPORTED_EXTENSIONS.join(',');
+
+  // Update the file types description to include plan limits
+  useEffect(() => {
+    // This will trigger a re-render when plan limits change
+  }, [paymentData, isPaymentLoading]);
+
   return (
     <Card className="w-full">
       <CardHeader>
@@ -178,7 +210,7 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
               {isUploading ? t('uploading') : t('browse-files')}
             </Button>
             <p className="text-xs text-muted-foreground mt-2">
-              {t('max-file-size')}
+              {t('max-file-size', { maxFileSize: maxFileSizeMB })}
             </p>
           </div>
           <Input
@@ -186,7 +218,7 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
             ref={fileInputRef}
             onChange={handleFileInput}
             className="hidden"
-            accept=".eml,.html"
+            accept={acceptString}
           />
         </div>
       </CardContent>
