@@ -9,6 +9,8 @@
     "login": "Log in",
     "logout": "Log out",
     "signUp": "Sign up",
+    "upgrade": "Upgrade",
+    "upgradeShort": "Upg",
     "language": "Switch language",
     "mode": {
       "label": "Toggle mode",
@@ -1159,5 +1161,11 @@
   "AIAudioPage": {
     "title": "AI Audio",
     "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly"
+  },
+  "Navbar": {
+    "upgrade": {
+      "upgrade": "Upgrade",
+      "upgradeShort": "Upg"
+    }
   }
 }
