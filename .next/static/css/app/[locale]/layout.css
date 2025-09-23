@@ -1865,6 +1865,9 @@
   .max-h-48 {
     max-height: calc(var(--spacing) * 48);
   }
+  .max-h-60 {
+    max-height: calc(var(--spacing) * 60);
+  }
   .max-h-\[6lh\] {
     max-height: 6lh;
   }
@@ -2128,6 +2131,9 @@
   }
   .max-w-\[90vw\] {
     max-width: 90vw;
+  }
+  .max-w-\[100px\] {
+    max-width: 100px;
   }
   .max-w-\[150px\] {
     max-width: 150px;
@@ -2506,6 +2512,9 @@
   }
   .cursor-help {
     cursor: help;
+  }
+  .cursor-not-allowed {
+    cursor: not-allowed;
   }
   .cursor-pointer {
     cursor: pointer;
@@ -4073,6 +4082,9 @@
   }
   .\!pr-3 {
     padding-right: calc(var(--spacing) * 3) !important;
+  }
+  .pr-1 {
+    padding-right: calc(var(--spacing) * 1);
   }
   .pr-1\.5 {
     padding-right: calc(var(--spacing) * 1.5);
@@ -9829,6 +9841,11 @@
   .xl\:inline {
     @media (width >= 80rem) {
       display: inline;
+    }
+  }
+  .xl\:grid-cols-3 {
+    @media (width >= 80rem) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
   }
   .xl\:grid-cols-4 {
