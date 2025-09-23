@@ -95,23 +95,6 @@ export const websiteConfig: WebsiteConfig = {
   },
   price: {
     plans: {
-      free: {
-        id: 'free',
-        prices: [],
-        isFree: true,
-        isLifetime: false,
-        features: {
-          fileUpload: {
-            maxFileSize: 5, // 5MB
-            maxFiles: 5, // 5 files
-          },
-        },
-        credits: {
-          enable: true,
-          amount: 50,
-          expireDays: 30,
-        },
-      },
       pro: {
         id: 'pro',
         prices: [

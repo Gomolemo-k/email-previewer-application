@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
+import { useQueryClient } from '@tanstack/react-query';
  import { Download, ExternalLink, Monitor, Tablet, Smartphone, ArrowLeft } from 'lucide-react';
 
 interface EmailFile {
@@ -20,6 +21,7 @@ interface EmailFile {
 export default function EmailPreviewPage({ params }: { params: { fileId: string } }) {
   const t = useTranslations('Dashboard.email-preview');
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [file, setFile] = useState<EmailFile | null>(null);
   const [fileContent, setFileContent] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -30,6 +32,18 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   useEffect(() => {
     fetchFileData();
   }, [params.fileId]);
+
+  // When the email preview page loads, invalidate payment queries to ensure we have fresh data
+  useEffect(() => {
+    const { data: sessionData } = authClient.useSession();
+    if (sessionData?.data?.user?.id) {
+      // Invalidate payment queries to get fresh data
+      queryClient.invalidateQueries({
+        predicate: (query) => 
+          query.queryKey[0] === 'payment'
+      });
+    }
+  }, []);
 
   const fetchFileData = async () => {
     try {

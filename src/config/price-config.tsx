@@ -21,26 +21,7 @@ export function usePricePlans(): Record<string, PricePlan> {
   const priceConfig = websiteConfig.price;
   const plans: Record<string, PricePlan> = {};
 
-  // Add translated content to each plan
-  if (priceConfig.plans.free) {
-    plans.free = {
-      ...priceConfig.plans.free,
-      name: t('free.name'),
-      description: t('free.description'),
-      features: [
-        t('free.features.feature-1'),
-        t('free.features.feature-2'),
-        t('free.features.feature-3'),
-        t('free.features.feature-4'),
-      ],
-      limits: [
-        t('free.limits.limit-1'),
-        t('free.limits.limit-2'),
-        t('free.limits.limit-3'),
-      ],
-    };
-  }
-
+  // Only include the pro plan
   if (priceConfig.plans.pro) {
     plans.pro = {
       ...priceConfig.plans.pro,
@@ -54,7 +35,7 @@ export function usePricePlans(): Record<string, PricePlan> {
         t('pro.features.feature-5'),
         t('pro.features.feature-6'),
         t('pro.features.feature-7'),
-        t('pro.features.feature-8'),
+        
       ],
     };
   }

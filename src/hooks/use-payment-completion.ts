@@ -1,7 +1,7 @@
 import { checkPaymentCompletionAction } from '@/actions/check-payment-completion';
 import { verifyPaymentAction } from '@/actions/verify-payment';
 import { PAYMENT_POLL_INTERVAL } from '@/lib/constants';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef } from 'react';
 
 // Query keys for payment completion
@@ -68,4 +68,21 @@ export function usePaymentCompletion(
   }, [sessionId]);
 
   return query;
+}
+
+// Function to invalidate all payment-related queries
+export function invalidatePaymentQueries(queryClient: ReturnType<typeof useQueryClient>, userId?: string) {
+  // Invalidate all payment queries
+  queryClient.invalidateQueries({
+    predicate: (query) => 
+      query.queryKey[0] === 'payment'
+  });
+  
+  // Also invalidate payment completion queries
+  queryClient.invalidateQueries({
+    predicate: (query) => 
+      query.queryKey[0] === 'paymentCompletion'
+  });
+  
+  console.log('Invalidated payment queries');
 }

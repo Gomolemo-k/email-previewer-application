@@ -37,17 +37,15 @@ export function PricingTable({
 
   // Get price plans with translations
   const pricePlans = usePricePlans();
-  // Filter out the lifetime plan and only show free and pro plans
+  // Only show pro plans (free plan has been removed)
   const plans = Object.values(pricePlans).filter(
-    (plan) => plan.id === 'free' || plan.id === 'pro'
+    (plan) => plan.id === 'pro'
   );
 
   // Current plan ID for comparison
   const currentPlanId = currentPlan?.id || null;
 
-  // Filter plans into free, subscription and one-time plans
-  const freePlans = plans.filter((plan) => plan.isFree && !plan.disabled);
-
+  // Filter plans into subscription and one-time plans (free plans removed)
   const subscriptionPlans = plans.filter(
     (plan) =>
       !plan.isFree &&
@@ -130,7 +128,7 @@ export function PricingTable({
       {/* Calculate total number of visible plans */}
       {(() => {
         const totalVisiblePlans =
-          freePlans.length + subscriptionPlans.length + oneTimePlans.length;
+          subscriptionPlans.length + oneTimePlans.length;
         return (
           <div
             className={cn(
@@ -143,16 +141,6 @@ export function PricingTable({
                 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
             )}
           >
-            {/* Render free plans (always visible) */}
-            {freePlans.map((plan) => (
-              <PricingCard
-                key={plan.id}
-                plan={plan}
-                metadata={metadata}
-                isCurrentPlan={currentPlanId === plan.id}
-              />
-            ))}
-
             {/* Render subscription plans with the selected interval */}
             {subscriptionPlans.map((plan) => (
               <PricingCard

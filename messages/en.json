@@ -406,22 +406,6 @@
     }
   },
   "PricePlans": {
-    "free": {
-      "name": "Free",
-      "description": "Basic features for personal use",
-      "features": {
-        "feature-1": "Up to 5 email files",
-        "feature-2": "5MB file size limit",
-        "feature-3": "Basic email preview",
-        "feature-4": "Community support"
-      },
-      "limits": {
-        "limit-1": "Limited to 5 files",
-        "limit-2": "5MB file size limit",
-        "limit-3": "Basic file formats only",
-        "limit-4": "No priority support"
-      }
-    },
     "pro": {
       "name": "Pro",
       "description": "Advanced features for professionals",

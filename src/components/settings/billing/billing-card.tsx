@@ -172,13 +172,6 @@ export default function BillingCard() {
             )}
         </div>
 
-        {/* Free plan message */}
-        {isFreePlan && (
-          <div className="text-sm text-muted-foreground">
-            {t('freePlanMessage')}
-          </div>
-        )}
-
         {/* Lifetime plan message */}
         {isLifetimeMember && (
           <div className="text-sm text-muted-foreground">
@@ -210,15 +203,6 @@ export default function BillingCard() {
         )}
       </CardContent>
       <CardFooter className="mt-2 px-6 py-4 flex justify-end items-center bg-muted rounded-none">
-        {/* user is on free plan, show upgrade plan button */}
-        {isFreePlan && (
-          <Button variant="default" className="cursor-pointer" asChild>
-            <LocaleLink href={`${Routes.Pricing}?callback=${Routes.Dashboard}`}>
-              {t('upgradePlan')}
-            </LocaleLink>
-          </Button>
-        )}
-
         {/* user is lifetime member, show manage billing button */}
         {isLifetimeMember && currentUser && (
           <CustomerPortalButton userId={currentUser.id} className="">
