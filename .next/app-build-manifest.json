@@ -65,6 +65,16 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/get-email-files/route.js"
+    ],
+    "/[locale]/(protected)/email-preview/[fileId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(protected)/email-preview/[fileId]/page.js"
+    ],
+    "/api/get-email-file-content/[filename]/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/get-email-file-content/[filename]/route.js"
     ]
   }
 }

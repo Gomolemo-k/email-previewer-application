@@ -1826,6 +1826,9 @@
   .h-\[calc\(100\%-2\.75rem\)\] {
     height: calc(100% - 2.75rem);
   }
+  .h-\[calc\(100vh-80px\)\] {
+    height: calc(100vh - 80px);
+  }
   .h-\[calc\(100vh-120px\)\] {
     height: calc(100vh - 120px);
   }
@@ -2054,11 +2057,17 @@
   .w-\[200vw\] {
     width: 200vw;
   }
+  .w-\[375px\] {
+    width: 375px;
+  }
   .w-\[400px\] {
     width: 400px;
   }
   .w-\[600px\] {
     width: 600px;
+  }
+  .w-\[768px\] {
+    width: 768px;
   }
   .w-\[calc\(3\/4\*100\%\+3rem\)\] {
     width: calc(3 / 4 * 100% + 3rem);
@@ -2209,6 +2218,9 @@
   }
   .min-w-\[240px\] {
     min-width: 240px;
+  }
+  .min-w-\[300px\] {
+    min-width: 300px;
   }
   .min-w-\[375px\] {
     min-width: 375px;
