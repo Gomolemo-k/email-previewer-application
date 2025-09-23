@@ -24,6 +24,7 @@ interface ScreenResolution {
   id: string;
   name: string;
   width: number;
+  height: number;
   icon: React.ReactNode;
 }
 
@@ -41,14 +42,14 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   const [availableEmails, setAvailableEmails] = useState<EmailFile[]>([]);
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
 
-  // Available screen resolutions
+  // Available screen resolutions with realistic device dimensions
   const screenResolutions: ScreenResolution[] = [
-    { id: '4k', name: t('4k'), width: 3840, icon: <MonitorSpeaker className="h-4 w-4" /> },
-    { id: 'laptop', name: t('laptop'), width: 1440, icon: <Laptop className="h-4 w-4" /> },
-    { id: 'desktop', name: t('desktop'), width: 1200, icon: <Monitor className="h-4 w-4" /> },
-    { id: 'tablet', name: t('tablet'), width: 768, icon: <Tablet className="h-4 w-4" /> },
-    { id: 'mobile', name: t('mobile'), width: 375, icon: <Smartphone className="h-4 w-4" /> },
-    { id: 'small-mobile', name: t('small-mobile'), width: 320, icon: <Smartphone className="h-4 w-4" /> },
+    { id: '4k', name: t('4k'), width: 3840, height: 2160, icon: <MonitorSpeaker className="h-4 w-4" /> },
+    { id: 'laptop', name: t('laptop'), width: 1440, height: 900, icon: <Laptop className="h-4 w-4" /> },
+    { id: 'desktop', name: t('desktop'), width: 1920, height: 1080, icon: <Monitor className="h-4 w-4" /> },
+    { id: 'tablet', name: t('tablet'), width: 768, height: 1024, icon: <Tablet className="h-4 w-4" /> },
+    { id: 'mobile', name: t('mobile'), width: 375, height: 667, icon: <Smartphone className="h-4 w-4" /> },
+    { id: 'small-mobile', name: t('small-mobile'), width: 320, height: 568, icon: <Smartphone className="h-4 w-4" /> },
   ];
 
   // ✅ useSession must be called at top level
@@ -393,26 +394,147 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
               </div>
 
               {/* Preview Panes */}
-              <div className={`grid gap-4 ${filteredResolutions.length > 1 ? 'grid-cols-1 lg:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
+              <div className={`grid gap-6 ${filteredResolutions.length > 1 ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
                 {filteredResolutions.map((resolution) => (
-                  <div key={resolution.id} className="flex-1 min-w-[300px]">
+                  <div key={resolution.id} className="flex flex-col">
                     <div className="text-sm font-medium mb-2 flex items-center gap-2">
                       {resolution.icon}
                       {resolution.name} ({resolution.width}px)
                     </div>
-                    <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
-                      {file.fileType === 'html' ? (
-                        <iframe
-                          srcDoc={fileContent}
-                          className="w-full h-full"
-                          style={{ minWidth: '300px', width: `${resolution.width}px`, maxWidth: '100%' }}
-                          title={`${resolution.name} Preview`}
-                        />
-                      ) : (
-                        <pre className="whitespace-pre-wrap break-words" style={{ width: `${resolution.width}px`, maxWidth: '100%', height: '100%', overflow: 'auto' }}>
-                          {fileContent}
-                        </pre>
-                      )}
+                    <div className="border rounded-lg bg-white flex flex-col flex-1 overflow-hidden">
+                      {/* Device frame for better visualization */}
+                      <div 
+                        className="flex-1 overflow-auto p-4 flex justify-center items-start"
+                        style={{ 
+                          height: '100vh',
+                          backgroundColor: '#f8f9fa'
+                        }}
+                      >
+                        {file.fileType === 'html' ? (
+                          <div className="relative w-full max-w-full">
+                            {/* Device frame based on resolution */}
+                            {resolution.id === 'mobile' || resolution.id === 'small-mobile' ? (
+                              // Mobile device frame
+                              <div className="relative mx-auto w-full" style={{ maxWidth: `${resolution.width + 40}px` }}>
+                                <div className="absolute inset-0 bg-gray-900 rounded-[40px] shadow-2xl" style={{ padding: '20px' }}>
+                                  <div className="w-full h-full bg-white rounded-[30px] overflow-hidden">
+                                    <iframe
+                                      srcDoc={fileContent}
+                                      className="w-full"
+                                      style={{ 
+                                        height: `${resolution.height}px`,
+                                        border: 'none'
+                                      }}
+                                      title={`${resolution.name} Preview`}
+                                    />
+                                  </div>
+                                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-gray-800 rounded-full"></div>
+                                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-gray-700"></div>
+                                </div>
+                              </div>
+                            ) : resolution.id === 'tablet' ? (
+                              // Tablet device frame
+                              <div className="relative mx-auto w-full" style={{ maxWidth: `${resolution.width + 40}px` }}>
+                                <div className="absolute inset-0 bg-gray-900 rounded-[30px] shadow-2xl" style={{ padding: '20px' }}>
+                                  <div className="w-full h-full bg-white rounded-[20px] overflow-hidden">
+                                    <iframe
+                                      srcDoc={fileContent}
+                                      className="w-full"
+                                      style={{ 
+                                        height: `${resolution.height}px`,
+                                        border: 'none'
+                                      }}
+                                      title={`${resolution.name} Preview`}
+                                    />
+                                  </div>
+                                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-gray-700"></div>
+                                </div>
+                              </div>
+                            ) : (
+                              // Desktop/laptop device frame
+                              <div className="relative mx-auto w-full" style={{ maxWidth: `${Math.min(resolution.width + 40, 1400)}px` }}>
+                                <div className="absolute inset-0 bg-gray-900 rounded-lg shadow-2xl" style={{ padding: '20px' }}>
+                                  <div className="w-full h-full bg-white rounded overflow-hidden">
+                                    <iframe
+                                      srcDoc={fileContent}
+                                      className="w-full"
+                                      style={{ 
+                                        height: `${resolution.height}px`,
+                                        border: 'none'
+                                      }}
+                                      title={`${resolution.name} Preview`}
+                                    />
+                                  </div>
+                                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gray-700 rounded-full"></div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div className="relative w-full max-w-full">
+                            {/* Device frame for text content */}
+                            {resolution.id === 'mobile' || resolution.id === 'small-mobile' ? (
+                              // Mobile device frame for text
+                              <div className="relative mx-auto w-full" style={{ maxWidth: `${resolution.width + 40}px` }}>
+                                <div className="absolute inset-0 bg-gray-900 rounded-[40px] shadow-2xl" style={{ padding: '20px' }}>
+                                  <div className="w-full h-full bg-white rounded-[30px] overflow-hidden p-4">
+                                    <pre 
+                                      className="m-0 text-xs overflow-auto"
+                                      style={{ 
+                                        height: `${resolution.height}px`,
+                                        whiteSpace: 'pre-wrap',
+                                        wordBreak: 'break-word'
+                                      }}
+                                    >
+                                      {fileContent}
+                                    </pre>
+                                  </div>
+                                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-gray-800 rounded-full"></div>
+                                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-gray-700"></div>
+                                </div>
+                              </div>
+                            ) : resolution.id === 'tablet' ? (
+                              // Tablet device frame for text
+                              <div className="relative mx-auto w-full" style={{ maxWidth: `${resolution.width + 40}px` }}>
+                                <div className="absolute inset-0 bg-gray-900 rounded-[30px] shadow-2xl" style={{ padding: '20px' }}>
+                                  <div className="w-full h-full bg-white rounded-[20px] overflow-hidden p-4">
+                                    <pre 
+                                      className="m-0 text-sm overflow-auto"
+                                      style={{ 
+                                        height: `${resolution.height}px`,
+                                        whiteSpace: 'pre-wrap',
+                                        wordBreak: 'break-word'
+                                      }}
+                                    >
+                                      {fileContent}
+                                    </pre>
+                                  </div>
+                                  <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-gray-700"></div>
+                                </div>
+                              </div>
+                            ) : (
+                              // Desktop/laptop device frame for text
+                              <div className="relative mx-auto w-full" style={{ maxWidth: `${Math.min(resolution.width + 40, 1400)}px` }}>
+                                <div className="absolute inset-0 bg-gray-900 rounded-lg shadow-2xl" style={{ padding: '20px' }}>
+                                  <div className="w-full h-full bg-white rounded overflow-hidden p-4">
+                                    <pre 
+                                      className="m-0 overflow-auto"
+                                      style={{ 
+                                        height: `${resolution.height}px`,
+                                        whiteSpace: 'pre-wrap',
+                                        wordBreak: 'break-word'
+                                      }}
+                                    >
+                                      {fileContent}
+                                    </pre>
+                                  </div>
+                                  <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gray-700 rounded-full"></div>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}
