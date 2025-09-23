@@ -75,6 +75,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/get-email-file-content/[filename]/route.js"
+    ],
+    "/[locale]/[...rest]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/[...rest]/page.js"
     ]
   }
 }
