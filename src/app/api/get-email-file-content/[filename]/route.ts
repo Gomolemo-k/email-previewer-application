@@ -8,9 +8,12 @@ const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { filename: string } }
+  { params }: { params: Promise<{ filename: string }> }
 ) {
   try {
+    // Await the params object first
+    const resolvedParams = await params;
+    
     // Authenticate the user
     const session = await auth.api.getSession({
       headers: request.headers,
@@ -24,7 +27,7 @@ export async function GET(
     }
 
     // Validate filename
-    if (!params.filename) {
+    if (!resolvedParams.filename) {
       return NextResponse.json(
         { error: 'Filename is required' },
         { status: 400 }
@@ -32,11 +35,11 @@ export async function GET(
     }
 
     // Construct the full file path
-    const filePath = join(UPLOAD_DIR, params.filename);
+    const filePath = join(UPLOAD_DIR, resolvedParams.filename);
     
     // Verify that the file belongs to the user by checking the filename format
     // Format: originalName-userId-fileId.extension
-    const fileNameParts = params.filename.split('.');
+    const fileNameParts = resolvedParams.filename.split('.');
     const fileExtension = fileNameParts.pop() || '';
     const nameAndIds = fileNameParts.join('.');
     

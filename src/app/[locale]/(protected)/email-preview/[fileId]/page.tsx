@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import { useQueryClient } from '@tanstack/react-query';
- import { Download, ExternalLink, Monitor, Tablet, Smartphone, ArrowLeft } from 'lucide-react';
+import { Download, ExternalLink, Monitor, Tablet, Smartphone, ArrowLeft } from 'lucide-react';
 
 interface EmailFile {
   id: string;
@@ -29,30 +29,30 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   const [contentError, setContentError] = useState<string | null>(null);
   const [session, setSession] = useState<any>(null);
 
+  // ✅ useSession must be called at top level
+  const { data: sessionData } = authClient.useSession();
+
+  // Invalidate payment queries when session loads
+  useEffect(() => {
+    if (sessionData?.data?.user?.id) {
+      queryClient.invalidateQueries({
+        predicate: (query) => query.queryKey[0] === 'payment',
+      });
+    }
+  }, [sessionData?.data?.user?.id, queryClient]);
+
   useEffect(() => {
     fetchFileData();
   }, [params.fileId]);
 
-  // When the email preview page loads, invalidate payment queries to ensure we have fresh data
-  useEffect(() => {
-    const { data: sessionData } = authClient.useSession();
-    if (sessionData?.data?.user?.id) {
-      // Invalidate payment queries to get fresh data
-      queryClient.invalidateQueries({
-        predicate: (query) => 
-          query.queryKey[0] === 'payment'
-      });
-    }
-  }, []);
-
   const fetchFileData = async () => {
     try {
       setLoading(true);
-      
-      // Check if user is authenticated
+
+      // Get session manually for fetchFileContent
       const sessionData = await authClient.getSession();
       setSession(sessionData);
-      
+
       if (!sessionData.data?.user) {
         throw new Error('User not authenticated');
       }
@@ -71,13 +71,13 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
       }
 
       setFile(foundFile);
-      
+
       // Fetch file content
       await fetchFileContent(foundFile, sessionData);
     } catch (error: any) {
       console.error('Error fetching file:', error);
       toast.error(t('fetch-error'), {
-        description: error.message || t('fetch-error-description')
+        description: error.message || t('fetch-error-description'),
       });
     } finally {
       setLoading(false);
@@ -88,27 +88,26 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
     try {
       setContentLoading(true);
       setContentError(null);
-      
-      // Construct the filename as it's stored on the server
-      // Format: originalName-userId-fileId.extension
+
       const fileExtension = file.fileType;
       const fileNameWithoutExtension = file.filename.replace(/\.[^/.]+$/, '');
+      // ✅ consistent filename format
       const formattedFileName = `${fileNameWithoutExtension}-${sessionData.data?.user?.id}-${file.id}.${fileExtension}`;
-      
+
       const response = await fetch(`/api/get-email-file-content/${formattedFileName}`);
-      
+
       if (!response.ok) {
         const errorResult = await response.json();
         throw new Error(errorResult.error || 'Failed to fetch file content');
       }
-      
+
       const content = await response.text();
       setFileContent(content);
     } catch (error: any) {
       console.error('Error fetching file content:', error);
       setContentError(error.message || t('content-fetch-error-description'));
       toast.error(t('content-fetch-error'), {
-        description: error.message || t('content-fetch-error-description')
+        description: error.message || t('content-fetch-error-description'),
       });
     } finally {
       setContentLoading(false);
@@ -128,23 +127,22 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   };
 
   const handleDownload = async () => {
-    if (!file) return;
-    
+    if (!file || !session?.data?.user?.id) return;
+
     try {
-      // Construct the filename as it's stored on the server
       const filenameParts = file.filename.split('.');
       const fileExtension = filenameParts.pop();
       const fileNameWithoutExtension = filenameParts.join('.');
-      
-      // Format: originalName-userId-fileId.extension
-      const formattedFileName = `${fileNameWithoutExtension}-${file.id}.${fileExtension}`;
-      
+
+      // ✅ now includes userId
+      const formattedFileName = `${fileNameWithoutExtension}-${session.data?.user?.id}-${file.id}.${fileExtension}`;
+
       const response = await fetch(`/api/download-email-file/${formattedFileName}`);
-      
+
       if (!response.ok) {
         throw new Error('Failed to download file');
       }
-      
+
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -154,14 +152,14 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-      
+
       toast.success(t('download-success'), {
-        description: t('download-success-description')
+        description: t('download-success-description'),
       });
     } catch (error: any) {
       console.error('Error downloading file:', error);
       toast.error(t('download-error'), {
-        description: error.message || t('download-error-description')
+        description: error.message || t('download-error-description'),
       });
     }
   };
@@ -170,13 +168,13 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
     router.back();
   };
 
+  // ✅ render logic unchanged
   if (loading) {
     return (
       <div className="flex flex-1 flex-col p-4 md:p-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">{t('title')}</h1>
         </div>
-        
         <Card className="w-full">
           <CardContent className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -192,13 +190,10 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">{t('title')}</h1>
         </div>
-        
         <Card className="w-full">
           <CardContent className="flex flex-col justify-center items-center h-64 gap-4">
             <p className="text-muted-foreground">{t('file-not-found')}</p>
-            <Button onClick={() => router.back()}>
-              {t('go-back')}
-            </Button>
+            <Button onClick={() => router.back()}>{t('go-back')}</Button>
           </CardContent>
         </Card>
       </div>
@@ -222,16 +217,16 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
           </Button>
         </div>
       </div>
-      
+
       <Card className="w-full">
         <CardHeader>
           <div className="flex justify-between items-start">
             <div>
               <CardTitle className="flex items-center gap-2">
                 {file.filename}
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
+                <Button
+                  variant="ghost"
+                  size="sm"
                   className="h-6 w-6 p-0"
                   onClick={() => window.open(window.location.href, '_blank')}
                 >
@@ -281,7 +276,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                   </div>
                 </div>
               </div>
-              
+
               {/* Preview Panes */}
               <div className="flex flex-col lg:flex-row gap-4">
                 {/* Desktop Preview */}
@@ -292,8 +287,8 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                   </div>
                   <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
                     {file.fileType === 'html' ? (
-                      <iframe 
-                        srcDoc={fileContent} 
+                      <iframe
+                        srcDoc={fileContent}
                         className="w-full h-full"
                         style={{ minWidth: '300px', maxWidth: '1200px' }}
                         title="Desktop Preview"
@@ -305,7 +300,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                     )}
                   </div>
                 </div>
-                
+
                 {/* Tablet Preview */}
                 <div className="flex-1 min-w-[300px]">
                   <div className="text-sm font-medium mb-2 flex items-center gap-2">
@@ -314,8 +309,8 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                   </div>
                   <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
                     {file.fileType === 'html' ? (
-                      <iframe 
-                        srcDoc={fileContent} 
+                      <iframe
+                        srcDoc={fileContent}
                         className="w-full h-full"
                         style={{ minWidth: '300px', width: '768px', maxWidth: '100%' }}
                         title="Tablet Preview"
@@ -327,7 +322,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                     )}
                   </div>
                 </div>
-                
+
                 {/* Mobile Preview */}
                 <div className="flex-1 min-w-[300px]">
                   <div className="text-sm font-medium mb-2 flex items-center gap-2">
@@ -336,8 +331,8 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                   </div>
                   <div className="border rounded-lg p-4 bg-white h-[70vh] overflow-auto">
                     {file.fileType === 'html' ? (
-                      <iframe 
-                        srcDoc={fileContent} 
+                      <iframe
+                        srcDoc={fileContent}
                         className="w-full h-full"
                         style={{ minWidth: '300px', width: '375px', maxWidth: '100%' }}
                         title="Mobile Preview"
