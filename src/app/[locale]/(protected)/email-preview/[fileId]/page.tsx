@@ -46,7 +46,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   // Available screen resolutions with realistic device dimensions
   const screenResolutions: ScreenResolution[] = [
     { id: '4k', name: t('4k'), width: 3840, height: 2160, icon: <MonitorSpeaker className="h-4 w-4" /> },
-    { id: 'laptop', name: t('laptop'), width: 1440, height: 900, icon: <Laptop className="h-4 w-4" /> },
+    { id: 'laptop', name: t('laptop'), width: 1460, height: 940, icon: <Laptop className="h-4 w-4" /> },
     { id: 'desktop', name: t('desktop'), width: 1920, height: 1080, icon: <Monitor className="h-4 w-4" /> },
     { id: 'tablet', name: t('tablet'), width: 768, height: 1024, icon: <Tablet className="h-4 w-4" /> },
     { id: 'mobile', name: t('mobile'), width: 375, height: 667, icon: <Smartphone className="h-4 w-4" /> },
@@ -296,12 +296,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                   </Button>
                   <h1 className="text-2xl font-bold">{t('title')}</h1>
                 </div>
-                <div className="flex gap-2">
-                  <Button onClick={handleDownload} variant="outline">
-                    <Download className="h-4 w-4 mr-2" />
-                    {t('download')}
-                  </Button>
-                </div>
+                
               </div>
 
               {/* Filters Section */}
@@ -354,213 +349,72 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
               </Card>
 
               <Card className="w-full">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
+                {/* Main Content */}
+                <div className="flex flex-col">
+                  {/* Header */}
+                  <div className="border-b p-4 flex items-center justify-between">
                     <div>
-                      <CardTitle className="flex items-center gap-2">
-                        {file.filename}
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-6 w-6 p-0"
-                          onClick={() => window.open(window.location.href, '_blank')}
-                        >
-                          <ExternalLink className="h-4 w-4" />
-                        </Button>
-                      </CardTitle>
-                      <CardDescription>
-                        <div className="flex flex-wrap gap-4 mt-2 text-sm">
-                          <span>{t('file-type')}: {file.fileType.toUpperCase()}</span>
-                          <span>{t('file-size')}: {formatFileSize(file.fileSize)}</span>
-                          <span>{t('upload-date')}: {formatDate(file.createdAt)}</span>
-                        </div>
-                      </CardDescription>
+                      <h3 className="font-semibold">{file.filename}</h3>
+                      <div className="text-sm text-muted-foreground">
+                        {t('file-type')}: {file.fileType.toUpperCase()} • {t('file-size')}: {formatFileSize(file.fileSize)}
+                      </div>
                     </div>
                   </div>
-                </CardHeader>
-                <CardContent>
-                  {contentLoading ? (
-                    <div className="flex justify-center items-center h-32">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                    </div>
-                  ) : contentError ? (
-                    <div className="flex flex-col justify-center items-center h-32 gap-4">
-                      <p className="text-red-500">{t('content-fetch-error')}</p>
-                      <p className="text-muted-foreground text-sm">{contentError}</p>
-                      <Button onClick={() => file && session && fetchFileContent(file, session)}>
-                        {t('go-back')}
-                      </Button>
-                    </div>
-                  ) : fileContent ? (
-                    <div className="space-y-6">
-                      {/* Preview Panes Header */}
-                      <div className="flex items-center gap-4">
-                        <h2 className="text-lg font-semibold">{t('preview-title')}</h2>
-                        <div className="flex gap-2 flex-wrap">
-                          {screenResolutions.map((resolution) => (
-                            selectedResolutions.includes(resolution.id) && (
-                              <div key={resolution.id} className="flex items-center gap-1 text-sm text-muted-foreground">
-                                {resolution.icon}
-                                {resolution.name}
-                              </div>
-                            )
-                          ))}
+                  
+                  {/* Preview Area */}
+                  <div className="flex-1 overflow-auto p-4">
+                    <div className="max-w-6xl mx-auto">
+                      {contentLoading ? (
+                        <div className="flex justify-center items-center h-64">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
                         </div>
-                      </div>
-
-                      {/* Preview Panes */}
-                      <div className={`grid gap-6 ${filteredResolutions.length > 1 ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
-                        {filteredResolutions.map((resolution) => (
-                          <div key={resolution.id} className="flex flex-col">
-                            <div className="text-sm font-medium mb-2 flex items-center gap-2">
-                              {resolution.icon}
-                              {resolution.name} ({resolution.width}px)
-                            </div>
-                            <div className="border rounded-lg bg-white flex flex-col flex-1 overflow-hidden">
-                              {/* Device frame for better visualization */}
-                              <div 
-                                className="flex-1 overflow-auto p-4 flex justify-center items-start"
-                                style={{ 
-                                  height: '100vh',
-                                  backgroundColor: '#f8f9fa'
-                                }}
-                              >
+                      ) : contentError ? (
+                        <div className="flex flex-col justify-center items-center h-64 gap-4">
+                          <p className="text-red-500">{t('content-fetch-error')}</p>
+                          <p className="text-muted-foreground text-sm">{contentError}</p>
+                          <Button onClick={() => file && session && fetchFileContent(file, session)}>
+                            {t('retry')}
+                          </Button>
+                        </div>
+                      ) : fileContent ? (
+                        <div className={`grid gap-8 ${filteredResolutions.length > 1 ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
+                          {filteredResolutions.map((resolution) => (
+                            <div key={resolution.id} className="flex flex-col">
+                              <div className="text-center mb-2 font-medium text-sm">{resolution.name}</div>
+                              <div className="border rounded-lg bg-white flex flex-col flex-1 overflow-hidden shadow-sm">
                                 {file.fileType === 'html' ? (
-                                  <div className="relative w-full max-w-full">
-                                    {/* Device frame based on resolution */}
-                                    {resolution.id === 'mobile' || resolution.id === 'small-mobile' ? (
-                                      // Mobile device frame
-                                      <div className="relative mx-auto w-full" style={{ maxWidth: `${resolution.width + 40}px` }}>
-                                        <div className="absolute inset-0 bg-gray-900 rounded-[40px] shadow-2xl" style={{ padding: '20px' }}>
-                                          <div className="w-full h-full bg-white rounded-[30px] overflow-hidden">
-                                            <iframe
-                                              srcDoc={fileContent}
-                                              className="w-full"
-                                              style={{ 
-                                                height: `${resolution.height}px`,
-                                                border: 'none'
-                                              }}
-                                              title={`${resolution.name} Preview`}
-                                            />
-                                          </div>
-                                          <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-gray-800 rounded-full"></div>
-                                          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-gray-700"></div>
-                                        </div>
-                                      </div>
-                                    ) : resolution.id === 'tablet' ? (
-                                      // Tablet device frame
-                                      <div className="relative mx-auto w-full" style={{ maxWidth: `${resolution.width + 40}px` }}>
-                                        <div className="absolute inset-0 bg-gray-900 rounded-[30px] shadow-2xl" style={{ padding: '20px' }}>
-                                          <div className="w-full h-full bg-white rounded-[20px] overflow-hidden">
-                                            <iframe
-                                              srcDoc={fileContent}
-                                              className="w-full"
-                                              style={{ 
-                                                height: `${resolution.height}px`,
-                                                border: 'none'
-                                              }}
-                                              title={`${resolution.name} Preview`}
-                                            />
-                                          </div>
-                                          <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-gray-700"></div>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      // Desktop/laptop device frame
-                                      <div className="relative mx-auto w-full" style={{ maxWidth: `${Math.min(resolution.width + 40, 1400)}px` }}>
-                                        <div className="absolute inset-0 bg-gray-900 rounded-lg shadow-2xl" style={{ padding: '20px' }}>
-                                          <div className="w-full h-full bg-white rounded overflow-hidden">
-                                            <iframe
-                                              srcDoc={fileContent}
-                                              className="w-full"
-                                              style={{ 
-                                                height: `${resolution.height}px`,
-                                                border: 'none'
-                                              }}
-                                              title={`${resolution.name} Preview`}
-                                            />
-                                          </div>
-                                          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gray-700 rounded-full"></div>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
+                                  <iframe
+                                    srcDoc={fileContent}
+                                    width="100%"
+                                    height={Math.min(resolution.height, 800)}
+                                    className="border-0"
+                                    title={`${resolution.name} Preview`}
+                                    style={{ minHeight: `${Math.min(resolution.height, 800)}px` }}
+                                  />
                                 ) : (
-                                  <div className="relative w-full max-w-full">
-                                    {/* Device frame for text content */}
-                                    {resolution.id === 'mobile' || resolution.id === 'small-mobile' ? (
-                                      // Mobile device frame for text
-                                      <div className="relative mx-auto w-full" style={{ maxWidth: `${resolution.width + 40}px` }}>
-                                        <div className="absolute inset-0 bg-gray-900 rounded-[40px] shadow-2xl" style={{ padding: '20px' }}>
-                                          <div className="w-full h-full bg-white rounded-[30px] overflow-hidden p-4">
-                                            <pre 
-                                              className="m-0 text-xs overflow-auto"
-                                              style={{ 
-                                                height: `${resolution.height}px`,
-                                                whiteSpace: 'pre-wrap',
-                                                wordBreak: 'break-word'
-                                              }}
-                                            >
-                                              {fileContent}
-                                            </pre>
-                                          </div>
-                                          <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-24 h-6 bg-gray-800 rounded-full"></div>
-                                          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-12 h-12 rounded-full bg-gray-700"></div>
-                                        </div>
-                                      </div>
-                                    ) : resolution.id === 'tablet' ? (
-                                      // Tablet device frame for text
-                                      <div className="relative mx-auto w-full" style={{ maxWidth: `${resolution.width + 40}px` }}>
-                                        <div className="absolute inset-0 bg-gray-900 rounded-[30px] shadow-2xl" style={{ padding: '20px' }}>
-                                          <div className="w-full h-full bg-white rounded-[20px] overflow-hidden p-4">
-                                            <pre 
-                                              className="m-0 text-sm overflow-auto"
-                                              style={{ 
-                                                height: `${resolution.height}px`,
-                                                whiteSpace: 'pre-wrap',
-                                                wordBreak: 'break-word'
-                                              }}
-                                            >
-                                              {fileContent}
-                                            </pre>
-                                          </div>
-                                          <div className="absolute top-6 left-1/2 transform -translate-x-1/2 w-8 h-8 rounded-full bg-gray-700"></div>
-                                        </div>
-                                      </div>
-                                    ) : (
-                                      // Desktop/laptop device frame for text
-                                      <div className="relative mx-auto w-full" style={{ maxWidth: `${Math.min(resolution.width + 40, 1400)}px` }}>
-                                        <div className="absolute inset-0 bg-gray-900 rounded-lg shadow-2xl" style={{ padding: '20px' }}>
-                                          <div className="w-full h-full bg-white rounded overflow-hidden p-4">
-                                            <pre 
-                                              className="m-0 overflow-auto"
-                                              style={{ 
-                                                height: `${resolution.height}px`,
-                                                whiteSpace: 'pre-wrap',
-                                                wordBreak: 'break-word'
-                                              }}
-                                            >
-                                              {fileContent}
-                                            </pre>
-                                          </div>
-                                          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-1 bg-gray-700 rounded-full"></div>
-                                        </div>
-                                      </div>
-                                    )}
-                                  </div>
+                                  <pre 
+                                    className="m-0 p-4 text-sm overflow-auto"
+                                    style={{ 
+                                      minHeight: `${Math.min(resolution.height, 800)}px`,
+                                      whiteSpace: 'pre-wrap',
+                                      wordBreak: 'break-word'
+                                    }}
+                                  >
+                                    {fileContent}
+                                  </pre>
                                 )}
                               </div>
                             </div>
-                          </div>
-                        ))}
-                      </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="flex justify-center items-center h-64">
+                          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                        </div>
+                      )}
                     </div>
-                  ) : (
-                    <div className="flex justify-center items-center h-32">
-                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-                    </div>
-                  )}
-                </CardContent>
+                  </div>
+                </div>
               </Card>
             </div>
           </div>
