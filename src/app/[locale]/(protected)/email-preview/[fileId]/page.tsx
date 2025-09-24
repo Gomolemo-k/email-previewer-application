@@ -8,9 +8,10 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import { useQueryClient } from '@tanstack/react-query';
-import { Download, ExternalLink, Monitor, Tablet, Smartphone, ArrowLeft, Laptop, MonitorSpeaker } from 'lucide-react';
+import { Download, ExternalLink, Monitor, Tablet, Smartphone, ArrowLeft, Laptop, MonitorSpeaker, RotateCcw } from 'lucide-react';
 import { MultiSelect, MultiSelectItem, MultiSelectContext } from '@/components/ui/multi-select';
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
+import DeviceMockup from '@/components/email-preview/device-mockups';
 
 interface EmailFile {
   id: string;
@@ -27,6 +28,7 @@ interface ScreenResolution {
   width: number;
   height: number;
   icon: React.ReactNode;
+  orientation?: 'portrait' | 'landscape';
 }
 
 export default function EmailPreviewPage({ params }: { params: { fileId: string } }) {
@@ -42,15 +44,19 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   const [selectedResolutions, setSelectedResolutions] = useState<string[]>(['desktop', 'tablet', 'mobile']);
   const [availableEmails, setAvailableEmails] = useState<EmailFile[]>([]);
   const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
+  const [deviceOrientations, setDeviceOrientations] = useState<Record<string, 'portrait' | 'landscape'>>({});
 
   // Available screen resolutions with realistic device dimensions
   const screenResolutions: ScreenResolution[] = [
     { id: '4k', name: t('4k'), width: 3840, height: 2160, icon: <MonitorSpeaker className="h-4 w-4" /> },
     { id: 'laptop', name: t('laptop'), width: 1460, height: 940, icon: <Laptop className="h-4 w-4" /> },
     { id: 'desktop', name: t('desktop'), width: 1920, height: 1080, icon: <Monitor className="h-4 w-4" /> },
-    { id: 'tablet', name: t('tablet'), width: 768, height: 1024, icon: <Tablet className="h-4 w-4" /> },
-    { id: 'mobile', name: t('mobile'), width: 375, height: 667, icon: <Smartphone className="h-4 w-4" /> },
-    { id: 'small-mobile', name: t('small-mobile'), width: 320, height: 568, icon: <Smartphone className="h-4 w-4" /> },
+    { id: 'tablet', name: t('tablet'), width: 768, height: 1024, icon: <Tablet className="h-4 w-4" />, orientation: 'portrait' },
+    { id: 'tablet-landscape', name: `${t('tablet')} ${t('landscape')}`, width: 1024, height: 768, icon: <Tablet className="h-4 w-4" />, orientation: 'landscape' },
+    { id: 'mobile', name: t('mobile'), width: 375, height: 667, icon: <Smartphone className="h-4 w-4" />, orientation: 'portrait' },
+    { id: 'mobile-landscape', name: `${t('mobile')} ${t('landscape')}`, width: 667, height: 375, icon: <Smartphone className="h-4 w-4" />, orientation: 'landscape' },
+    { id: 'small-mobile', name: t('small-mobile'), width: 320, height: 568, icon: <Smartphone className="h-4 w-4" />, orientation: 'portrait' },
+    { id: 'small-mobile-landscape', name: `${t('small-mobile')} ${t('landscape')}`, width: 568, height: 320, icon: <Smartphone className="h-4 w-4" />, orientation: 'landscape' },
   ];
 
   // Breadcrumbs for the email preview page
@@ -243,6 +249,16 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
     }
   };
 
+  const toggleOrientation = (resolutionId: string) => {
+    const currentOrientation = deviceOrientations[resolutionId] || 'portrait';
+    const newOrientation = currentOrientation === 'portrait' ? 'landscape' : 'portrait';
+    
+    setDeviceOrientations(prev => ({
+      ...prev,
+      [resolutionId]: newOrientation
+    }));
+  };
+
   // ✅ render logic unchanged
   if (loading) {
     return (
@@ -337,7 +353,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                             <MultiSelectItem key={resolution.id} value={resolution.id}>
                               <div className="flex items-center gap-2">
                                 {resolution.icon}
-                                {resolution.name} ({resolution.width}px)
+                                {resolution.name} ({resolution.width}×{resolution.height})
                               </div>
                             </MultiSelectItem>
                           ))}
@@ -378,34 +394,67 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                         </div>
                       ) : fileContent ? (
                         <div className={`grid gap-8 ${filteredResolutions.length > 1 ? 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3' : 'grid-cols-1'}`}>
-                          {filteredResolutions.map((resolution) => (
-                            <div key={resolution.id} className="flex flex-col">
-                              <div className="text-center mb-2 font-medium text-sm">{resolution.name}</div>
-                              <div className="border rounded-lg bg-white flex flex-col flex-1 overflow-hidden shadow-sm">
-                                {file.fileType === 'html' ? (
-                                  <iframe
-                                    srcDoc={fileContent}
-                                    width="100%"
-                                    height={Math.min(resolution.height, 800)}
-                                    className="border-0"
-                                    title={`${resolution.name} Preview`}
-                                    style={{ minHeight: `${Math.min(resolution.height, 800)}px` }}
-                                  />
-                                ) : (
-                                  <pre 
-                                    className="m-0 p-4 text-sm overflow-auto"
-                                    style={{ 
-                                      minHeight: `${Math.min(resolution.height, 800)}px`,
-                                      whiteSpace: 'pre-wrap',
-                                      wordBreak: 'break-word'
-                                    }}
-                                  >
-                                    {fileContent}
-                                  </pre>
-                                )}
+                          {filteredResolutions.map((resolution) => {
+                            const resolutionId = resolution.id;
+                            const currentOrientation = deviceOrientations[resolutionId] || resolution.orientation || 'portrait';
+                            const isLandscape = currentOrientation === 'landscape';
+                            
+                            // For mobile and tablet, we'll use the portrait version of the device type
+                            // but add landscape class when needed
+                            let deviceType = resolutionId;
+                            if (resolutionId === 'tablet-landscape') deviceType = 'tablet';
+                            if (resolutionId === 'mobile-landscape') deviceType = 'mobile';
+                            if (resolutionId === 'small-mobile-landscape') deviceType = 'small-mobile';
+                            
+                            return (
+                              <div key={resolutionId} className="flex flex-col">
+                                <div className="flex justify-between items-center mb-2 font-medium text-sm">
+                                  <span>{resolution.name}</span>
+                                  {(resolutionId.includes('tablet') || resolutionId.includes('mobile')) && (
+                                    <Button
+                                      size="sm"
+                                      variant="ghost"
+                                      onClick={() => toggleOrientation(resolutionId)}
+                                      className="h-6 w-6 p-0"
+                                      title={isLandscape ? 'Portrait' : 'Landscape'}
+                                    >
+                                      <RotateCcw className="h-3 w-3" />
+                                    </Button>
+                                  )}
+                                </div>
+                                <div className="h-[500px] flex items-center justify-center overflow-hidden">
+                                  <div className={`${isLandscape ? 'landscape' : ''} w-full h-full`}>
+                                    <DeviceMockup 
+                                      deviceType={deviceType as any} 
+                                      title={`${resolution.name} (${resolution.width}×${resolution.height})`}
+                                    >
+                                      <div className="w-full h-full overflow-auto">
+                                        {file.fileType === 'html' ? (
+                                          <iframe
+                                            srcDoc={fileContent}
+                                            width="100%"
+                                            height="100%"
+                                            className="border-0"
+                                            title={`${resolution.name} Preview`}
+                                          />
+                                        ) : (
+                                          <pre 
+                                            className="m-0 p-4 w-full h-full text-sm overflow-auto"
+                                            style={{ 
+                                              whiteSpace: 'pre-wrap',
+                                              wordBreak: 'break-word'
+                                            }}
+                                          >
+                                            {fileContent}
+                                          </pre>
+                                        )}
+                                      </div>
+                                    </DeviceMockup>
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          ))}
+                            );
+                          })}
                         </div>
                       ) : (
                         <div className="flex justify-center items-center h-64">
