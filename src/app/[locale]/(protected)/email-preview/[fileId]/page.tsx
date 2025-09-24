@@ -373,7 +373,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
               <p className="text-red-500">{t('content-fetch-error')}</p>
               <p className="text-muted-foreground text-sm">{contentError}</p>
               <Button onClick={() => file && session && fetchFileContent(file, session)}>
-                {t('retry')}
+                {t('go-back')}
               </Button>
             </div>
           ) : fileContent ? (
