@@ -30,23 +30,36 @@
     0 10px 20px rgba(0, 21, 64, .05);
 }
 
+/* Phone (9:16 ratio, 6" screen) */
 .phone {
-  padding: 12% 3%;
+  width: 150px;
+  height: 266px;
+  padding: 5% 2%;
 }
 
 .phone.landscape {
-  padding: 1.75% 8%;
+  width: 266px;
+  height: 150px;
+  padding: 2% 8%;
 }
 
+/* Tablet (4:3 ratio, 10" screen) */
 .tablet {
+  width: 240px;
+  height: 320px;
   padding: 8% 2%;
 }
 
 .tablet.landscape {
+  width: 320px;
+  height: 240px;
   padding: 1.12% 6%;
 }
 
+/* Laptop (16:10 ratio, 15" screen) */
 .laptop {
+  width: 480px;
+  height: 300px;
   margin-left: 12%;
   margin-right: 12%;
   margin-bottom: 2.5%;
@@ -54,7 +67,10 @@
   padding: 1.35%;
 }
 
+/* Desktop (16:9 ratio, 24" monitor) */
 .desktop {
+  width: 640px;
+  height: 360px;
   margin-bottom: 11%;
   border-radius: 1vw;
   padding: 1.5%;
@@ -100,7 +116,7 @@
   top: 0;
   bottom: 0;
   width: 1%;
-  height: 20%;
+  height: 0%;
 }
 
 /* Tablet button */
