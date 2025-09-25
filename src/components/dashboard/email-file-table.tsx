@@ -206,15 +206,6 @@ export function EmailFileTable() {
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      asChild
-                    >
-                      <LocaleLink href={`/email-preview/${file.id}`}>
-                        <ExternalLink className="h-4 w-4" />
-                      </LocaleLink>
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
                       onClick={() => handleDeleteFile(file.id, file.filename)}
                     >
                       <Trash2 className="h-4 w-4" />
