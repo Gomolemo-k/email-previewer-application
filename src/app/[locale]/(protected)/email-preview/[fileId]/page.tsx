@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
-import { Download, ExternalLink, Monitor, Tablet, Smartphone } from 'lucide-react';
+import { Monitor, Tablet, Smartphone } from 'lucide-react';
 
 interface EmailFile {
   id: string;
@@ -81,34 +81,6 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
 
   const formatDate = (date: Date) => new Date(date).toLocaleDateString() + ' ' + new Date(date).toLocaleTimeString();
 
-  const handleDownload = async () => {
-    if (!file) return;
-    try {
-      const filenameParts = file.filename.split('.');
-      const fileExtension = filenameParts.pop();
-      const fileNameWithoutExtension = filenameParts.join('.');
-      const formattedFileName = `${fileNameWithoutExtension}-${file.id}.${fileExtension}`;
-      
-      const response = await fetch(`/api/download-email-file/${formattedFileName}`);
-      if (!response.ok) throw new Error('Failed to download file');
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = file.filename;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-
-      toast.success(t('download-success'), { description: t('download-success-description') });
-    } catch (error: any) {
-      console.error('Error downloading file:', error);
-      toast.error(t('download-error'), { description: error.message || t('download-error-description') });
-    }
-  };
-
   if (loading) {
     return (
       <div className="flex flex-1 flex-col p-4 md:p-6">
@@ -145,38 +117,20 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">{t('title')}</h1>
-        <div className="flex gap-2">
-          <Button onClick={handleDownload} variant="outline">
-            <Download className="h-4 w-4 mr-2" />
-            {t('download')}
-          </Button>
-        </div>
       </div>
 
       {/* File Card */}
       <Card className="w-full">
         <CardHeader>
-          <div className="flex justify-between items-start">
-            <div>
-              <CardTitle className="flex items-center gap-2">
-                {file.filename}
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="h-6 w-6 p-0"
-                  onClick={() => window.open(window.location.href, '_blank')}
-                >
-                  <ExternalLink className="h-4 w-4" />
-                </Button>
-              </CardTitle>
-              <CardDescription>
-                <div className="flex flex-wrap gap-4 mt-2 text-sm">
-                  <span>{t('file-type')}: {file.fileType.toUpperCase()}</span>
-                  <span>{t('file-size')}: {formatFileSize(file.fileSize)}</span>
-                  <span>{t('upload-date')}: {formatDate(file.createdAt)}</span>
-                </div>
-              </CardDescription>
-            </div>
+          <div>
+            <CardTitle>{file.filename}</CardTitle>
+            <CardDescription>
+              <div className="flex flex-wrap gap-4 mt-2 text-sm">
+                <span>{t('file-type')}: {file.fileType.toUpperCase()}</span>
+                <span>{t('file-size')}: {formatFileSize(file.fileSize)}</span>
+                <span>{t('upload-date')}: {formatDate(file.createdAt)}</span>
+              </div>
+            </CardDescription>
           </div>
         </CardHeader>
 
@@ -199,7 +153,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                 </div>
               </div>
 
-              {/* Preview Frames without white grids */}
+              {/* Preview Frames */}
               <div className="flex flex-col lg:flex-row gap-4 overflow-x-auto">
                 {/* Desktop */}
                 <div className="flex-1 min-w-[375px]">
