@@ -20,9 +20,9 @@ As a user, when I select an email from the list, I want to see its content rende
 - [x] Implement responsive preview panes with appropriate dimensions
 - [x] Add loading states while email content is being fetched
 - [x] Handle errors when email content cannot be retrieved
-- [ ] Write unit tests for frontend and backend components
-- [ ] Write integration tests for the preview flow
-- [ ] Create documentation for the preview feature
+- [x] Write unit tests for frontend and backend components
+- [x] Write integration tests for the preview flow
+- [x] Create documentation for the preview feature
 - [ ] Submit PR for peer review
 
 ## Subtasks
