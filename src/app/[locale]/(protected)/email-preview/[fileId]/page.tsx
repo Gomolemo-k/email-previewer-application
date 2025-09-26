@@ -7,10 +7,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
-import { Monitor, Tablet, Smartphone } from 'lucide-react';
-
-// MultiSelect imports
-import { MultiSelect, MultiSelectItem, MultiSelectContext } from '@/components/ui/multi-select';
+import FilterSection from '@/components/FilterSection';
+import DeviceMockup from '@/components/DeviceMockup'; 
+import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 
 interface EmailFile {
   id: string;
@@ -20,6 +19,72 @@ interface EmailFile {
   createdAt: Date;
 }
 
+interface DeviceOption {
+  id: string;
+  name: string;
+  category: string;
+}
+
+// Map device ID to full display name expected by DeviceMockup
+const DEVICE_NAME_MAP: Record<string, string> = {
+  // iPhones
+  'iphone-17-pro-max': 'iPhone 17 Pro Max',
+  'iphone-17-pro': 'iPhone 17 Pro',
+  'iphone-17': 'iPhone 17',
+  'iphone-16-pro-max': 'iPhone 16 Pro Max',
+  'iphone-16-pro': 'iPhone 16 Pro',
+  'iphone-16-plus': 'iPhone 16 Plus',
+  'iphone-13-pro': 'iPhone 13 Pro',
+  'iphone-13-pro-max': 'iPhone 13 Pro Max',
+  'iphone-11-pro': 'iPhone 11 Pro',
+  'iphone-11-pro-max': 'iPhone 11 Pro Max',
+  'iphone-11': 'iPhone 11',
+  // iPads
+  'ipad-pro-13': 'iPad Pro 13-inch (2024)',
+  'ipad-pro-11': 'iPad Pro 11-inch (2024)',
+  'ipad-air-2025': 'iPad Air (2025)',
+  'ipad-standard-2025': 'iPad (2025, Standard)',
+  // Samsung Phones
+  'galaxy-s25-ultra': 'Galaxy S25 Ultra',
+  'galaxy-s25-plus': 'Galaxy S25+',
+  'galaxy-s25-edge': 'Galaxy S25 Edge',
+  'galaxy-s25-fe': 'Galaxy S25 FE',
+  'galaxy-s24-ultra': 'Galaxy S24 Ultra',
+  'galaxy-note-20-ultra': 'Galaxy Note 20 Ultra',
+  // Samsung Tablets
+  'galaxy-tab-s10-ultra': 'Galaxy Tab S10 Ultra',
+  'galaxy-tab-s11-ultra': 'Galaxy Tab S11 Ultra',
+  // Google Pixel Phones
+  'pixel-10-pro-xl': 'Pixel 10 Pro XL',
+  'pixel-10-pro': 'Pixel 10 Pro',
+  'pixel-10': 'Pixel 10',
+  'pixel-9-pro-xl': 'Pixel 9 Pro XL',
+  'pixel-9': 'Pixel 9',
+  'pixel-9a': 'Pixel 9a',
+  'pixel-8-pro': 'Pixel 8 Pro',
+  'pixel-7a': 'Pixel 7a',
+  // Google Pixel Fold
+  'pixel-9-pro-fold': 'Pixel 9 Pro Fold',
+  // MacBooks
+  'macbook-air-13-m4': 'MacBook Air 13" (M4)',
+  'macbook-air-15-m4': 'MacBook Air 15" (M4)',
+  'macbook-pro-14-m4': 'MacBook Pro 14" (M4)',
+  'macbook-pro-16-m4': 'MacBook Pro 16" (M4)',
+  // Samsung Laptops
+  'galaxy-book4-13': 'Samsung Galaxy Book4 13"',
+  'galaxy-book4-15': 'Samsung Galaxy Book4 15"',
+  // iMacs
+  'imac-24-m3': 'iMac 24" (M3)',
+  'imac-24-m4': 'iMac 24" (M4)',
+  // Apple Displays
+  'apple-studio-display': 'Apple Studio Display',
+  'apple-pro-display-xdr': 'Apple Pro Display XDR',
+  // Samsung Displays
+  'samsung-all-in-one-pro': 'Samsung All-in-One Pro PC',
+  'samsung-m5-flat-fhd': 'Samsung M5 Flat FHD Smart Monitor',
+  'samsung-odyssey-g9': 'Samsung Odyssey G9 Curved Gaming Monitor',
+};
+
 export default function EmailPreviewPage({ params }: { params: { fileId: string } }) {
   const t = useTranslations('Dashboard.email-preview');
   const router = useRouter();
@@ -28,17 +93,74 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
 
-  // Filter states
-  const [selectedEmails, setSelectedEmails] = useState<string[]>([]);
-  const [selectedResolutions, setSelectedResolutions] = useState<string[]>([]);
-
-  // Mock data (replace with API data if needed)
+  const [selectedEmails, setSelectedEmails] = useState<string[]>([params.fileId]);
+  const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [availableEmails, setAvailableEmails] = useState<EmailFile[]>([]);
-  const screenResolutions = [
-    { id: 'desktop', name: t('desktop'), width: 1200, icon: <Monitor className="h-4 w-4" /> },
-    { id: 'tablet', name: t('tablet'), width: 768, icon: <Tablet className="h-4 w-4" /> },
-    { id: 'mobile', name: t('mobile'), width: 375, icon: <Smartphone className="h-4 w-4" /> },
+
+  const deviceOptions: DeviceOption[] = [
+    // iPhones
+    { id: 'iphone-17-pro-max', name: 'iPhone 17 Pro Max', category: 'iPhone' },
+    { id: 'iphone-17-pro', name: 'iPhone 17 Pro', category: 'iPhone' },
+    { id: 'iphone-17', name: 'iPhone 17', category: 'iPhone' },
+    { id: 'iphone-16-pro-max', name: 'iPhone 16 Pro Max', category: 'iPhone' },
+    { id: 'iphone-16-pro', name: 'iPhone 16 Pro', category: 'iPhone' },
+    { id: 'iphone-16-plus', name: 'iPhone 16 Plus', category: 'iPhone' },
+    { id: 'iphone-13-pro', name: 'iPhone 13 Pro', category: 'iPhone' },
+    { id: 'iphone-13-pro-max', name: 'iPhone 13 Pro Max', category: 'iPhone' },
+    { id: 'iphone-11-pro', name: 'iPhone 11 Pro', category: 'iPhone' },
+    { id: 'iphone-11-pro-max', name: 'iPhone 11 Pro Max', category: 'iPhone' },
+    { id: 'iphone-11', name: 'iPhone 11', category: 'iPhone' },
+    // iPads
+    { id: 'ipad-pro-13', name: 'iPad Pro 13-inch (2024)', category: 'iPad' },
+    { id: 'ipad-pro-11', name: 'iPad Pro 11-inch (2024)', category: 'iPad' },
+    { id: 'ipad-air-2025', name: 'iPad Air (2025)', category: 'iPad' },
+    { id: 'ipad-standard-2025', name: 'iPad (2025, Standard)', category: 'iPad' },
+    // Samsung Phones
+    { id: 'galaxy-s25-ultra', name: 'Galaxy S25 Ultra', category: 'Samsung Phone' },
+    { id: 'galaxy-s25-plus', name: 'Galaxy S25+', category: 'Samsung Phone' },
+    { id: 'galaxy-s25-edge', name: 'Galaxy S25 Edge', category: 'Samsung Phone' },
+    { id: 'galaxy-s25-fe', name: 'Galaxy S25 FE', category: 'Samsung Phone' },
+    { id: 'galaxy-s24-ultra', name: 'Galaxy S24 Ultra', category: 'Samsung Phone' },
+    { id: 'galaxy-note-20-ultra', name: 'Galaxy Note 20 Ultra', category: 'Samsung Phone' },
+    // Samsung Tablets
+    { id: 'galaxy-tab-s10-ultra', name: 'Galaxy Tab S10 Ultra', category: 'Samsung Tablet' },
+    { id: 'galaxy-tab-s11-ultra', name: 'Galaxy Tab S11 Ultra', category: 'Samsung Tablet' },
+    // Google Pixel Phones
+    { id: 'pixel-10-pro-xl', name: 'Pixel 10 Pro XL', category: 'Google Pixel' },
+    { id: 'pixel-10-pro', name: 'Pixel 10 Pro', category: 'Google Pixel' },
+    { id: 'pixel-10', name: 'Pixel 10', category: 'Google Pixel' },
+    { id: 'pixel-9-pro-xl', name: 'Pixel 9 Pro XL', category: 'Google Pixel' },
+    { id: 'pixel-9', name: 'Pixel 9', category: 'Google Pixel' },
+    { id: 'pixel-9a', name: 'Pixel 9a', category: 'Google Pixel' },
+    { id: 'pixel-8-pro', name: 'Pixel 8 Pro', category: 'Google Pixel' },
+    { id: 'pixel-7a', name: 'Pixel 7a', category: 'Google Pixel' },
+    // Google Pixel Fold
+    { id: 'pixel-9-pro-fold', name: 'Pixel 9 Pro Fold', category: 'Google Pixel Fold' },
+    // MacBooks
+    { id: 'macbook-air-13-m4', name: 'MacBook Air 13" (M4)', category: 'MacBook' },
+    { id: 'macbook-air-15-m4', name: 'MacBook Air 15" (M4)', category: 'MacBook' },
+    { id: 'macbook-pro-14-m4', name: 'MacBook Pro 14" (M4)', category: 'MacBook' },
+    { id: 'macbook-pro-16-m4', name: 'MacBook Pro 16" (M4)', category: 'MacBook' },
+    // Samsung Laptops
+    { id: 'galaxy-book4-13', name: 'Samsung Galaxy Book4 13"', category: 'Samsung Laptop' },
+    { id: 'galaxy-book4-15', name: 'Samsung Galaxy Book4 15"', category: 'Samsung Laptop' },
+    // iMacs
+    { id: 'imac-24-m3', name: 'iMac 24" (M3)', category: 'iMac' },
+    { id: 'imac-24-m4', name: 'iMac 24" (M4)', category: 'iMac' },
+    // Apple Displays
+    { id: 'apple-studio-display', name: 'Apple Studio Display', category: 'Apple Display' },
+    { id: 'apple-pro-display-xdr', name: 'Apple Pro Display XDR', category: 'Apple Display' },
+    // Samsung Displays
+    { id: 'samsung-all-in-one-pro', name: 'Samsung All-in-One Pro PC', category: 'Samsung Display' },
+    { id: 'samsung-m5-flat-fhd', name: 'Samsung M5 Flat FHD Smart Monitor', category: 'Samsung Display' },
+    { id: 'samsung-odyssey-g9', name: 'Samsung Odyssey G9 Curved Gaming Monitor', category: 'Samsung Display' },
   ];
+
+  const sortedDeviceOptions = deviceOptions.sort((a, b) => {
+    if (a.category < b.category) return -1;
+    if (a.category > b.category) return 1;
+    return a.name.localeCompare(b.name);
+  });
 
   useEffect(() => {
     fetchFileData();
@@ -56,7 +178,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || 'Failed to fetch files');
 
-      setAvailableEmails(result.files); // Populate filter options
+      setAvailableEmails(result.files);
 
       const foundFile = result.files.find((f: EmailFile) => f.id === params.fileId);
       if (!foundFile) throw new Error('File not found');
@@ -88,13 +210,8 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
     }
   };
 
-  const handleEmailChange = (values: string[]) => {
-    setSelectedEmails(values);
-  };
-
-  const handleResolutionChange = (values: string[]) => {
-    setSelectedResolutions(values);
-  };
+  const handleEmailsChange = (emails: string[]) => setSelectedEmails(emails);
+  const handleDevicesChange = (devices: string[]) => setSelectedDevices(devices);
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -109,10 +226,10 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   if (loading) {
     return (
       <div className="flex flex-1 flex-col p-4 md:p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">{t('title')}</h1>
-        </div>
-        <Card className="w-full">
+        <DashboardHeader
+          breadcrumbs={[{ label: t('title'), isCurrentPage: true }]}
+        />
+        <Card className="w-full mt-4">
           <CardContent className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           </CardContent>
@@ -124,10 +241,10 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
   if (!file) {
     return (
       <div className="flex flex-1 flex-col p-4 md:p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">{t('title')}</h1>
-        </div>
-        <Card className="w-full">
+        <DashboardHeader
+          breadcrumbs={[{ label: t('title'), isCurrentPage: true }]}
+        />
+        <Card className="w-full mt-4">
           <CardContent className="flex flex-col justify-center items-center h-64 gap-4">
             <p className="text-muted-foreground">{t('file-not-found')}</p>
             <Button onClick={() => router.back()}>{t('go-back')}</Button>
@@ -139,62 +256,25 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
 
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">{t('title')}</h1>
-      </div>
+      {/* Dashboard Header */}
+      <DashboardHeader
+        breadcrumbs={[
+          { label: t('title') },
+          { label: file.filename, isCurrentPage: true },
+        ]}
+      />
 
       {/* Filters Section */}
-      <Card className="w-full mb-6">
-        <CardHeader>
-          <CardTitle className="text-lg">{t('filters-title')}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Email Selection */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">{t('select-emails')}</label>
-              <MultiSelectContext.Provider value={{ value: selectedEmails, onValueChange: handleEmailChange }}>
-                <MultiSelect
-                  value={selectedEmails}
-                  onValueChange={handleEmailChange}
-                  placeholder={t('select-emails-placeholder')}
-                >
-                  {availableEmails.map((email) => (
-                    <MultiSelectItem key={email.id} value={email.id}>
-                      {email.filename}
-                    </MultiSelectItem>
-                  ))}
-                </MultiSelect>
-              </MultiSelectContext.Provider>
-            </div>
-
-            {/* Resolution Selection */}
-            <div>
-              <label className="text-sm font-medium mb-2 block">{t('select-resolutions')}</label>
-              <MultiSelectContext.Provider value={{ value: selectedResolutions, onValueChange: handleResolutionChange }}>
-                <MultiSelect
-                  value={selectedResolutions}
-                  onValueChange={handleResolutionChange}
-                  placeholder={t('select-resolutions-placeholder')}
-                >
-                  {screenResolutions.map((resolution) => (
-                    <MultiSelectItem key={resolution.id} value={resolution.id}>
-                      <div className="flex items-center gap-2">
-                        {resolution.icon}
-                        {resolution.name} ({resolution.width}px)
-                      </div>
-                    </MultiSelectItem>
-                  ))}
-                </MultiSelect>
-              </MultiSelectContext.Provider>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+      <FilterSection 
+        availableEmails={availableEmails}
+        onEmailsChange={handleEmailsChange}
+        onDevicesChange={handleDevicesChange}
+        selectedEmails={selectedEmails}
+        selectedDevices={selectedDevices}
+      />
 
       {/* File Card */}
-      <Card className="w-full">
+      <Card className="w-full mt-4">
         <CardHeader>
           <div>
             <CardTitle>{file.filename}</CardTitle>
@@ -211,29 +291,38 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
         <CardContent>
           {fileContent ? (
             <div className="space-y-6">
-              {/* Preview Panes */}
-              <div className="flex flex-col lg:flex-row gap-4 overflow-x-auto">
-                {screenResolutions
-                  .filter((res) => selectedResolutions.length === 0 || selectedResolutions.includes(res.id))
-                  .map((res) => (
-                    <div key={res.id} className="flex-1 min-w-[375px]">
-                      <div className="text-sm font-medium mb-2 flex items-center gap-2">
-                        {res.icon}{res.name} ({res.width}px)
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {selectedDevices.length > 0 ? (
+                  selectedDevices.map((deviceId) => {
+                    const device = deviceOptions.find(d => d.id === deviceId);
+                    if (!device) return null;
+                    const deviceDisplayName = DEVICE_NAME_MAP[deviceId] || device.name;
+
+                    return (
+                      <div key={deviceId} className="flex flex-col items-center">
+                        <div className="text-sm font-medium mb-2 text-center px-2 text-muted-foreground">
+                          {device.name}
+                        </div>
+                        <DeviceMockup deviceName={deviceDisplayName} className="w-full max-w-full">
+                          {file.fileType === 'html' ? (
+                            <iframe
+                              srcDoc={fileContent}
+                              title={`${device.name} Preview`}
+                            />
+                          ) : (
+                            <pre className="p-4 whitespace-pre-wrap overflow-auto h-full w-full">
+                              {fileContent}
+                            </pre>
+                          )}
+                        </DeviceMockup>
                       </div>
-                      {file.fileType === 'html' ? (
-                        <iframe
-                          srcDoc={fileContent}
-                          className="w-full h-[70vh]"
-                          style={{ minWidth: '375px', width: `${res.width}px`, maxWidth: `${res.width}px` }}
-                          title={`${res.name} Preview`}
-                        />
-                      ) : (
-                        <pre className={`whitespace-pre-wrap break-words max-w-[${res.width}px] overflow-x-auto`}>
-                          {fileContent}
-                        </pre>
-                      )}
-                    </div>
-                  ))}
+                    );
+                  })
+                ) : (
+                  <div className="col-span-full text-center py-8 text-muted-foreground">
+                    {t('select-devices-to-preview') || 'Select devices to preview'}
+                  </div>
+                )}
               </div>
             </div>
           ) : (
