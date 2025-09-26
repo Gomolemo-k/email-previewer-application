@@ -13,24 +13,14 @@ import {
   Settings2Icon,
   SettingsIcon,
   UsersRoundIcon,
+  MailIcon, // <-- We'll use this for email preview
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { websiteConfig } from './website';
 
-/**
- * Get sidebar config with translations
- *
- * NOTICE: used in client components only
- *
- * docs:
- * https://mksaas.com/docs/config/sidebar
- *
- * @returns The sidebar config with translated titles and descriptions
- */
 export function useSidebarLinks(): NestedMenuItem[] {
   const t = useTranslations('Dashboard');
 
-  // if is demo website, allow user to access admin and user pages, but data is fake
   const isDemo = isDemoWebsite();
 
   return [
@@ -38,6 +28,12 @@ export function useSidebarLinks(): NestedMenuItem[] {
       title: t('dashboard.title'),
       icon: <LayoutDashboardIcon className="size-4 shrink-0" />,
       href: Routes.Dashboard,
+      external: false,
+    },
+    {
+      title: t('email-preview.title'), // Add translation key in your locale files
+      icon: <MailIcon className="size-4 shrink-0" />,
+      href: Routes.Dashboard, 
       external: false,
     },
     {
