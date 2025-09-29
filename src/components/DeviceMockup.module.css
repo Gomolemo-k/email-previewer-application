@@ -1,225 +1,495 @@
-/* DeviceMockup.module.css */
-
+/* ======= General Device Styles ======= */
 .device {
-  border-radius: 20px;
+  border-radius: 24px;
   position: relative;
   box-sizing: border-box;
-  background: #fff;
+  background: #c0c0c0; /* silver frame */
+  color: #c0c0c0; /* inherit for shadows */
   box-shadow:
-    inset 0 4px 7px 1px #fff,
-    inset 0 -5px 20px rgba(173, 186, 204, 0.25),
-    0 2px 6px rgba(0, 21, 64, 0.14),
-    0 10px 20px rgba(0, 21, 64, 0.05);
+    inset 0 4px 7px 1px rgba(255, 255, 255, 0.9), /* top highlight */
+    inset 0 -5px 20px rgba(120, 120, 120, 0.4),   /* bottom shading */
+    0 2px 6px rgba(0, 0, 0, 0.2),                 /* outer drop shadow */
+    0 10px 20px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: visible; /* Changed from hidden to visible to allow stands to show */
+  min-height: 550px;
 }
 
 .device > * {
   width: 100%;
   height: 100%;
   display: block;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 0, 0, 0.24);
-  background: white;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.15); /* faint glass edge */
+  background: #000 !important; /* deep black screen */
 }
 
-/* === Phone === */
-.phone {
-  padding: 12% 3%;
-}
+/* Apple devices */
+.apple-device { background: #c0c0c0; color: #c0c0c0; }
+.apple-device > * { background: #000 !important; }
 
-.phone.landscape {
-  padding: 1.75% 8%;
-}
+/* Samsung devices */
+.samsung-device { background: #c0c0c0; color: #c0c0c0; }
+.samsung-device > * { background: #000 !important; }
 
-/* Phone speaker (top) */
-.phone::before {
-  content: "";
-  display: block;
-  position: absolute;
-  border-radius: 50px;
-  margin: 5.5% auto 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  width: 20%;
-  height: 1%;
-  background: transparent;
-  box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.12);
-  z-index: 2;
-}
+/* Google devices */
+.google-device { background: #c0c0c0; color: #c0c0c0; }
+.google-device > * { background: #000 !important; }
 
-.phone.landscape::before {
-  margin: auto 0 auto 4.5%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 1%;
-  height: 20%;
-}
+/* ======= Device Type Padding ======= */
+/* Phones */
+.phone { padding: 6% 3%; }
+.phone.landscape { padding: 1.75% 8%; }
 
-/* Phone home button (bottom) */
-.phone::after {
-  content: "";
-  display: block;
-  position: absolute;
-  border-radius: 50%;
-  margin: 0 auto 2%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 10%;
-  height: 0;
-  padding-top: 10%;
-  background: #fff;
-  box-shadow: inset 0 0 5px 1px rgba(0, 0, 0, 0.12);
-  z-index: 2;
-}
+/* Tablets */
+.tablet { padding: 8% 2%; }
+.tablet.landscape { padding: 1.12% 6%; }
 
-.phone.landscape::after {
-  margin: auto 0;
-  left: calc(100% - 7%);
-  top: 0;
-  bottom: 0;
-  width: 6%;
-  padding-top: 6%;
-}
-
-/* === Tablet === */
-.tablet {
-  padding: 8% 2%;
-}
-
-.tablet.landscape {
-  padding: 1.12% 6%;
-}
-
-/* Tablet camera (top) */
-.tablet::before {
-  content: "";
-  display: block;
-  position: absolute;
-  border-radius: 50%;
-  margin: 3.5% auto 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  width: 2.25%;
-  height: 0;
-  padding-top: 2.25%;
-  background: #eee;
-  box-shadow: inset 0 0 3px 1px rgba(0, 0, 0, 0.12);
-  z-index: 2;
-}
-
-.tablet.landscape::before {
-  margin: auto 0 auto 2.5%;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 1.75%;
-  padding-top: 1.75%;
-}
-
-/* Tablet home button */
-.tablet::after {
-  content: "";
-  display: block;
-  position: absolute;
-  border-radius: 50%;
-  margin: 0 auto 2%;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 6%;
-  height: 0;
-  padding-top: 6%;
-  background: #fff;
-  box-shadow: inset 0 0 5px 1px rgba(0, 0, 0, 0.12);
-  z-index: 2;
-}
-
-.tablet.landscape::after {
-  margin: auto 0;
-  left: calc(100% - 5.25%);
-  top: 0;
-  bottom: 0;
-  width: 4.5%;
-  padding-top: 4.5%;
-}
-
-/* === Laptop === */
+/* Laptops */
 .laptop {
-  margin-left: 12%;
-  margin-right: 12%;
-  margin-bottom: 2.5%;
+  margin: 12% 12% 2.5%;
   border-radius: 1vw;
   padding: 1.35%;
 }
-
-/* Laptop base (shadow under screen) */
 .laptop::after {
   content: "";
-  display: block;
   position: absolute;
   border-radius: 4px 4px 48px 48px;
   left: -15%;
   bottom: -4%;
   width: 130%;
   height: 7%;
-  background: #fff;
+  background: #c0c0c0;
   box-shadow:
-    inset 0 4px 7px 1px #fff,
-    inset 0 -5px 20px rgba(173, 186, 204, 0.25),
-    0 2px 6px rgba(0, 21, 64, 0.14),
-    0 10px 20px rgba(0, 21, 64, 0.05);
+    inset 0 4px 7px 1px rgba(255, 255, 255, 0.9),
+    inset 0 -5px 20px rgba(120, 120, 120, 0.4),
+    0 2px 6px rgba(0, 0, 0, 0.2),
+    0 10px 20px rgba(0, 0, 0, 0.1);
   z-index: 1;
 }
 
-/* === Desktop === */
+/* Desktops */
 .desktop {
   margin-bottom: 11%;
   border-radius: 1vw;
   padding: 1.5%;
 }
 
-/* Desktop stand arm */
-.desktop::before {
-  content: "";
-  display: block;
+/* iMacs and Monitors - different shape from phones */
+.imac {
+  padding: 4% 3%;
+  border-radius: 12px;
+  min-height: 260px;
+  width: auto;
+  aspect-ratio: 16/9; /* More standard monitor aspect ratio */
+}
+
+.apple-studio-display,
+.apple-pro-display-xdr {
+  padding: 4% 3%;
+  border-radius: 8px;
+  min-height: 260px;
+  width: auto;
+  aspect-ratio: 21/9; /* Ultra-wide monitor aspect ratio */
+}
+
+.samsung-all-in-one-pro,
+.samsung-m5-flat-fhd,
+.samsung-odyssey-g9 {
+  padding: 4% 3%;
+  border-radius: 8px;
+  min-height: 260px;
+  width: auto;
+  aspect-ratio: 16/9; /* Standard monitor aspect ratio */
+}
+
+/* ======= Cameras, Notches & Dynamic Islands ======= */
+.device .front-camera {
   position: absolute;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  bottom: -18%;
-  width: 20%;
-  height: 20%;
-  background: #fafafa;
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #555;
+  border-radius: 10px;
+}
+
+.device .notch {
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 25px;
+  background: #111;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.device .dynamic-island {
+  position: absolute;
+  top: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 30px;
+  background: #111;
+  border-radius: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ======= Rear Camera Bumps ======= */
+.samsung-phone::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 30px;
+  height: 40px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 6px;
+  z-index: 2;
+}
+
+.google-phone::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  width: 35px;
+  height: 45px;
+  background: rgba(0,0,0,0.7);
+  border-radius: 8px;
+  z-index: 2;
+}
+
+.google-phone::after {
+  content: "";
+  position: absolute;
+  top: 15%;
+  right: 15%;
+  width: 25px;
+  height: 30px;
+  background: rgba(0,0,0,0.8);
+  border-radius: 6px;
+  z-index: 3;
+}
+
+/* ======= Front Camera Dot (Added) ======= */
+.samsung-phone::after,
+.google-phone::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #000;
+  border-radius: 50%;
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* ======= Stands ======= */
+.device .stand {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 10px;
+  background: #333; /* black stand base */
+  border-radius: 5px;
+}
+
+/* Add stand neck/arm for device stand */
+.device .stand::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 20px;
+  background: #333; /* black stand neck/arm */
+  border-radius: 6px;
+}
+
+/* iMac Stand - black with proper shape */
+.imac .stand {
+  bottom: -40px;
+  width: 120px;
+  height: 10px;
+  background: #333; /* black stand base */
+}
+.imac .stand::after {
+  content: "";
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 20px;
+  background: #333; /* black stand neck/arm */
+  border-radius: 8px;
+}
+.imac .base {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 8px;
+  background: #333; /* black base */
+  border-radius: 4px;
   z-index: -1;
 }
 
-/* Desktop stand base */
-.desktop::after {
+/* MacBook stand */
+.macbook .stand {
+  bottom: -8px;
+  width: 70%;
+  height: 4px;
+  background: #333; /* black stand base */
+  border-radius: 2px;
+}
+.macbook .stand::before {
   content: "";
-  display: block;
   position: absolute;
-  border-radius: 4px 4px 24px 24px;
-  margin: 0 auto;
-  left: 0;
-  right: 0;
-  bottom: -19.5%;
-  width: 34%;
-  height: 2%;
-  background: #fff;
-  box-shadow:
-    inset 0 4px 7px 1px #fff,
-    inset 0 -5px 20px rgba(173, 186, 204, 0.25),
-    0 2px 6px rgba(0, 21, 64, 0.14),
-    0 10px 20px rgba(0, 21, 64, 0.05);
-  z-index: 0;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 15px;
+  background: #333; /* black stand neck/arm */
+  border-radius: 6px;
+}
+.macbook .front-camera {
+  top: 5px;
+  width: 6px;
+  height: 6px;
+  background: #333;
+  border-radius: 50%;
+  z-index: 2;
 }
 
-/* Responsive adjustments */
+/* Samsung Laptops */
+.galaxy-book4-13 .stand,
+.galaxy-book4-15 .stand {
+  bottom: -6px;
+  width: 70%;
+  height: 3px;
+  background: #333; /* black stand base */
+  border-radius: 1.5px;
+}
+.galaxy-book4-13 .stand::before,
+.galaxy-book4-15 .stand::before {
+  content: "";
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 15px;
+  background: #333; /* black stand neck/arm */
+  border-radius: 2px;
+}
+
+/* Apple Studio Display - black stand */
+.apple-studio-display .stand {
+  bottom: -45px;
+  width: 100px;
+  height: 8px;
+  background: #333; /* black stand base */
+}
+.apple-studio-display .stand::after {
+  content: "";
+  top: -25px;
+  width: 6px;
+  height: 25px;
+  background: #333; /* black stand neck/arm */
+}
+.apple-studio-display .stand.base {
+  bottom: -55px;
+  width: 70px;
+  height: 6px;
+  background: #333; /* black base */
+  border-radius: 3px;
+  z-index: -1;
+}
+
+/* Samsung Displays - black stands */
+.samsung-all-in-one-pro .stand,
+.samsung-m5-flat-fhd .stand,
+.samsung-odyssey-g9 .stand {
+  bottom: -35px;
+  width: 90px;
+  height: 7px;
+  background: #333; /* black stand base */
+  border-radius: 3.5px;
+}
+.samsung-all-in-one-pro .stand::after,
+.samsung-m5-flat-fhd .stand::after,
+.samsung-odyssey-g9 .stand::after {
+  content: "";
+  top: -25px;
+  width: 8px;
+  height: 25px;
+  background: #333; /* black stand neck/arm */
+}
+
+/* MacBook base */
+.macbook-air-13,
+.macbook-air-15,
+.macbook-pro-14,
+.macbook-pro-16 {
+  position: relative;
+}
+.macbook-air-13::after,
+.macbook-air-15::after,
+.macbook-pro-14::after,
+.macbook-pro-16::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 8px;
+  background: #333; /* black base */
+  border-radius: 4px;
+  z-index: -1;
+}
+
+/* Samsung Laptop base */
+.galaxy-book4-13,
+.galaxy-book4-15 {
+  position: relative;
+}
+.galaxy-book4-13::after,
+.galaxy-book4-15::after {
+  content: "";
+  position: absolute;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  height: 8px;
+  background: #333; /* black base */
+  border-radius: 4px;
+  z-index: -1;
+}
+
+/* ======= Device Overrides (Sizes, Shape, Type) ======= */
+/* iPhones */
+.iphone-17-pro-max { --frame-width: 220px; --frame-height: 530px; --frame-radius: 18px; }
+.iphone-17-pro { --frame-width: 210px; --frame-height: 510px; --frame-radius: 18px; }
+.iphone-17 { --frame-width: 200px; --frame-height: 490px; --frame-radius: 18px; }
+.iphone-16-pro-max { --frame-width: 220px; --frame-height: 530px; --frame-radius: 18px; }
+.iphone-16-pro { --frame-width: 210px; --frame-height: 510px; --frame-radius: 18px; }
+.iphone-16-plus { --frame-width: 205px; --frame-height: 520px; --frame-radius: 18px; }
+.iphone-13-pro { --frame-width: 200px; --frame-height: 490px; --frame-radius: 18px; }
+.iphone-13-pro-max { --frame-width: 210px; --frame-height: 510px; --frame-radius: 18px; }
+.iphone-11-pro { --frame-width: 190px; --frame-height: 470px; --frame-radius: 18px; }
+.iphone-11-pro-max { --frame-width: 200px; --frame-height: 490px; --frame-radius: 18px; }
+.iphone-11 { --frame-width: 195px; --frame-height: 480px; --frame-radius: 18px; }
+
+/* iPads */
+.ipad-pro-13 { --frame-width: 400px; --frame-height: 350px; --frame-radius: 10px; }
+.ipad-pro-11 { --frame-width: 350px; --frame-height: 320px; --frame-radius: 10px; }
+.ipad-air-2025 { --frame-width: 330px; --frame-height: 300px; --frame-radius: 10px; }
+.ipad-standard-2025 { --frame-width: 320px; --frame-height: 290px; --frame-radius: 12px; }
+
+/* Samsung Phones */
+.galaxy-s25-ultra { --frame-width: 220px; --frame-height: 530px; --frame-radius: 18px; }
+.galaxy-s25-plus { --frame-width: 215px; --frame-height: 520px; --frame-radius: 20px; }
+.galaxy-s25-edge { --frame-width: 215px; --frame-height: 520px; --frame-radius: 20px; }
+.galaxy-s25-fe { --frame-width: 200px; --frame-height: 500px; --frame-radius: 25px; }
+.galaxy-s24-ultra { --frame-width: 220px; --frame-height: 530px; --frame-radius: 18px; }
+.galaxy-note-20-ultra { --frame-width: 215px; --frame-height: 520px; --frame-radius: 20px; }
+
+/* Samsung Tablets */
+.galaxy-tab-s10-ultra { --frame-width: 420px; --frame-height: 350px; --frame-radius: 10px; }
+.galaxy-tab-s11-ultra { --frame-width: 430px; --frame-height: 360px; --frame-radius: 10px; }
+
+/* Google Pixel Phones */
+.pixel-10-pro-xl,
+.pixel-10-pro,
+.pixel-10,
+.pixel-9-pro-xl,
+.pixel-9,
+.pixel-9a,
+.pixel-8-pro,
+.pixel-7a {
+  --frame-width: 200px;
+  --frame-height: 490px;
+  --frame-radius: 18px;
+}
+
+/* Google Pixel Fold */
+.pixel-9-pro-fold {
+  --frame-width: 200px;
+  --frame-height: 490px;
+  --frame-radius: 12px;
+}
+
+/* MacBooks */
+.macbook-air-13,
+.macbook-air-15,
+.macbook-pro-14,
+.macbook-pro-16 {
+  --frame-width: 400px;
+  --frame-height: 300px;
+  --frame-radius: 10px;
+}
+
+/* Samsung Laptops */
+.galaxy-book4-13,
+.galaxy-book4-15 {
+  --frame-width: 400px;
+  --frame-height: 300px;
+  --frame-radius: 12px;
+}
+
+/* iMacs */
+.imac-24-m3,
+.imac-24-m4 {
+  --frame-width: 500px;
+  --frame-height: 350px;
+  --frame-radius: 12px;
+}
+
+/* Apple Displays */
+.apple-studio-display,
+.apple-pro-display-xdr {
+  --frame-width: 500px;
+  --frame-height: 350px;
+  --frame-radius: 10px;
+}
+
+/* Samsung Displays */
+.samsung-all-in-one-pro,
+.samsung-m5-flat-fhd,
+.samsung-odyssey-g9 {
+  --frame-width: 500px;
+  --frame-height: 350px;
+  --frame-radius: 10px;
+}
+
+/* ======= Responsive ======= */
 @media (max-width: 800px) {
-  .device {
-    border-radius: 1vw;
-  }
+  .device { border-radius: 1vw; }
+}
+@media (max-width: 500px) {
+  .laptop { margin-left: 8%; margin-right: 8%; }
+}
+@media (max-width: 400px) {
+  .laptop { margin-left: 5%; margin-right: 5%; }
 }
