@@ -74,7 +74,7 @@ export const websiteConfig: WebsiteConfig = {
     relatedPostsSize: 3,
   },
   docs: {
-    enable: true,
+    enable: false,
   },
   mail: {
     provider: 'resend',
