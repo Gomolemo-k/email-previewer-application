@@ -974,7 +974,7 @@
       "items": {
         "item-1": {
           "question": "Do you offer a free trial?",
-          "answer": "Yes, we offer a 7-day free trial."
+          "answer": "No, we don't offer a free trial. We believe in the quality of our service and offer a 30-day money-back guarantee if you're not satisfied."
         },
         "item-2": {
           "question": "How do I cancel my subscription?",
@@ -982,15 +982,15 @@
         },
         "item-3": {
           "question": "Can I change my plan?",
-          "answer": "Yes, you can change your plan at any time by visiting the billing page."
+          "answer": "Our service has a single Pro plan. You can switch between monthly and yearly billing cycles by visiting the billing page."
         },
         "item-4": {
           "question": "What is the refund policy?",
           "answer": "We offer a 30-day money-back guarantee if you are not happy with our product."
         },
         "item-5": {
-          "question": "Can't find what you're looking for?",
-          "answer": "Please contact our customer support team at support@mksaas.com"
+          "question": "What email file formats are supported?",
+          "answer": "We support .eml, .msg, .mbox, .mbx, .html, .htm, .txt, .pst, and .ost file formats for email preview."
         }
       }
     },
