@@ -33,7 +33,7 @@ export function useSidebarLinks(): NestedMenuItem[] {
     {
       title: t('email-preview.title'), // Add translation key in your locale files
       icon: <MailIcon className="size-4 shrink-0" />,
-      href: Routes.Dashboard, 
+      href: `${Routes.Dashboard}#email-preview`, 
       external: false,
     },
     {
