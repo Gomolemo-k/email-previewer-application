@@ -67,12 +67,6 @@ export default function Integration2Section() {
                     <span>{t('primaryButton')}</span>
                   </LocaleLink>
                 </Button>
-
-                <Button asChild size="lg" variant="outline">
-                  <LocaleLink href="/">
-                    <span>{t('secondaryButton')}</span>
-                  </LocaleLink>
-                </Button>
               </div>
             </div>
           </div>
