@@ -1,8 +1,8 @@
 {
   "Metadata": {
-    "name": "MkSaaS Demo",
-    "title": "MkSaaS - The Best AI SaaS Boilerplate",
-    "description": "MkSaaS is the best AI SaaS boilerplate. Make AI SaaS in days, simply and effortlessly"
+    "name": "Email Previewer",
+    "title": "Email Previewer - Preview Your Email Across All Devices",
+    "description": "Email Previewer is the premier email template preview service. Preview your email templates across all devices in minutes, simply and effortlessly"
   },
   "Common": {
     "premium": "Premium",
@@ -478,10 +478,10 @@
   },
   "AboutPage": {
     "title": "About",
-    "description": "This is MkSaaS, an AI SaaS template built with modern technologies, helping you build your SaaS faster and better.",
-    "authorName": "MkSaaS",
-    "authorBio": "AI SaaS Boilerplate",
-    "introduction": "👋 Hi there! This is MkSaaS, an AI SaaS template built with modern technologies, helping you build your SaaS faster and better. If you have any questions, welcome to contact me.",
+    "description": "This is Email Previewer, an email preview software built with modern technologies, helping you preview your emails across all devices faster and better.",
+    "authorName": "Email Previewer",
+    "authorBio": "Email Preview Software",
+    "introduction": "👋 Hi there! This is Email Previewer, an email preview software built with modern technologies, helping you preview your emails across all devices faster and better. If you have any questions, welcome to contact me.",
     "talkWithMe": "Talk with me",
     "followMe": "Follow me on X"
   },
@@ -779,7 +779,7 @@
       }
     },
     "footer": {
-      "tagline": "Make AI SaaS in days, simply and effortlessly",
+      "tagline": "Preview your email  across all devices, simply and effortlessly",
       "product": {
         "title": "Product",
         "items": {
@@ -850,14 +850,12 @@
     }
   },
   "HomePage": {
-    "title": "MkSaaS",
-    "description": "Make AI SaaS in days, simply and effortlessly",
+    "title": "Email Previewer",
+    "description": "Preview your emails on multiple device types simultaneously - desktop, tablet, and mobile - to ensure consistent rendering and optimal user experience across all screen sizes",
     "hero": {
-      "title": "Make AI SaaS in days, simply and effortlessly",
-      "description": "The is a demo website built with MkSaaS, a Next.js SaaS boilerplate to help you build your AI SaaS faster and better.",
-      "introduction": "Introducing MkSaaS Boilerplate",
-      "primary": "Get Started",
-      "secondary": "See Demo"
+      "title": "Preview your email across all devices, simply and effortlessly",
+      "description": "Email Previewer is a comprehensive email preview service to help you test your emails across all devices, from desktop to mobile, faster and better.",
+      "primary": "Get Started"
     },
     "logocloud": {
       "title": "Your favorite companies are our partners"
@@ -897,69 +895,68 @@
     "integration2": {
       "title": "Integrate with your favorite tools",
       "description": "Connect seamlessly with popular platforms and services to enhance your workflow.",
-      "primaryButton": "Get Started",
-      "secondaryButton": "See Demo"
+      "primaryButton": "Get Started"
     },
     "features": {
-      "title": "Features",
-      "subtitle": "The features of your product",
-      "description": "Write the description of your product here",
+      "title": "Email Preview Features",
+      "subtitle": "Powerful email template testing tools",
+      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients",
       "items": {
         "item-1": {
-          "title": "Product Feature One",
-          "description": "Please write the detailed description of feature one here, make it as detailed as possible, make it more attractive to users"
+          "title": "Cross-Device Preview",
+          "description": "Preview your emails on multiple device types simultaneously - desktop, tablet, and mobile - to ensure consistent rendering and optimal user experience across all screen sizes"
         },
         "item-2": {
-          "title": "Product Feature Two",
-          "description": "Please write the detailed description of feature two here, make it as detailed as possible, make it more attractive to users"
+          "title": "Multi-Format Support",
+          "description": "Upload and preview various email formats including .eml, .msg, .mbox, .html, .htm, and .txt files with instant rendering and accurate display"
         },
         "item-3": {
-          "title": "Product Feature Three",
-          "description": "Please write the detailed description of feature three here, make it as detailed as possible, make it more attractive to users"
+          "title": "Real-time Responsive Testing",
+          "description": "Test how your email designs adapt to different screen resolutions with our real-time responsive preview functionality"
         },
         "item-4": {
-          "title": "Product Feature Four",
-          "description": "Please write the detailed description of feature four here, make it as detailed as possible, make it more attractive to users"
+          "title": "Email Client Compatibility",
+          "description": "Verify how your emails render across major email clients to ensure maximum deliverability and visual consistency"
         }
       }
     },
     "features2": {
-      "title": "Features2",
-      "subtitle": "The features of your product",
-      "description": "Write the description of your product here",
-      "feature-1": "Product Feature One",
-      "feature-2": "Product Feature Two",
-      "feature-3": "Product Feature Three",
-      "feature-4": "Product Feature Four"
+      "title": "Email Preview Features",
+      "subtitle": "Powerful email template testing tools",
+      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients",
+      "feature-1": "Cross-Device Preview",
+      "feature-2": "Multi-Format Support",
+      "feature-3": "Real-time Responsive Testing",
+      "feature-4": "Email Client Compatibility"
     },
     "features3": {
-      "title": "Features3",
-      "subtitle": "The features of your product",
-      "description": "Write the description of your product here",
+      "title": "Email Preview Features",
+      "subtitle": "Powerful email template testing tools",
+      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients",
       "items": {
         "item-1": {
-          "title": "Product Feature One",
-          "description": "Please write the detailed description of feature one here"
+          "title": "Cross-Device Preview",
+          "description": "Preview your emails on multiple device types simultaneously - desktop, tablet, and mobile - to ensure consistent rendering and optimal user experience across all screen sizes"
         },
         "item-2": {
-          "title": "Product Feature Two",
-          "description": "Please write the detailed description of feature two here"
+          "title": "Multi-Format Support",
+          "description": "Upload and preview various email formats including .eml, .msg, .mbox, .html, .htm, and .txt files with instant rendering and accurate display"
         },
         "item-3": {
-          "title": "Product Feature Three",
-          "description": "Please write the detailed description of feature three here"
+          "title": "Real-time Responsive Testing",
+          "description": "Test how your email designs adapt to different screen resolutions with our real-time responsive preview functionality"
         },
         "item-4": {
-          "title": "Product Feature Four",
-          "description": "Please write the detailed description of feature four here"
+          "title": "Email Client Compatibility",
+          "description": "Verify how your emails render across major email clients to ensure maximum deliverability and visual consistency"
         },
         "item-5": {
-          "title": "Product Feature Five",
-          "description": "Please write the detailed description of feature five here"
+          "title": "Download Functionality",
+          "description": "Download your email templates in various formats for use in your email marketing campaigns"
         },
         "item-6": {
-          "title": "Product Feature Six",
-          "description": "Please write the detailed description of feature six here"
+          "title": "File Management",
+          "description": "Upload, organize, and manage your email template files with our intuitive file management system"
         }
       }
     },
@@ -990,7 +987,7 @@
         },
         "item-5": {
           "question": "Can't find what you're looking for?",
-          "answer": "Please contact our customer support team at support@mksaas.com"
+          "answer": "Please contact our customer support team at support@email-previewer.com"
         }
       }
     },
@@ -999,76 +996,76 @@
       "subtitle": "What our customers are saying",
       "items": {
         "item-1": {
-          "name": "Jonathan Yombo",
-          "role": "Software Engineer",
-          "image": "https://randomuser.me/api/portraits/men/1.jpg",
-          "quote": "MkSaaS is really extraordinary and very practical, no need to break your head. A real gold mine."
+          "name": "Sarah Johnson",
+          "role": "Email Marketing Manager",
+          "image": "https://randomuser.me/api/portraits/women/1.jpg",
+          "quote": "Email Previewer has completely transformed our email testing process. We can now preview our templates across all devices with a single click!"
         },
         "item-2": {
-          "name": "Yves Kalume",
-          "role": "GDE - Android",
+          "name": "Michael Chen",
+          "role": "Frontend Developer",
           "image": "https://randomuser.me/api/portraits/men/6.jpg",
-          "quote": "With no experience in webdesign I just redesigned my entire website in a few minutes with tailwindcss thanks to MkSaaS."
+          "quote": "No more manually testing emails on different devices. Email Previewer gives us instant previews across desktop, tablet, and mobile in one place."
         },
         "item-3": {
-          "name": "Yucel Faruksahan",
-          "role": "Tailkits Creator",
-          "image": "https://randomuser.me/api/portraits/men/7.jpg",
-          "quote": "Great work on MkSaaS template. This is one of the best personal website that I have seen so far :)"
+          "name": "Emma Rodriguez",
+          "role": "UX Designer",
+          "image": "https://randomuser.me/api/portraits/women/7.jpg",
+          "quote": "The responsive email previews have cut our design iteration time in half. Now we can ensure our emails look perfect across all screen sizes."
         },
         "item-4": {
-          "name": "Anonymous author",
-          "role": "Product Manager",
+          "name": "David Thompson",
+          "role": "Digital Marketing Director",
           "image": "https://randomuser.me/api/portraits/men/8.jpg",
-          "quote": "I downloaded the one of MkSaaS template which is very clear to understand at the start and you could modify the codes/blocks to fit perfectly on your purpose of the page."
+          "quote": "Our email open rates have increased by 23% since we started using Email Previewer to optimize our email templates for all devices."
         },
         "item-5": {
-          "name": "Shekinah Tshiokufila",
-          "role": "Senior Software Engineer",
-          "image": "https://randomuser.me/api/portraits/men/4.jpg",
-          "quote": "MkSaaS is redefining the standard of web design, with these blocks it provides an easy and efficient way for those who love beauty but may lack the time to implement it."
+          "name": "Priya Patel",
+          "role": "Email Campaign Specialist",
+          "image": "https://randomuser.me/api/portraits/women/4.jpg",
+          "quote": "The cross-platform compatibility testing is exceptional. Email Previewer saves our team numerous hours every week."
         },
         "item-6": {
-          "name": "Oketa Fred",
-          "role": "Fullstack Developer",
+          "name": "James Wilson",
+          "role": "Product Manager",
           "image": "https://randomuser.me/api/portraits/men/2.jpg",
-          "quote": "I absolutely love MkSaaS! The component blocks are beautifully designed and easy to use, which makes creating a great-looking website a breeze."
+          "quote": "I love how easy it is to upload and preview any email format. Email Previewer is an essential tool for our marketing workflow."
         },
         "item-7": {
-          "name": "Zeki",
-          "role": "Founder of ChatExtend",
-          "image": "https://randomuser.me/api/portraits/men/5.jpg",
-          "quote": "MkSaaS is the perfect fusion of simplicity and versatility, enabling us to create UIs that are as stunning as they are user-friendly."
+          "name": "Olivia Martinez",
+          "role": "Creative Director",
+          "image": "https://randomuser.me/api/portraits/women/5.jpg",
+          "quote": "The accuracy of the email previews perfectly reflects how our emails render in real email clients. Absolutely invaluable for quality control."
         },
         "item-8": {
-          "name": "Joseph Kitheka",
-          "role": "Fullstack Developer",
+          "name": "Alex Kim",
+          "role": "Web Developer",
           "image": "https://randomuser.me/api/portraits/men/9.jpg",
-          "quote": "MkSaaS has transformed the way I develop web applications. Their extensive collection of UI components, blocks, and templates has significantly accelerated my workflow."
+          "quote": "Email Previewer has become an indispensable part of our email development pipeline. The time savings are incredible."
         },
         "item-9": {
-          "name": "Khatab Wedaa",
-          "role": "MerakiUI Creator",
-          "image": "https://randomuser.me/api/portraits/men/10.jpg",
-          "quote": "MkSaaS is an elegant, clean, and responsive tailwind css components it's very helpful to start fast with your project."
+          "name": "Sophia Williams",
+          "role": "Content Manager",
+          "image": "https://randomuser.me/api/portraits/women/10.jpg",
+          "quote": "Testing emails used to be the most tedious part of our process. Now with Email Previewer, it's quick, accurate, and comprehensive."
         },
         "item-10": {
-          "name": "Rodrigo Aguilar",
-          "role": "TailwindAwesome Creator",
+          "name": "Robert Garcia",
+          "role": "Marketing Lead",
           "image": "https://randomuser.me/api/portraits/men/11.jpg",
-          "quote": "I love MkSaaS ❤️. The component blocks are well-structured, simple to use, and beautifully designed. It makes it really easy to have a good-looking website in no time."
+          "quote": "The device simulation is incredibly accurate. Now I can be confident our emails look perfect before sending."
         },
         "item-11": {
-          "name": "Eric Ampire",
-          "role": "@GoogleDevExpert for Android",
-          "image": "https://randomuser.me/api/portraits/men/12.jpg",
-          "quote": "MkSaaS templates are the perfect solution for anyone who wants to create a beautiful and functional website without any web design experience."
+          "name": "Amanda Foster",
+          "role": "Brand Manager",
+          "image": "https://randomuser.me/api/portraits/women/12.jpg",
+          "quote": "Email Previewer has helped us maintain consistent brand experience across all email touchpoints. A game-changer for our team."
         },
         "item-12": {
-          "name": "Roland Tubonge",
-          "role": "Software Engineer",
+          "name": "Thomas Lee",
+          "role": "Marketing Engineer",
           "image": "https://randomuser.me/api/portraits/men/13.jpg",
-          "quote": "MkSaaS is so well designed that even with a very poor knowledge of web design you can do miracles. Let yourself be seduced!"
+          "quote": "The ability to preview multiple email formats instantly is a massive time saver. Email Previewer delivers exactly what we need."
         }
       }
     },
@@ -1091,8 +1088,7 @@
     "calltoaction": {
       "title": "Start Building",
       "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly",
-      "primaryButton": "Get Started",
-      "secondaryButton": "See Demo"
+      "primaryButton": "Get Started"
     }
   },
   "AITextPage": {
