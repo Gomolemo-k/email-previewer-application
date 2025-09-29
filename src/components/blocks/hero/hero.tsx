@@ -29,7 +29,6 @@ const transitionVariants = {
 
 export default function HeroSection() {
   const t = useTranslations('HomePage.hero');
-  const linkIntroduction = 'https://x.com/mksaascom';
   const linkPrimary = '/#pricing';
   const linkSecondary = 'https://demo.mksaas.com';
 
@@ -52,28 +51,6 @@ export default function HeroSection() {
               <Ripple />
 
               <div className="text-center sm:mx-auto lg:mr-auto lg:mt-0">
-                {/* introduction */}
-                <AnimatedGroup variants={transitionVariants}>
-                  <LocaleLink
-                    href={linkIntroduction}
-                    className="hover:bg-accent group mx-auto flex w-fit items-center gap-2 rounded-full border p-1 pl-4"
-                  >
-                    <span className="text-foreground text-sm">
-                      {t('introduction')}
-                    </span>
-
-                    <div className="size-6 overflow-hidden rounded-full duration-500">
-                      <div className="flex w-12 -translate-x-1/2 duration-500 ease-in-out group-hover:translate-x-0">
-                        <span className="flex size-6">
-                          <ArrowRight className="m-auto size-3" />
-                        </span>
-                        <span className="flex size-6">
-                          <ArrowRight className="m-auto size-3" />
-                        </span>
-                      </div>
-                    </div>
-                  </LocaleLink>
-                </AnimatedGroup>
 
                 {/* title */}
                 <TextEffect
@@ -127,17 +104,6 @@ export default function HeroSection() {
                       </LocaleLink>
                     </Button>
                   </div>
-                  <Button
-                    key={2}
-                    asChild
-                    size="lg"
-                    variant="outline"
-                    className="h-10.5 rounded-xl px-5"
-                  >
-                    <LocaleLink href={linkSecondary}>
-                      <span className="text-nowrap">{t('secondary')}</span>
-                    </LocaleLink>
-                  </Button>
                 </AnimatedGroup>
               </div>
             </div>
