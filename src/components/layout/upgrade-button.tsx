@@ -21,9 +21,8 @@ export function UpgradeButton() {
   const [isLoading, setIsLoading] = useState(true);
   
   // Get current user
-  const { data: session } = useCurrentUser();
-  const userId = session?.user?.id;
-
+  const session = useCurrentUser();
+  const userId =
   useEffect(() => {
     // Only set isLoading to false when we have the data
     if (mounted) {
