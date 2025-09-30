@@ -21,8 +21,8 @@ export const websiteConfig: WebsiteConfig = {
   metadata: {
     images: {
       ogImage: '/og.png',
-      logoLight: '/logo.png',
-      logoDark: '/logo-dark.png',
+      logoLight: '/e-p.png',
+      logoDark: '/e-p.png',
     },
     social: {
       github: 'https://github.com/MkSaaSHQ',
@@ -69,7 +69,7 @@ export const websiteConfig: WebsiteConfig = {
     },
   },
   blog: {
-    enable: true,
+    enable: false,
     paginationSize: 6,
     relatedPostsSize: 3,
   },
