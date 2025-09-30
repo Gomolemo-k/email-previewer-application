@@ -1,6 +1,8 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { websiteConfig } from '@/config/website';
 import { constructMetadata } from '@/lib/metadata';
 import { getUrlWithLocale } from '@/lib/urls/urls';
+import { MailIcon, TwitterIcon } from 'lucide-react';
 import type { Metadata } from 'next';
 import type { Locale } from 'next-intl';
 import { getTranslations } from 'next-intl/server';
@@ -12,7 +14,7 @@ export async function generateMetadata({
 }): Promise<Metadata | undefined> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'Metadata' });
-  const pt = await getTranslations({ locale, namespace: 'AIAudioPage' });
+  const pt = await getTranslations({ locale, namespace: 'AudioPage' });
 
   return constructMetadata({
     title: pt('title') + ' | ' + t('title'),
@@ -21,29 +23,46 @@ export async function generateMetadata({
   });
 }
 
-export default async function AIAudioPage() {
-  const t = await getTranslations('AIAudioPage');
+export default async function AudioPage() {
+  const t = await getTranslations('AudioPage');
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      {/* about section */}
-      <div className="relative max-w-(--breakpoint-md) mx-auto mb-24 mt-8 md:mt-16">
-        <div className="mx-auto flex flex-col justify-between">
-          <div className="flex flex-row items-center gap-8">
-            {/* avatar and name */}
-            <div className="flex items-center gap-8">
-              <Avatar className="size-32 p-0.5">
-                <AvatarImage
-                  className="rounded-full border-4 border-gray-200"
-                  src="/logo.png"
-                  alt="Avatar"
-                />
-                <AvatarFallback>
-                  <div className="size-32 text-muted-foreground" />
-                </AvatarFallback>
-              </Avatar>
-            </div>
-          </div>
+    <div className="relative flex min-h-screen w-full overflow-x-clip">
+      {/* background */}
+      <div className="absolute inset-0 -z-10 h-full w-full bg-white bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] bg-[size:6rem_4rem]"></div>
+
+      <div className="container relative z-10 mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center gap-12 px-4 py-16 text-center">
+        {/* logo */}
+        <img
+          src="/e-p.png"
+          alt="logo"
+          width={128}
+          height={128}
+          className="size-24 rounded-lg"
+        />
+
+        {/* header */}
+        <div className="space-y-4">
+          <h1 className="text-4xl font-bold text-foreground md:text-5xl">
+            {t('title')}
+          </h1>
+          <p className="text-lg text-muted-foreground md:text-xl">
+            {t('description')}
+          </p>
+        </div>
+
+        {/* cta */}
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Button className="rounded-lg">
+            <a href={websiteConfig.metadata.social?.twitter}>
+              <TwitterIcon className="mr-1 size-4" /> {t('getStarted')}
+            </a>
+          </Button>
+          <Button variant="outline" className="rounded-lg">
+            <a href={`mailto:${websiteConfig.mail.supportEmail}`}>
+              <MailIcon className="mr-1 size-4" /> {t('contactUs')}
+            </a>
+          </Button>
         </div>
       </div>
     </div>
