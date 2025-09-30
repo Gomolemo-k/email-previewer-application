@@ -15,7 +15,7 @@ export default function StatsSection() {
 
         <div className="grid gap-0.5 *:text-center md:grid-cols-3 dark:[--color-muted:var(--color-zinc-900)]">
           <div className="bg-muted rounded-(--radius) space-y-4 py-12">
-            <div className="text-5xl font-bold">+1200</div>
+            <div className="text-5xl font-bold">45</div>
             <p>Stars on GitHub</p>
           </div>
           <div className="bg-muted rounded-(--radius) space-y-4 py-12">
