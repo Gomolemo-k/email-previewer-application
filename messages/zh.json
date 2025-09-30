@@ -853,113 +853,73 @@
     }
   },
   "HomePage": {
-    "title": "MkSaaS",
-    "description": "使用 MkSaaS 在几天内轻松构建您的 AI SaaS 产品",
+    "title": "邮件预览器",
+    "description": "邮件预览器是一款专业的邮件模板预览服务，让您在几分钟内跨所有设备预览您的邮件，简单且毫不费力。",
     "hero": {
-      "title": "使用 MkSaaS 轻松构建您的 AI SaaS 产品",
-      "description": "MkSaaS 是构建 AI SaaS 的最佳模板，内置 AI、身份验证、全球支付、博客、文档、邮件订阅、SEO、多彩主题、丰富组件等。",
-      "introduction": "介绍 MkSaaS 模板",
-      "primary": "开始使用",
-      "secondary": "查看演示"
-    },
-    "integration": {
-      "title": "集成",
-      "subtitle": "与您最喜欢的工具集成",
-      "description": "无缝连接流行的平台和服务，以增强您的工作流程。",
-      "learnMore": "了解更多",
-      "items": {
-        "item-1": {
-          "title": "Google Gemini",
-          "description": "这里是Google Gemini的描述，详细介绍Google Gemini的功能和优势。"
-        },
-        "item-2": {
-          "title": "Replit",
-          "description": "这里是Replit的描述，详细介绍Replit的功能和优势。"
-        },
-        "item-3": {
-          "title": "MagicUI",
-          "description": "这里是MagicUI的描述，详细介绍MagicUI的功能和优势。"
-        },
-        "item-4": {
-          "title": "VSCodium",
-          "description": "这里是VSCodium的描述，详细介绍VSCodium的功能和优势。"
-        },
-        "item-5": {
-          "title": "MediaWiki",
-          "description": "这里是MediaWiki的描述，详细介绍MediaWiki的功能和优势。"
-        },
-        "item-6": {
-          "title": "Google PaLM",
-          "description": "这里是Google PaLM的描述，详细介绍Google PaLM的功能和优势。"
-        }
-      }
-    },
-    "integration2": {
-      "title": "与您最喜欢的工具集成",
-      "description": "无缝连接流行的平台和服务，以增强您的工作流程。",
-      "primaryButton": "开始使用",
-      "secondaryButton": "查看演示"
+      "title": "跨所有设备预览您的邮件，简单且毫不费力",
+      "description": "邮件预览器是一个全面的邮件预览服务，帮助您在所有设备上测试您的邮件，从桌面到移动设备，更快更好。",
+      "primary": "开始使用"
     },
     "features": {
-      "title": "功能",
-      "subtitle": "您的 SaaS 产品功能",
-      "description": "请在这里介绍您的 SaaS 产品的特色功能的信息",
+      "title": "邮件预览功能",
+      "subtitle": "强大的邮件模板测试工具",
+      "description": "我们全面的邮件预览平台提供确保您的邮件在所有设备和客户端上完美显示所需的一切",
       "items": {
         "item-1": {
-          "title": "产品特色功能一",
-          "description": "请在这里详细描述您的产品特色功能一，尽可能详细，使其更吸引用户，提高落地页的转化率"
+          "title": "跨设备预览",
+          "description": "同时在多种设备类型上预览您的邮件 - 桌面、平板和移动设备 - 以确保一致的渲染和所有屏幕尺寸上的最佳用户体验"
         },
         "item-2": {
-          "title": "产品特色功能二",
-          "description": "请在这里详细描述您的产品特色功能二，尽可能详细，使其更吸引用户，提高落地页的转化率"
+          "title": "多格式支持",
+          "description": "上传和预览多种邮件格式，包括 .eml、.msg、.mbox、.html、.htm 和 .txt 文件，即时渲染和准确显示"
         },
         "item-3": {
-          "title": "产品特色功能三",
-          "description": "请在这里详细描述您的产品特色功能三，尽可能详细，使其更吸引用户，提高落地页的转化率"
+          "title": "实时响应测试",
+          "description": "使用我们的实时响应预览功能测试您的邮件设计如何适应不同的屏幕分辨率"
         },
         "item-4": {
-          "title": "产品特色功能四",
-          "description": "请在这里详细描述您的产品特色功能四，尽可能详细，使其更吸引用户，提高落地页的转化率"
+          "title": "邮件客户端兼容性",
+          "description": "验证您的邮件在主要邮件客户端中的渲染方式，以确保最大可传递性和视觉一致性"
         }
       }
     },
     "features2": {
-      "title": "功能2",
-      "subtitle": "您的 SaaS 产品功能",
-      "description": "请在这里介绍您的 SaaS 产品的特色功能的信息",
-      "feature-1": "特色功能特点一",
-      "feature-2": "特色功能特点二",
-      "feature-3": "特色功能特点三",
-      "feature-4": "特色功能特点四"
+      "title": "邮件预览功能",
+      "subtitle": "强大的邮件模板测试工具",
+      "description": "我们全面的邮件预览平台提供确保您的邮件在所有设备和客户端上完美显示所需的一切",
+      "feature-1": "跨设备预览",
+      "feature-2": "多格式支持",
+      "feature-3": "实时响应测试",
+      "feature-4": "邮件客户端兼容性"
     },
     "features3": {
-      "title": "功能3",
-      "subtitle": "您的 SaaS 产品功能",
-      "description": "请在这里介绍您的 SaaS 产品的特色功能的信息",
+      "title": "邮件预览功能",
+      "subtitle": "强大的邮件模板测试工具",
+      "description": "我们全面的邮件预览平台提供确保您的邮件在所有设备和客户端上完美显示所需的一切",
       "items": {
         "item-1": {
-          "title": "产品特色功能一",
-          "description": "请在这里详细描述您的产品特色功能一，尽可能详细，使其更吸引用户"
+          "title": "跨设备预览",
+          "description": "同时在多种设备类型上预览您的邮件 - 桌面、平板和移动设备 - 以确保一致的渲染和所有屏幕尺寸上的最佳用户体验"
         },
         "item-2": {
-          "title": "产品特色功能二",
-          "description": "请在这里详细描述您的产品特色功能二，尽可能详细，使其更吸引用户"
+          "title": "多格式支持",
+          "description": "上传和预览多种邮件格式，包括 .eml、.msg、.mbox、.html、.htm 和 .txt 文件，即时渲染和准确显示"
         },
         "item-3": {
-          "title": "产品特色功能三",
-          "description": "请在这里详细描述您的产品特色功能三，尽可能详细，使其更吸引用户"
+          "title": "实时响应测试",
+          "description": "测试您的邮件设计如何适应不同的屏幕分辨率，使用我们的实时响应预览功能"
         },
         "item-4": {
-          "title": "产品特色功能四",
-          "description": "请在这里详细描述您的产品特色功能四，尽可能详细，使其更吸引用户"
+          "title": "邮件客户端兼容性",
+          "description": "验证您的邮件在主要邮件客户端中的渲染方式，以确保最大可传递性和视觉一致性"
         },
         "item-5": {
-          "title": "产品特色功能五",
-          "description": "请在这里详细描述您的产品特色功能五，尽可能详细，使其更吸引用户"
+          "title": "下载功能",
+          "description": "以各种格式下载您的邮件模板，用于您的邮件营销活动"
         },
         "item-6": {
-          "title": "产品特色功能六",
-          "description": "请在这里详细描述您的产品特色功能六，尽可能详细，使其更吸引用户"
+          "title": "文件管理",
+          "description": "使用我们直观的文件管理系统上传、组织和管理您的邮件模板文件"
         }
       }
     },
@@ -970,11 +930,11 @@
     },
     "faqs": {
       "title": "常见问题",
-      "subtitle": "如果您有任何问题，请随时联系我们",
+      "subtitle": "常见问题",
       "items": {
         "item-1": {
           "question": "你们提供免费试用吗？",
-          "answer": "我们不提供免费试用。我们对服务质量充满信心，并提供30天退款保证，如果您不满意可以申请退款。"
+          "answer": "不，我们不提供免费试用。我们相信我们服务的质量，并提供30天退款保证，如果您不满意。"
         },
         "item-2": {
           "question": "如何取消我的订阅？",
@@ -982,109 +942,109 @@
         },
         "item-3": {
           "question": "我可以更改我的计划吗？",
-          "answer": "我们的服务只有一个专业版计划。您可以访问账单页面在月度和年度计费周期之间切换。"
+          "answer": "我们的服务有一个单一的专业版计划。您可以通过访问账单页面在月度和年度计费周期之间切换。"
         },
         "item-4": {
           "question": "你们的退款政策是什么？",
-          "answer": "如果您对我们的服务不满意，我们提供30天退款保证。"
+          "answer": "如果您对我们服务不满意，我们提供30天退款保证。"
         },
         "item-5": {
           "question": "找不到您想问的问题？",
-          "answer": "请联系我们的客户支持团队，邮箱地址：support@mksaas.com"
+          "answer": "请联系我们的客户支持团队，邮箱地址：support@email-previewer.com"
         }
       }
     },
     "testimonials": {
       "title": "客户评价",
-      "subtitle": "我们的客户对我们的评价",
+      "subtitle": "客户对我们怎么说",
       "items": {
         "item-1": {
-          "name": "Jonathan Yombo",
-          "role": "软件工程师",
-          "image": "https://randomuser.me/api/portraits/men/1.jpg",
-          "quote": "MkSaaS 非常出色且实用，无需费心，一个真正的金矿。"
+          "name": "Sarah Johnson",
+          "role": "邮件营销经理",
+          "image": "https://randomuser.me/api/portraits/women/1.jpg",
+          "quote": "邮件预览器完全改变了我们的邮件测试过程。我们现在可以一键预览我们的模板在所有设备上的效果！"
         },
         "item-2": {
-          "name": "Yves Kalume",
-          "role": "Android GDE",
+          "name": "Michael Chen",
+          "role": "前端开发工程师",
           "image": "https://randomuser.me/api/portraits/men/6.jpg",
-          "quote": "没有网页设计经验，我只需几分钟就可以用 Tailwindcss 重新设计我的整个网站，感谢 MkSaaS。"
+          "quote": "无需在不同设备上手动测试邮件。邮件预览器在一处提供桌面、平板和移动设备的即时预览。"
         },
         "item-3": {
-          "name": "Yucel Faruksahan",
-          "role": "Tailkits 创建者",
-          "image": "https://randomuser.me/api/portraits/men/7.jpg",
-          "quote": "MkSaaS 模板做得很好，这是我见过最好的 SaaS 模板，没有之一 :)"
+          "name": "Emma Rodriguez",
+          "role": "UX设计师",
+          "image": "https://randomuser.me/api/portraits/women/7.jpg",
+          "quote": "响应式邮件预览已将我们的设计迭代时间减半。现在我们可以确保我们的邮件在所有屏幕尺寸上看起来完美。"
         },
         "item-4": {
-          "name": "Anonymous author",
-          "role": "产品经理",
+          "name": "David Thompson",
+          "role": "数字营销总监",
           "image": "https://randomuser.me/api/portraits/men/8.jpg",
-          "quote": "我不熟悉 Tailwind，我想自己做一些页面，我在网上搜索了很多英雄页面和区块。然而，大多数都没有给我一个清晰的想法，或者需要一些 HTML/CSS 编码背景来从原始文件中做一些更改，或者太贵了。我下载了其中一个 MkSaaS 模板，它非常容易理解，你可以在开始时修改代码/区块以完美地适应你的页面目的。"
+          "quote": "自开始使用邮件预览器优化我们为所有设备的邮件模板以来，我们的邮件打开率增加了23%。"
         },
         "item-5": {
-          "name": "Shekinah Tshiokufila",
-          "role": "高级软件工程师",
-          "image": "https://randomuser.me/api/portraits/men/4.jpg",
-          "quote": "MkSaaS 正在重新定义网页设计标准，这些区块为那些喜欢美丽但可能缺乏时间实现它的人提供了简单且高效的方式。我只能推荐这个不可思议的奇迹。"
+          "name": "Priya Patel",
+          "role": "邮件活动专家",
+          "image": "https://randomuser.me/api/portraits/women/4.jpg",
+          "quote": "跨平台兼容性测试非常出色。邮件预览器为我们团队节省了大量时间。"
         },
         "item-6": {
-          "name": "Oketa Fred",
-          "role": "全栈开发工程师",
+          "name": "James Wilson",
+          "role": "产品经理",
           "image": "https://randomuser.me/api/portraits/men/2.jpg",
-          "quote": "我绝对喜欢 MkSaaS！这些组件区块设计精美且易于使用，使创建一个出色的网站变得轻而易举。"
+          "quote": "我喜欢上传和预览任何邮件格式的简便性。邮件预览器是我们营销工作流程中必不可少的工具。"
         },
         "item-7": {
-          "name": "Zeki",
-          "role": "ChatExtend 创始人",
-          "image": "https://randomuser.me/api/portraits/men/5.jpg",
-          "quote": "使用 MkSaaS 就像解锁了一个秘密的设计超能力。它是简单性和多功能性的完美融合，使我们能够创建既令人惊叹又用户友好的界面。"
+          "name": "Olivia Martinez",
+          "role": "创意总监",
+          "image": "https://randomuser.me/api/portraits/women/5.jpg",
+          "quote": "邮件预览的准确性完美反映了我们的邮件在真实邮件客户端中的渲染。对于质量控制来说绝对不可或缺。"
         },
         "item-8": {
-          "name": "Joseph Kitheka",
-          "role": "全栈开发工程师",
+          "name": "Alex Kim",
+          "role": "Web开发工程师",
           "image": "https://randomuser.me/api/portraits/men/9.jpg",
-          "quote": "MkSaaS 改变了我的网页开发方式。他们的 UI 组件、区块和模板极大地加速了我的工作流程。定制每个方面的灵活性使我能够创建独特的用户体验。MkSaaS 是现代网页开发的游戏规则改变者！"
+          "quote": "邮件预览器已成为我们邮件开发过程中的不可或缺部分。节省的时间是惊人的。"
         },
         "item-9": {
-          "name": "Khatab Wedaa",
-          "role": "MerakiUI 创建者",
-          "image": "https://randomuser.me/api/portraits/men/10.jpg",
-          "quote": "MkSaaS 是一个优雅、干净且响应式的 SaaS 模板，它非常有助于快速开始您的项目。"
+          "name": "Sophia Williams",
+          "role": "内容经理",
+          "image": "https://randomuser.me/api/portraits/women/10.jpg",
+          "quote": "测试邮件曾是我们流程中最乏味的部分。现在有了邮件预览器，它快速、准确且全面。"
         },
         "item-10": {
-          "name": "Rodrigo Aguilar",
-          "role": "TailwindAwesome 创建者",
+          "name": "Robert Garcia",
+          "role": "营销主管",
           "image": "https://randomuser.me/api/portraits/men/11.jpg",
-          "quote": "我爱 MkSaaS ❤️。这些组件区块结构良好，易于使用，设计精美。它使创建一个出色的网站变得非常容易。"
+          "quote": "设备模拟非常准确。现在我可以自信地在发送前确保我们的邮件看起来完美。"
         },
         "item-11": {
-          "name": "Eric Ampire",
-          "role": "Google 开发者专家",
-          "image": "https://randomuser.me/api/portraits/men/12.jpg",
-          "quote": "MkSaaS 模板是任何想要创建一个美丽且功能齐全的网站但没有网页设计经验的人的完美解决方案。这些模板易于使用，可定制，并且响应迅速。我强烈推荐 MkSaaS 模板给任何想要创建网站的人。"
+          "name": "Amanda Foster",
+          "role": "品牌经理",
+          "image": "https://randomuser.me/api/portraits/women/12.jpg",
+          "quote": "邮件预览器帮助我们在所有邮件接触点上保持一致的品牌体验。对我们团队来说是游戏规则改变者。"
         },
         "item-12": {
-          "name": "Roland Tubonge",
-          "role": "软件工程师",
+          "name": "Thomas Lee",
+          "role": "营销工程师",
           "image": "https://randomuser.me/api/portraits/men/13.jpg",
-          "quote": "MkSaaS 设计得如此出色，即使没有网页设计经验，您也可以创造奇迹。让自己被吸引！"
+          "quote": "能够即时预览多种邮件格式是一个巨大的时间节省器。邮件预览器提供我们所需的一切。"
         }
       }
     },
     "stats": {
       "title": "统计",
-      "subtitle": "MkSaaS 相关的数字",
-      "description": "MkSaaS 可让您在几天内轻松构建您的 AI SaaS",
+      "subtitle": "邮件预览器相关数字",
+      "description": "邮件预览器可让您在几天内轻松优化您的邮件模板",
       "items": {
         "item-1": {
-          "title": "GitHub 上的星星"
+          "title": "支持的设备"
         },
         "item-2": {
-          "title": "使用 MkSaaS 的活跃用户"
+          "title": "支持的邮件格式"
         },
         "item-3": {
-          "title": "使用 MkSaaS 启动的应用"
+          "title": "活跃用户"
         }
       }
     }
