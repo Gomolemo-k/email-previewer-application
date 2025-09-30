@@ -21,7 +21,7 @@ export default function StatsSection() {
             <div className="mb-12 mt-12 grid grid-cols-2 gap-2 md:mb-0">
               <div className="space-y-4">
                 <div className="bg-linear-to-r from-zinc-950 to-zinc-600 bg-clip-text text-5xl font-bold text-transparent dark:from-white dark:to-zinc-800">
-                  +1200
+                  45
                 </div>
                 <p>Stars on GitHub</p>
               </div>
