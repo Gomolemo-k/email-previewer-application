@@ -1,9 +1,10 @@
 'use client';
 
+import { useCookieConsent } from '@/hooks/use-cookie-consent';
 import Script from 'next/script';
 
 /**
- * Plausible Analytics
+ * Plausible Analytics with Cookie Consent
  *
  * NOTICE:
  * If you do not check `404 error pages` when you set up Plausible Analytics,
@@ -27,7 +28,15 @@ export function PlausibleAnalytics() {
     return null;
   }
 
-  return (
-    <Script defer type="text/javascript" data-domain={domain} src={script} />
-  );
+  const consentStatus = useCookieConsent();
+  
+  // Only load analytics if consent has been given
+  if (consentStatus === 'accepted') {
+    return (
+      <Script defer type="text/javascript" data-domain={domain} src={script} />
+    );
+  }
+
+  // If consent is unknown or rejected, don't load analytics
+  return null;
 }

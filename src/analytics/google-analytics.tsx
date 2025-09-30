@@ -1,9 +1,10 @@
 'use client';
 
+import { useCookieConsent } from '@/hooks/use-cookie-consent';
 import { GoogleAnalytics as NextGoogleAnalytics } from '@next/third-parties/google';
 
 /**
- * Google Analytics
+ * Google Analytics with Cookie Consent
  *
  * https://analytics.google.com
  * https://mksaas.com/docs/analytics#google
@@ -19,5 +20,13 @@ export default function GoogleAnalytics() {
     return null;
   }
 
-  return <NextGoogleAnalytics gaId={analyticsId} />;
+  const consentStatus = useCookieConsent();
+  
+  // Only load analytics if consent has been given
+  if (consentStatus === 'accepted') {
+    return <NextGoogleAnalytics gaId={analyticsId} />;
+  }
+
+  // If consent is unknown or rejected, don't load analytics
+  return null;
 }

@@ -1,9 +1,10 @@
 'use client';
 
+import { useCookieConsent } from '@/hooks/use-cookie-consent';
 import Script from 'next/script';
 
 /**
- * Umami Analytics
+ * Umami Analytics with Cookie Consent
  *
  * https://umami.is
  * https://mksaas.com/docs/analytics#umami
@@ -23,12 +24,20 @@ export function UmamiAnalytics() {
     return null;
   }
 
-  return (
-    <Script
-      async
-      type="text/javascript"
-      data-website-id={websiteId}
-      src={script}
-    />
-  );
+  const consentStatus = useCookieConsent();
+  
+  // Only load analytics if consent has been given
+  if (consentStatus === 'accepted') {
+    return (
+      <Script
+        async
+        type="text/javascript"
+        data-website-id={websiteId}
+        src={script}
+      />
+    );
+  }
+
+  // If consent is unknown or rejected, don't load analytics
+  return null;
 }
