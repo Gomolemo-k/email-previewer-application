@@ -1089,20 +1089,16 @@
     }
   },
   "AIImagePage": {
-    "title": "AI Image",
-    "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly"
+    "title": "AI Image"
   },
   "AIChatPage": {
-    "title": "AI Chat",
-    "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly"
+    "title": "AI Chat"
   },
   "AIVideoPage": {
-    "title": "AI Video",
-    "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly"
+    "title": "AI Video"
   },
   "AIAudioPage": {
-    "title": "AI Audio",
-    "description": "MkSaaS lets you make AI SaaS in days, simply and effortlessly"
+    "title": "AI Audio"
   },
   "Navbar": {
     "upgrade": {
