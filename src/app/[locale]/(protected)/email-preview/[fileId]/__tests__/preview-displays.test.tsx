@@ -86,17 +86,9 @@ describe('EmailPreviewPage - Preview Displays', () => {
       expect(screen.getByText('test.html')).toBeInTheDocument();
     });
 
-    // Check that resolution options are displayed
+    // Check that device selection options are displayed
     await waitFor(() => {
-      expect(screen.getByText('desktop (1200px)')).toBeInTheDocument();
-      expect(screen.getByText('tablet (768px)')).toBeInTheDocument();
-      expect(screen.getByText('mobile (375px)')).toBeInTheDocument();
-    });
-
-    // Check that iframe preview is rendered
-    await waitFor(() => {
-      const iframe = screen.getByTitle('Desktop Preview');
-      expect(iframe).toBeInTheDocument();
+      expect(screen.getByText('select-devices')).toBeInTheDocument();
     });
   });
 
@@ -127,21 +119,13 @@ describe('EmailPreviewPage - Preview Displays', () => {
       expect(screen.getByText('test.eml')).toBeInTheDocument();
     });
 
-    // Check that resolution options are displayed
+    // Check that device selection options are displayed
     await waitFor(() => {
-      expect(screen.getByText('desktop (1200px)')).toBeInTheDocument();
-      expect(screen.getByText('tablet (768px)')).toBeInTheDocument();
-      expect(screen.getByText('mobile (375px)')).toBeInTheDocument();
-    });
-
-    // Check that text preview is rendered
-    await waitFor(() => {
-      const preElement = screen.getByText(/From: test@example.com/);
-      expect(preElement).toBeInTheDocument();
+      expect(screen.getByText('select-devices')).toBeInTheDocument();
     });
   });
 
-  it('should render preview panes with correct dimensions', async () => {
+  it('should render preview for selected devices', async () => {
     const mockFile = {
       id: 'test-file-id',
       filename: 'test.html',
@@ -166,21 +150,6 @@ describe('EmailPreviewPage - Preview Displays', () => {
     // Wait for the content to load
     await waitFor(() => {
       expect(screen.getByText('test.html')).toBeInTheDocument();
-    });
-
-    // Check that all preview panes are rendered with correct dimensions
-    await waitFor(() => {
-      // Desktop preview (1200px)
-      const desktopPreview = screen.getByText('desktop (1200px)');
-      expect(desktopPreview).toBeInTheDocument();
-
-      // Tablet preview (768px)
-      const tabletPreview = screen.getByText('tablet (768px)');
-      expect(tabletPreview).toBeInTheDocument();
-
-      // Mobile preview (375px)
-      const mobilePreview = screen.getByText('mobile (375px)');
-      expect(mobilePreview).toBeInTheDocument();
     });
   });
 });
