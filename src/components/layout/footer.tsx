@@ -3,7 +3,6 @@
 import Container from '@/components/layout/container';
 import { Logo } from '@/components/layout/logo';
 import { ModeSwitcherHorizontal } from '@/components/layout/mode-switcher-horizontal';
-import BuiltWithButton from '@/components/shared/built-with-button';
 import { useFooterLinks } from '@/config/footer-config';
 import { useSocialLinks } from '@/config/social-config';
 import { LocaleLink } from '@/i18n/navigation';
@@ -35,28 +34,28 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
                 {t('Marketing.footer.tagline')}
               </p>
 
-              {/* social links */}
+              {/* email only */}
               <div className="flex items-center gap-4 py-2">
                 <div className="flex items-center gap-2">
-                  {socialLinks?.map((link) => (
-                    <a
-                      key={link.title}
-                      href={link.href || '#'}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={link.title}
-                      className="border border-border inline-flex h-8 w-8 items-center
-                          justify-center rounded-full hover:bg-accent hover:text-accent-foreground"
-                    >
-                      <span className="sr-only">{link.title}</span>
-                      {link.icon ? link.icon : null}
-                    </a>
-                  ))}
+                  {socialLinks
+                    ?.filter(link => link.title === 'Email')
+                    .map((link) => (
+                      <a
+                        key={link.title}
+                        href={link.href || '#'}
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label={link.title}
+                        className="border border-border inline-flex h-8 w-8 items-center
+                            justify-center rounded-full hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <span className="sr-only">{link.title}</span>
+                        {link.icon ? link.icon : null}
+                      </a>
+                    ))}
                 </div>
               </div>
 
-              {/* built with button */}
-              <BuiltWithButton />
             </div>
           </div>
 
@@ -93,7 +92,7 @@ export function Footer({ className }: React.HTMLAttributes<HTMLElement>) {
       <div className="border-t py-8">
         <Container className="px-4 flex items-center justify-between gap-x-4">
           <span className="text-muted-foreground text-sm">
-            &copy; {new Date().getFullYear()} {t('Metadata.name')} All Rights
+            &copy; {new Date().getFullYear()} Workflow Lab All Rights
             Reserved.
           </span>
 
