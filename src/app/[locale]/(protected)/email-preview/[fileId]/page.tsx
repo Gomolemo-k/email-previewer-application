@@ -351,13 +351,12 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                         <div className="text-sm font-medium mb-2 text-center px-2 text-muted-foreground">
                           {device.name}
                         </div>
-                        <div className="relative w-full max-w-[500px] h-auto min-h-[400px]">
+                        <div className="relative w-full max-w-[300px] h-[500px]">
                           <Image
                             src={getDeviceImageSrc(deviceId)}
                             alt={device.name}
-                            width={500}
-                            height={400}
-                            className="w-full h-auto object-contain"
+                            fill
+                            className="w-full h-full object-contain"
                             unoptimized // Since these are static assets
                           />
                           <div className={`
