@@ -2,7 +2,7 @@
   "Metadata": {
     "name": "Email Previewer",
     "title": "Email Previewer - Preview Your Email Across All Devices",
-    "description": "Email Previewer is the premier email template preview service. Preview your email templates across all devices in minutes, simply and effortlessly"
+    "description": "Email Previewer is the premier email template preview service. Preview your email templates across all devices in minutes, simply and effortlessly."
   },
   "Common": {
     "premium": "Premium",
@@ -53,7 +53,7 @@
     },
     "email-upload": {
       "title": "Upload Email Files",
-      "description": "Upload your email files for preview",
+      "description": "Upload your email files for preview.",
       "drag-and-drop": "Drag and drop your email files here",
       "drop-here": "Drop your email files here",
       "browse-files": "Browse Files",
@@ -395,8 +395,8 @@
   },
   "PricingPage": {
     "title": "Pricing",
-    "description": "Choose the plan that works best for you",
-    "subtitle": "Choose the plan that works best for you",
+    "description": "Choose the plan that works best for you.",
+    "subtitle": "Choose the plan that works best for you.",
     "monthly": "Monthly",
     "yearly": "Yearly",
     "PricingCard": {
@@ -421,7 +421,7 @@
   "PricePlans": {
     "pro": {
       "name": "Pro",
-      "description": "Advanced features for professionals",
+      "description": "Advanced features for professionals.",
       "features": {
         "feature-1": "Manage user accounts",
         "feature-2": "10MB file size limit",
@@ -529,7 +529,7 @@
   "Newsletter": {
     "title": "Newsletter",
     "subtitle": "Join the community",
-    "description": "Subscribe to our newsletter for the latest news and updates",
+    "description": "Subscribe to our newsletter for the latest news and updates.",
     "form": {
       "email": "Email",
       "subscribe": "Subscribe",
@@ -844,7 +844,7 @@
     "title": "Email Previewer",
     "description": "Preview your emails on multiple device types simultaneously - desktop, tablet, and mobile - to ensure consistent rendering and optimal user experience across all screen sizes",
     "hero": {
-      "title": "Preview your email across all devices, simply and effortlessly",
+      "title": "Preview your email across all devices, simply and effortlessly.",
       "description": "Email Previewer is a comprehensive email preview service to help you test your emails across all devices, from desktop to mobile, faster and better.",
       "primary": "Get Started"
     },
@@ -853,30 +853,30 @@
     "features": {
       "title": "Email Preview Features",
       "subtitle": "Powerful email template testing tools",
-      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients",
+      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients.",
       "items": {
         "item-1": {
           "title": "Cross-Device Preview",
-          "description": "Preview your emails on multiple device types simultaneously - desktop, tablet, and mobile - to ensure consistent rendering and optimal user experience across all screen sizes"
+          "description": "Preview your emails on multiple device types simultaneously - desktop, tablet, and mobile - to ensure consistent rendering and optimal user experience across all screen sizes."
         },
         "item-2": {
           "title": "Multi-Format Support",
-          "description": "Upload and preview various email formats including .eml, .msg, .mbox, .html, .htm, and .txt files with instant rendering and accurate display"
+          "description": "Upload and preview various email formats including .eml, .msg, .mbox, .html, .htm, and .txt files with instant rendering and accurate display."
         },
         "item-3": {
           "title": "Real-time Responsive Testing",
-          "description": "Test how your email designs adapt to different screen resolutions with our real-time responsive preview functionality"
+          "description": "Test how your email designs adapt to different screen resolutions with our real-time responsive preview functionality."
         },
         "item-4": {
           "title": "Email Client Compatibility",
-          "description": "Verify how your emails render across major email clients to ensure maximum deliverability and visual consistency"
+          "description": "Verify how your emails render across major email clients to ensure maximum deliverability and visual consistency."
         }
       }
     },
     "features2": {
       "title": "Email Preview Features",
       "subtitle": "Powerful email template testing tools",
-      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients",
+      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients.",
       "feature-1": "Cross-Device Preview",
       "feature-2": "Multi-Format Support",
       "feature-3": "Real-time Responsive Testing",
@@ -885,38 +885,38 @@
     "features3": {
       "title": "Email Preview Features",
       "subtitle": "Powerful email template testing tools",
-      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients",
+      "description": "Our comprehensive email preview platform provides everything you need to ensure your emails look perfect across all devices and clients.",
       "items": {
         "item-1": {
           "title": "Cross-Device Preview",
-          "description": "Preview your emails on multiple device types simultaneously - desktop, tablet, and mobile - to ensure consistent rendering and optimal user experience across all screen sizes"
+          "description": "Preview your emails on multiple device types simultaneously - desktop, tablet, and mobile - to ensure consistent rendering and optimal user experience across all screen sizes."
         },
         "item-2": {
           "title": "Multi-Format Support",
-          "description": "Upload and preview various email formats including .eml, .msg, .mbox, .html, .htm, and .txt files with instant rendering and accurate display"
+          "description": "Upload and preview various email formats including .eml, .msg, .mbox, .html, .htm, and .txt files with instant rendering and accurate display."
         },
         "item-3": {
           "title": "Real-time Responsive Testing",
-          "description": "Test how your email designs adapt to different screen resolutions with our real-time responsive preview functionality"
+          "description": "Test how your email designs adapt to different screen resolutions with our real-time responsive preview functionality."
         },
         "item-4": {
           "title": "Email Client Compatibility",
-          "description": "Verify how your emails render across major email clients to ensure maximum deliverability and visual consistency"
+          "description": "Verify how your emails render across major email clients to ensure maximum deliverability and visual consistency."
         },
         "item-5": {
           "title": "Download Functionality",
-          "description": "Download your email templates in various formats for use in your email marketing campaigns"
+          "description": "Download your email templates in various formats for use in your email marketing campaigns."
         },
         "item-6": {
           "title": "File Management",
-          "description": "Upload, organize, and manage your email template files with our intuitive file management system"
+          "description": "Upload, organize, and manage your email template files with our intuitive file management system."
         }
       }
     },
     "pricing": {
       "title": "Pricing",
       "subtitle": "Pricing",
-      "description": "Choose the plan that works best for you"
+      "description": "Choose the plan that works best for you."
     },
     "faqs": {
       "title": "FAQ",
@@ -1025,7 +1025,7 @@
     "stats": {
       "title": "Stats",
       "subtitle": "Email Previewer in numbers",
-      "description": "Email Previewer lets you optimize your email templates in days, simply and effortlessly",
+      "description": "Email Previewer lets you optimize your email templates in days, simply and effortlessly.",
       "items": {
         "item-1": {
           "title": "Devices Supported"
@@ -1076,29 +1076,33 @@
     "features": {
       "scraping": {
         "title": "Smart Web Scraping",
-        "description": "Advanced web scraping technology extracts clean, structured content from any website"
+        "description": "Advanced web scraping technology extracts clean, structured content from any website."
       },
       "analysis": {
         "title": "AI-Powered Analysis",
-        "description": "Intelligent AI analysis extracts key insights, features, and structured information"
+        "description": "Intelligent AI analysis extracts key insights, features, and structured information."
       },
       "results": {
         "title": "Structured Results",
-        "description": "Get organized, easy-to-read results with clear sections and actionable insights"
+        "description": "Get organized, easy-to-read results with clear sections and actionable insights."
       }
     }
   },
   "AIImagePage": {
-    "title": "AI Image"
+    "title": "AI Image",
+    "description": "Generate stunning images with AI."
   },
   "AIChatPage": {
-    "title": "AI Chat"
+    "title": "AI Chat",
+    "description": "Chat with customers using AI."
   },
   "AIVideoPage": {
-    "title": "AI Video"
+    "title": "AI Video",
+    "description": "Create amazing videos with AI."
   },
   "AIAudioPage": {
-    "title": "AI Audio"
+    "title": "AI Audio",
+    "description": "Generate wonderful audio with AI."
   },
   "Navbar": {
     "upgrade": {
