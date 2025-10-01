@@ -36,7 +36,8 @@ const SUPPORTED_EXTENSIONS = Object.keys(SUPPORTED_FILE_TYPES);
 async function getUserPlanLimits(userId: string) {
   // Get all plans
   const plans = getAllPricePlans();
-  const freePlan = plans.find((plan) => plan.isFree);
+  // Since there's no explicit free plan now, set default limits for non-subscribed users
+  const defaultLimits = { maxFileSize: 10, maxFiles: 10 }; // Default: 10MB file size, 10 files for non-subscribers
   
   try {
     // Check if user has lifetime access
@@ -44,7 +45,7 @@ async function getUserPlanLimits(userId: string) {
     if (lifetimeResult?.data?.success && lifetimeResult.data.isLifetimeMember) {
       // Lifetime users get pro plan limits
       const lifetimePlan = plans.find((plan) => plan.isLifetime);
-      return lifetimePlan?.features?.fileUpload || { maxFileSize: 20, maxFiles: 50 };
+      return lifetimePlan?.features?.fileUpload || { maxFileSize: 10, maxFiles: 50 };
     }
     
     // Check if user has active subscription
@@ -57,16 +58,35 @@ async function getUserPlanLimits(userId: string) {
       );
       
       if (plan) {
-        return plan.features?.fileUpload || { maxFileSize: 20, maxFiles: 50 };
+        // Apply different file limits based on subscription interval for Pro plan
+        if (plan.id === 'pro') {
+          // Find the specific price that matches the subscription
+          const matchingPrice = plan.prices.find((price) => price.priceId === subscription.priceId);
+          
+          if (matchingPrice) {
+            // For yearly subscriptions, allow more files
+            if (matchingPrice.interval === 'year') {
+              return {
+                ...plan.features?.fileUpload,
+                maxFiles: 10000 // 10000 files for yearly Pro
+              };
+            } else {
+              // For monthly subscriptions, use the default Pro limits (1000 files)
+              return plan.features?.fileUpload || { maxFileSize: 10, maxFiles: 1000 };
+            }
+          }
+        }
+        
+        return plan.features?.fileUpload || { maxFileSize: 10, maxFiles: 50 };
       }
     }
     
-    // Default to free plan limits
-    return freePlan?.features?.fileUpload || { maxFileSize: 5, maxFiles: 5 };
+    // Default to basic limits for non-subscribers
+    return defaultLimits;
   } catch (error) {
     console.error('Error getting user plan limits:', error);
-    // Default to free plan limits if there's an error
-    return freePlan?.features?.fileUpload || { maxFileSize: 5, maxFiles: 5 };
+    // Default to basic limits if there's an error
+    return defaultLimits;
   }
 }
 

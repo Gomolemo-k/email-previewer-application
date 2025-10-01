@@ -118,8 +118,8 @@ export const websiteConfig: WebsiteConfig = {
         popular: true,
         features: {
           fileUpload: {
-            maxFileSize: 20, // 20MB
-            maxFiles: 50, // 50 files
+            maxFileSize: 10, // 10MB
+            maxFiles: 1000, // 1000 files for monthly Pro
           },
         },
         credits: {

@@ -37,8 +37,8 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
   const { data: paymentData, isLoading: isPaymentLoading } = useCurrentPlan(session?.user?.id);
   
   // Get plan limits
-  const planLimits = paymentData?.currentPlan?.features?.fileUpload || { maxFileSize: 5, maxFiles: 5 };
-  const maxFileSizeMB = planLimits.maxFileSize || 5;
+  const planLimits = paymentData?.currentPlan?.features?.fileUpload || { maxFileSize: 10, maxFiles: 10 };
+  const maxFileSizeMB = planLimits.maxFileSize || 10;
   const maxFileSizeBytes = maxFileSizeMB * 1024 * 1024;
 
   const validateFileType = (file: File): boolean => {

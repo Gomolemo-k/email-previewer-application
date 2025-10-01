@@ -6,6 +6,19 @@ import { auth } from '@/lib/auth';
 // Upload directory
 const UPLOAD_DIR = join(process.cwd(), 'uploads');
 
+// Supported email file extensions (should match those in upload-email/route.ts)
+const SUPPORTED_EXTENSIONS = [
+  'eml',    // Email Message File
+  'msg',    // Outlook Message File
+  'mbox',   // Mailbox File
+  'mbx',    // Mailbox File (alternative extension)
+  'html',   // HTML File
+  'htm',    // HTML File (alternative extension)
+  'txt',    // Text File
+  'pst',    // Outlook Personal Storage Table
+  'ost'     // Outlook Offline Storage Table
+];
+
 export async function GET(request: NextRequest) {
   try {
     // Authenticate the user
@@ -26,10 +39,12 @@ export async function GET(request: NextRequest) {
       
       // Filter files that belong to the current user
       // Format: originalName-userId-uuid.extension
-      const userFiles = files.filter(file => 
-        file.includes(`-${session.user.id}-`) && 
-        (file.endsWith('.eml') || file.endsWith('.html'))
-      );
+      const userFiles = files.filter(file => {
+        const fileExtension = file.split('.').pop()?.toLowerCase();
+        return file.includes(`-${session.user.id}-`) && 
+               fileExtension && 
+               SUPPORTED_EXTENSIONS.includes(fileExtension);
+      });
       
       const emailFiles = await Promise.all(
         userFiles.map(async (file) => {
