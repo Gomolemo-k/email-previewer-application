@@ -26,6 +26,93 @@ interface EmailHeaders {
   date?: string;
 }
 
+// ---- HELPERS ----
+
+// Parse headers + body from plain email text
+const parseEml = (content: string) => {
+  const headers: EmailHeaders = { from: '', to: '', subject: '' };
+  let body = content;
+
+  const headerEndIndex = content.indexOf('\n\n');
+  if (headerEndIndex > 0) {
+    const headerSection = content.slice(0, headerEndIndex);
+    body = content.slice(headerEndIndex + 2);
+
+    const headerLines = headerSection.split(/\r?\n/);
+    for (const line of headerLines) {
+      if (line.toLowerCase().startsWith('from:')) headers.from = line.slice(5).trim();
+      else if (line.toLowerCase().startsWith('to:')) headers.to = line.slice(3).trim();
+      else if (line.toLowerCase().startsWith('subject:')) headers.subject = line.slice(8).trim();
+      else if (line.toLowerCase().startsWith('date:')) headers.date = line.slice(5).trim();
+    }
+  }
+  return { headers, body };
+};
+
+// Parse .mbox/.mbx (use first email block)
+const parseMbox = (content: string) => {
+  const emails = content.split(/\n(?=From )/);
+  const firstEmail = emails[0] || content;
+  return parseEml(firstEmail);
+};
+
+// For HTML files - wrap the content directly without trying to parse headers
+const wrapHtmlContent = (content: string) => `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        body { font-family: Arial,sans-serif; line-height:1.6; background:#f9f9f9; padding:20px; }
+        .email-container { background:white; padding:30px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+      </style>
+    </head>
+    <body>
+      <div class="email-container">
+        ${content}
+      </div>
+    </body>
+  </html>
+`;
+
+// Wrap plain text into HTML
+const wrapTextInHtml = (text: string) => `
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <meta charset="UTF-8">
+      <style>
+        body { font-family: Arial,sans-serif; line-height:1.6; background:#f9f9f9; padding:20px; }
+        .email-container { background:white; padding:30px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+        .plain-text-content { white-space: pre-wrap; }
+      </style>
+    </head>
+    <body>
+      <div class="email-container">
+        <div class="plain-text-content">${text}</div>
+      </div>
+    </body>
+  </html>
+`;
+
+// Add headers into HTML preview
+const injectHeaders = (htmlBody: string, headers: EmailHeaders) => {
+  const headerHtml = `
+    <div style="background:#f8f9fa;padding:15px;border-radius:8px 8px 0 0;border-bottom:1px solid #dee2e6;font-size:14px;">
+      <p><strong>From:</strong> ${headers.from || 'Unknown'}</p>
+      <p><strong>To:</strong> ${headers.to || 'Unknown'}</p>
+      <p><strong>Subject:</strong> ${headers.subject || 'No Subject'}</p>
+      ${headers.date ? `<p><strong>Date:</strong> ${headers.date}</p>` : ''}
+    </div>
+  `;
+
+  if (htmlBody.includes('<body')) {
+    return htmlBody.replace(/<body[^>]*>/i, match => `${match}${headerHtml}`);
+  }
+  return headerHtml + htmlBody;
+};
+
+// ---- MAIN PAGE ----
 export default function EmailPreviewPage({ params }: { params: Promise<{ fileId: string }> }) {
   const resolvedParams = use(params);
   const fileId = resolvedParams.fileId;
@@ -34,233 +121,19 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
   const router = useRouter();
 
   const [file, setFile] = useState<EmailFile | null>(null);
-  const [emailContent, setEmailContent] = useState<string | null>(null);
-  const [emailHeaders, setEmailHeaders] = useState<EmailHeaders | null>(null);
+  const [emailHtml, setEmailHtml] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
-
   const [selectedEmails, setSelectedEmails] = useState<string[]>([fileId]);
   const [availableEmails, setAvailableEmails] = useState<EmailFile[]>([]);
 
-  useEffect(() => {
-    fetchFileData();
-  }, [fileId]);
-
-  const parseEmailHeaders = (content: string): { headers: EmailHeaders; body: string } => {
-    const headers: EmailHeaders = {
-      from: '',
-      to: '',
-      subject: ''
-    };
-
-    let body = content;
-    const headerEndIndex = content.indexOf('\n\n');
-    
-    if (headerEndIndex > 0) {
-      const headerSection = content.slice(0, headerEndIndex);
-      body = content.slice(headerEndIndex + 2);
-      
-      // Parse headers
-      const headerLines = headerSection.split('\n');
-      for (const line of headerLines) {
-        if (line.toLowerCase().startsWith('from:')) {
-          headers.from = line.slice(5).trim();
-        } else if (line.toLowerCase().startsWith('to:')) {
-          headers.to = line.slice(3).trim();
-        } else if (line.toLowerCase().startsWith('subject:')) {
-          headers.subject = line.slice(8).trim();
-        } else if (line.toLowerCase().startsWith('date:')) {
-          headers.date = line.slice(5).trim();
-        }
-      }
-    }
-
-    return { headers, body };
-  };
-
-  const extractEmailBody = (content: string): { htmlContent: string; headers: EmailHeaders } => {
-    try {
-      const { headers, body } = parseEmailHeaders(content);
-      
-      let htmlBody = body;
-
-      // If body is already HTML, use it directly
-      if (body.trim().startsWith('<!DOCTYPE') || body.trim().startsWith('<html')) {
-        htmlBody = body;
-      } else {
-        // Check if this is an HTML email based on headers
-        const isHtmlEmail = content.toLowerCase().includes('content-type: text/html') || 
-                           body.includes('<') || 
-                           body.includes('</');
-        
-        if (isHtmlEmail && (body.includes('<!DOCTYPE') || body.includes('<html') || body.includes('<body'))) {
-          // Try to extract HTML content
-          const htmlMatch = body.match(/<!DOCTYPE[^]*?<\/html>|<html[^]*?<\/html>|<body[^]*?<\/body>/i);
-          if (htmlMatch) {
-            htmlBody = htmlMatch[0];
-          }
-        } else {
-          // Wrap plain text in HTML
-          htmlBody = `
-            <!DOCTYPE html>
-            <html>
-            <head>
-              <meta charset="UTF-8">
-              <style>
-                body { 
-                  font-family: Arial, sans-serif; 
-                  line-height: 1.6; 
-                  color: #333; 
-                  max-width: 800px; 
-                  margin: 0 auto; 
-                  padding: 20px;
-                  background: #f9f9f9;
-                }
-                .email-container {
-                  background: white;
-                  padding: 30px;
-                  border-radius: 8px;
-                  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                }
-                .plain-text-content {
-                  white-space: pre-wrap;
-                  font-family: Arial, sans-serif;
-                }
-              </style>
-            </head>
-            <body>
-              <div class="email-container">
-                <div class="plain-text-content">${body}</div>
-              </div>
-            </body>
-            </html>
-          `;
-        }
-      }
-
-      // Create the final HTML with headers
-      const finalHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <style>
-            body { 
-              font-family: Arial, sans-serif; 
-              line-height: 1.6; 
-              color: #333; 
-              max-width: 800px; 
-              margin: 0 auto; 
-              padding: 20px;
-              background: #f9f9f9;
-            }
-            .email-headers {
-              background: #f8f9fa;
-              padding: 20px;
-              border-radius: 8px 8px 0 0;
-              border-bottom: 1px solid #dee2e6;
-              font-size: 14px;
-            }
-            .header-row {
-              margin-bottom: 8px;
-              display: flex;
-            }
-            .header-label {
-              font-weight: bold;
-              min-width: 80px;
-              color: #495057;
-            }
-            .header-value {
-              flex: 1;
-              color: #212529;
-            }
-            .email-body {
-              background: white;
-              padding: 30px;
-              border-radius: 0 0 8px 8px;
-              box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            }
-          </style>
-        </head>
-        <body>
-          <div class="email-headers">
-            <div class="header-row">
-              <div class="header-label">From:</div>
-              <div class="header-value">${headers.from || 'Unknown Sender'}</div>
-            </div>
-            <div class="header-row">
-              <div class="header-label">To:</div>
-              <div class="header-value">${headers.to || 'Unknown Recipient'}</div>
-            </div>
-            <div class="header-row">
-              <div class="header-label">Subject:</div>
-              <div class="header-value">${headers.subject || 'No Subject'}</div>
-            </div>
-            ${headers.date ? `
-            <div class="header-row">
-              <div class="header-label">Date:</div>
-              <div class="header-value">${headers.date}</div>
-            </div>
-            ` : ''}
-          </div>
-          <div class="email-body">
-            ${htmlBody}
-          </div>
-        </body>
-        </html>
-      `;
-
-      return { htmlContent: finalHtml, headers };
-
-    } catch (error) {
-      console.error('Error extracting email body:', error);
-      
-      // Fallback with basic headers
-      const fallbackHtml = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="UTF-8">
-          <style>
-            body { 
-              font-family: Arial, sans-serif; 
-              line-height: 1.6; 
-              color: #333; 
-              max-width: 800px; 
-              margin: 0 auto; 
-              padding: 20px;
-              background: #f5f5f5;
-            }
-            .error-content {
-              background: white;
-              padding: 20px;
-              border-radius: 8px;
-              border: 1px solid #ddd;
-              white-space: pre-wrap;
-              font-family: monospace;
-              font-size: 12px;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="error-content">${content}</div>
-        </body>
-        </html>
-      `;
-
-      return { 
-        htmlContent: fallbackHtml, 
-        headers: { from: '', to: '', subject: '' } 
-      };
-    }
-  };
+  useEffect(() => { fetchFileData(); }, [fileId]);
 
   const fetchFileData = async () => {
     try {
       setLoading(true);
       const sessionData = await authClient.getSession();
       setSession(sessionData);
-
       if (!sessionData.data?.user) throw new Error('User not authenticated');
 
       const response = await fetch('/api/get-email-files');
@@ -268,14 +141,13 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
       if (!response.ok) throw new Error(result.error || 'Failed to fetch files');
 
       setAvailableEmails(result.files);
-
       const foundFile = result.files.find((f: EmailFile) => f.id === fileId);
       if (!foundFile) throw new Error('File not found');
 
       setFile(foundFile);
       await fetchFileContent(foundFile, sessionData);
     } catch (error: any) {
-      console.error('Error fetching file:', error);
+      console.error(error);
       toast.error(t('fetch-error'), { description: error.message || t('fetch-error-description') });
     } finally {
       setLoading(false);
@@ -284,20 +156,64 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
 
   const fetchFileContent = async (file: EmailFile, sessionData: any) => {
     try {
-      const fileExtension = file.fileType;
-      const fileNameWithoutExtension = file.filename.replace(/\.[^/.]+$/, '');
-      const formattedFileName = `${fileNameWithoutExtension}-${sessionData.data?.user?.id}-${file.id}.${fileExtension}`;
+      const fileNameWithoutExt = file.filename.replace(/\.[^/.]+$/, '');
+      const formattedFileName = `${fileNameWithoutExt}-${sessionData.data?.user?.id}-${file.id}.${file.fileType}`;
 
       const response = await fetch(`/api/get-email-file-content/${formattedFileName}`);
       if (!response.ok) throw new Error('Failed to fetch file content');
 
       const content = await response.text();
-      const { htmlContent, headers } = extractEmailBody(content);
-      setEmailContent(htmlContent);
-      setEmailHeaders(headers);
+      let headers: EmailHeaders = { from: '', to: '', subject: '' };
+      let htmlContent = '';
+
+      switch (file.fileType.toLowerCase()) {
+        case 'eml': {
+          const parsed = parseEml(content);
+          headers = parsed.headers;
+          htmlContent = injectHeaders(wrapTextInHtml(parsed.body), headers);
+          break;
+        }
+        case 'mbox':
+        case 'mbx': {
+          const parsed = parseMbox(content);
+          headers = parsed.headers;
+          htmlContent = injectHeaders(wrapTextInHtml(parsed.body), headers);
+          break;
+        }
+        case 'html':
+        case 'htm': {
+          // For HTML files, don't try to parse headers - just display the content
+          htmlContent = wrapHtmlContent(content);
+          break;
+        }
+        case 'txt': {
+          const parsed = parseEml(content); // Try parsing headers from top
+          headers = parsed.headers;
+          htmlContent = injectHeaders(wrapTextInHtml(parsed.body), headers);
+          break;
+        }
+        case 'msg':
+        case 'pst':
+        case 'ost': {
+          const parsedServer = JSON.parse(content); // { htmlContent, headers }
+          headers = parsedServer.headers || headers;
+          htmlContent = injectHeaders(parsedServer.htmlContent, headers);
+          break;
+        }
+        default: {
+          const parsed = parseEml(content); // fallback
+          headers = parsed.headers;
+          htmlContent = injectHeaders(wrapTextInHtml(parsed.body), headers);
+          break;
+        }
+      }
+
+      setEmailHtml(htmlContent);
     } catch (error: any) {
-      console.error('Error fetching file content:', error);
-      toast.error(t('content-fetch-error'), { description: error.message || t('content-fetch-error-description') });
+      console.error(error);
+      toast.error(t('content-fetch-error'), {
+        description: error.message || t('content-fetch-error-description'),
+      });
     }
   };
 
@@ -311,7 +227,8 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const formatDate = (date: Date) => new Date(date).toLocaleDateString() + ' ' + new Date(date).toLocaleTimeString();
+  const formatDate = (date: Date) =>
+    new Date(date).toLocaleDateString() + ' ' + new Date(date).toLocaleTimeString();
 
   if (loading) {
     return (
@@ -343,10 +260,7 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
       <DashboardHeader
-        breadcrumbs={[
-          { label: t('title') },
-          { label: file.filename, isCurrentPage: true }
-        ]}
+        breadcrumbs={[{ label: t('title') }, { label: file.filename, isCurrentPage: true }]}
       />
 
       <FilterSection
@@ -372,13 +286,13 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
         </CardHeader>
 
         <CardContent>
-          {emailContent ? (
+          {emailHtml ? (
             <div className="border rounded-lg overflow-hidden bg-white">
               <iframe
-                srcDoc={emailContent}
+                srcDoc={emailHtml}
                 className="w-full h-[700px] border-0"
                 title="Email preview"
-                sandbox="allow-same-origin"
+                sandbox="allow-same-origin allow-scripts"
               />
             </div>
           ) : (
