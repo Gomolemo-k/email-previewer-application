@@ -372,7 +372,7 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                             ${deviceId.includes('display') || deviceId.includes('monitor') ? 'top-[7%] left-[4%] right-[4%] bottom-[10%]' : ''}
                             ${deviceId.includes('book') ? 'top-[15%] left-[9%] right-[9%] bottom-[18%]' : ''}
                           `}>
-                            {file.fileType === 'html' ? (
+                            {(file.fileType === 'html' || file.fileType === 'htm') ? (
                               <iframe
                                 srcDoc={fileContent}
                                 title={`${device.name} Preview`}
@@ -381,9 +381,34 @@ export default function EmailPreviewPage({ params }: { params: { fileId: string 
                                 style={{ border: 'none' }}
                               />
                             ) : (
-                              <pre className="w-full h-full p-2 overflow-auto whitespace-pre-wrap text-xs">
-                                {fileContent}
-                              </pre>
+                              (() => {
+                                const isEmailFormat = ['eml', 'msg', 'mbox', 'mbx', 'pst', 'ost'].includes(file.fileType);
+                                
+                                if (isEmailFormat) {
+                                  // Check if the content contains HTML tags
+                                  const hasHTML = /<html|<body|<div|<table|<td|<tr|<p|<br|<h\\d|<span|<img/.test(fileContent);
+                                  
+                                  if (hasHTML) {
+                                    // If content contains HTML, render in iframe with appropriate content type
+                                    return (
+                                      <iframe
+                                        srcDoc={fileContent}
+                                        title={`${device.name} Preview - HTML content from ${file.fileType.toUpperCase()} file`}
+                                        className="w-full h-full"
+                                        sandbox="allow-same-origin allow-scripts" // Security: limit iframe capabilities
+                                        style={{ border: 'none' }}
+                                      />
+                                    );
+                                  }
+                                }
+                                
+                                // For all other formats or email formats without HTML, render as text
+                                return (
+                                  <pre className="w-full h-full p-2 overflow-auto whitespace-pre-wrap text-xs">
+                                    {fileContent}
+                                  </pre>
+                                );
+                              })()
                             )}
                           </div>
                         </div>
