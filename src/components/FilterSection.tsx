@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
+import { Monitor, Smartphone, Tablet, Laptop, SmartphoneIcon } from 'lucide-react';
 
 interface EmailFile {
   id: string;
@@ -182,6 +183,19 @@ export default function FilterSection({
   const removeEmail = (id: string) => onEmailsChange(selectedEmails.filter((s) => s !== id));
   const removeDevice = (id: string) => onDevicesChange(selectedDevices.filter((s) => s !== id));
 
+  // Function to get the appropriate icon for a device category
+  const getDeviceIcon = (category: string) => {
+    if (category.includes('Phone') || category === 'iPhone') {
+      return <Smartphone className="size-4" />;
+    } else if (category.includes('iPad') || category.includes('Tablet')) {
+      return <Tablet className="size-4" />;
+    } else if (category.includes('MacBook') || category.includes('Laptop')) {
+      return <Laptop className="size-4" />;
+    } else {
+      return <Monitor className="size-4" />;
+    }
+  };
+
   return (
     <Card className="w-full mb-6">
       {/* Flex row instead of stacked */}
@@ -255,6 +269,7 @@ export default function FilterSection({
                       key={id}
                       className="inline-flex items-center gap-2 px-2 py-1 rounded-full border bg-muted text-sm"
                     >
+                      {device ? getDeviceIcon(device.category) : <Monitor className="size-4" />}
                       <span>{device ? device.name : id}</span>
                       <button
                         onClick={() => removeDevice(id)}
