@@ -79,6 +79,7 @@
       "file-size": "大小",
       "upload-date": "上传日期",
       "actions": "操作",
+      "search-placeholder": "搜索邮件文件...",
       "fetch-error": "获取文件失败",
       "fetch-error-description": "无法获取您的邮件文件，请重试。",
       "delete-success": "文件已删除",
