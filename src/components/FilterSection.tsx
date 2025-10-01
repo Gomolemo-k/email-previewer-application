@@ -25,6 +25,8 @@ interface FilterSectionProps {
   onDevicesChange: (devices: string[]) => void;
   selectedEmails: string[];
   selectedDevices: string[];
+  activeEmailId?: string;
+  onActiveEmailChange?: (id: string) => void;
 }
 
 /* --- Collapsible wrapper --- */
@@ -90,6 +92,8 @@ export default function FilterSection({
   onDevicesChange,
   selectedEmails,
   selectedDevices,
+  activeEmailId,
+  onActiveEmailChange,
 }: FilterSectionProps) {
   const t = useTranslations('Dashboard.email-preview');
 
@@ -196,6 +200,20 @@ export default function FilterSection({
     }
   };
 
+  // Set the first selected email as active if none is selected
+  useEffect(() => {
+    if (selectedEmails.length > 0 && !activeEmailId && onActiveEmailChange) {
+      onActiveEmailChange(selectedEmails[0]);
+    }
+  }, [selectedEmails, activeEmailId, onActiveEmailChange]);
+
+  // Handle switching between emails
+  const switchToEmail = (id: string) => {
+    if (onActiveEmailChange && selectedEmails.includes(id)) {
+      onActiveEmailChange(id);
+    }
+  };
+
   return (
     <Card className="w-full mb-6">
       {/* Flex row instead of stacked */}
@@ -207,16 +225,41 @@ export default function FilterSection({
             isOpen={emailsOpen}
             onToggle={() => setEmailsOpen((o) => !o)}
           >
+            {/* Tabs for switching between selected emails */}
+            {selectedEmails.length > 1 && (
+              <div className="flex overflow-x-auto gap-2 mb-2 pb-2 border-b">
+                {selectedEmails.map((id) => {
+                  const email = availableEmails.find((e) => e.id === id);
+                  const isActive = activeEmailId === id;
+                  return (
+                    <button
+                      key={id}
+                      onClick={() => switchToEmail(id)}
+                      className={`px-3 py-1.5 text-sm rounded-md whitespace-nowrap ${
+                        isActive 
+                          ? 'bg-primary text-primary-foreground' 
+                          : 'bg-muted hover:bg-muted/80'
+                      }`}
+                    >
+                      {email ? email.filename : id}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             <div className="flex flex-wrap gap-2 mb-2">
               {selectedEmails.length === 0 ? (
                 <div className="text-sm text-muted-foreground">{t('no-emails-selected')}</div>
               ) : (
                 selectedEmails.map((id) => {
                   const email = availableEmails.find((e) => e.id === id);
+                  const isActive = activeEmailId === id;
                   return (
                     <div
                       key={id}
-                      className="inline-flex items-center gap-2 px-2 py-1 rounded-full border bg-muted text-sm"
+                      className={`inline-flex items-center gap-2 px-2 py-1 rounded-full border text-sm ${
+                        isActive ? 'bg-primary text-primary-foreground' : 'bg-muted'
+                      }`}
                     >
                       <span>{email ? email.filename : id}</span>
                       <button
