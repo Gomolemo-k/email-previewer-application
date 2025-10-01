@@ -282,6 +282,26 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
     }
   };
 
+  // Function to determine device aspect ratio and styling
+  const getDeviceStyle = (deviceId: string) => {
+    if (deviceId.includes('iphone') || deviceId.includes('samsung-phone') || deviceId.includes('pixel')) {
+      return {
+        containerClass: "aspect-[9/16] max-h-96", // Mobile aspect ratio
+        iframeClass: "w-full h-full"
+      };
+    } else if (deviceId.includes('ipad') || deviceId.includes('tablet')) {
+      return {
+        containerClass: "aspect-[4/3] max-h-80", // Tablet aspect ratio
+        iframeClass: "w-full h-full"
+      };
+    } else {
+      return {
+        containerClass: "aspect-video max-h-64", // Desktop aspect ratio (16:9)
+        iframeClass: "w-full h-full"
+      };
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
       <DashboardHeader
@@ -327,28 +347,26 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
               
               {/* Device previews if devices are selected */}
               {selectedDevices.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {selectedDevices.map((deviceId) => {
-                    // Determine device type to apply appropriate styling
-                    let containerClass = "w-full h-[700px] border-0 desktop-device";
-                    if (deviceId.includes('iphone') || deviceId.includes('samsung-phone') || deviceId.includes('pixel')) {
-                      containerClass = "w-full h-[700px] border-0 mobile-device";
-                    } else if (deviceId.includes('ipad') || deviceId.includes('tablet')) {
-                      containerClass = "w-full h-[700px] border-0 tablet-device";
-                    }
+                    const deviceStyle = getDeviceStyle(deviceId);
                     
                     return (
-                      <div key={deviceId} className="border rounded-lg overflow-hidden bg-white p-4">
-                        <div className="flex items-center justify-center gap-2 mb-2 text-sm font-medium">
+                      <div key={deviceId} className="flex flex-col items-center">
+                        <div className="flex items-center justify-center gap-2 mb-3 text-sm font-medium text-gray-700">
                           {getDeviceIcon(deviceId)}
-                          <span>{deviceId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                          <span className="text-xs">
+                            {deviceId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                          </span>
                         </div>
-                        <iframe
-                          srcDoc={emailHtml}
-                          className={containerClass}
-                          title={`Email preview on ${deviceId}`}
-                          sandbox="allow-same-origin allow-scripts"
-                        />
+                        <div className={`border-2 border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm ${deviceStyle.containerClass} w-full`}>
+                          <iframe
+                            srcDoc={emailHtml}
+                            className={deviceStyle.iframeClass}
+                            title={`Email preview on ${deviceId}`}
+                            sandbox="allow-same-origin allow-scripts"
+                          />
+                        </div>
                       </div>
                     );
                   })}
