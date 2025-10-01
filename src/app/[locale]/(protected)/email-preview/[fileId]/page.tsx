@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import FilterSection from '@/components/FilterSection';
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
+import { Monitor, Smartphone, Tablet, Laptop } from 'lucide-react';
 
 interface EmailFile {
   id: string;
@@ -61,14 +62,14 @@ const wrapHtmlContent = (content: string) => `
   <!DOCTYPE html>
   <html>
     <head>
-      <meta charset="UTF-8">
+      <meta charset=\"UTF-8\">
       <style>
         body { font-family: Arial,sans-serif; line-height:1.6; background:#f9f9f9; padding:20px; }
         .email-container { background:white; padding:30px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
       </style>
     </head>
     <body>
-      <div class="email-container">
+      <div class=\"email-container\">
         ${content}
       </div>
     </body>
@@ -125,6 +126,7 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
   const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
   const [selectedEmails, setSelectedEmails] = useState<string[]>([fileId]);
+  const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [availableEmails, setAvailableEmails] = useState<EmailFile[]>([]);
 
   useEffect(() => { fetchFileData(); }, [fileId]);
@@ -218,6 +220,8 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
   };
 
   const handleEmailsChange = (emails: string[]) => setSelectedEmails(emails);
+  
+  const handleDevicesChange = (devices: string[]) => setSelectedDevices(devices);
 
   const formatFileSize = (bytes: number) => {
     if (bytes === 0) return '0 Bytes';
@@ -257,6 +261,27 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
     );
   }
 
+  // Function to get the appropriate icon for a device ID
+  const getDeviceIcon = (deviceId: string) => {
+    if (deviceId.includes('iphone') || 
+        deviceId.includes('samsung-phone') || 
+        deviceId.includes('pixel') ||
+        deviceId.includes('galaxy-s') ||
+        deviceId.includes('note')) {
+      return <Smartphone className="size-4" />;
+    } else if (deviceId.includes('ipad') || 
+               deviceId.includes('galaxy-tab') ||
+               deviceId.includes('tablet')) {
+      return <Tablet className="size-4" />;
+    } else if (deviceId.includes('macbook') ||
+               deviceId.includes('galaxy-book') ||
+               deviceId.includes('laptop')) {
+      return <Laptop className="size-4" />;
+    } else {
+      return <Monitor className="size-4" />;
+    }
+  };
+
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
       <DashboardHeader
@@ -267,8 +292,8 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
         availableEmails={availableEmails}
         onEmailsChange={handleEmailsChange}
         selectedEmails={selectedEmails}
-        onDevicesChange={() => {}}
-        selectedDevices={[]}
+        onDevicesChange={handleDevicesChange}
+        selectedDevices={selectedDevices}
       />
 
       <Card className="w-full mt-4">
@@ -287,14 +312,49 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
 
         <CardContent>
           {emailHtml ? (
-            <div className="border rounded-lg overflow-hidden bg-white">
-              <iframe
-                srcDoc={emailHtml}
-                className="w-full h-[700px] border-0"
-                title="Email preview"
-                sandbox="allow-same-origin allow-scripts"
-              />
-            </div>
+            <>
+              {/* Single preview if no devices selected or only 1 device */}
+              {selectedDevices.length === 0 && (
+                <div className="border rounded-lg overflow-hidden bg-white">
+                  <iframe
+                    srcDoc={emailHtml}
+                    className="w-full h-[700px] border-0"
+                    title="Email preview"
+                    sandbox="allow-same-origin allow-scripts"
+                  />
+                </div>
+              )}
+              
+              {/* Device previews if devices are selected */}
+              {selectedDevices.length > 0 && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {selectedDevices.map((deviceId) => {
+                    // Determine device type to apply appropriate styling
+                    let containerClass = "w-full h-[700px] border-0 desktop-device";
+                    if (deviceId.includes('iphone') || deviceId.includes('samsung-phone') || deviceId.includes('pixel')) {
+                      containerClass = "w-full h-[700px] border-0 mobile-device";
+                    } else if (deviceId.includes('ipad') || deviceId.includes('tablet')) {
+                      containerClass = "w-full h-[700px] border-0 tablet-device";
+                    }
+                    
+                    return (
+                      <div key={deviceId} className="border rounded-lg overflow-hidden bg-white p-4">
+                        <div className="flex items-center justify-center gap-2 mb-2 text-sm font-medium">
+                          {getDeviceIcon(deviceId)}
+                          <span>{deviceId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</span>
+                        </div>
+                        <iframe
+                          srcDoc={emailHtml}
+                          className={containerClass}
+                          title={`Email preview on ${deviceId}`}
+                          sandbox="allow-same-origin allow-scripts"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           ) : (
             <div className="flex justify-center items-center h-32">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
