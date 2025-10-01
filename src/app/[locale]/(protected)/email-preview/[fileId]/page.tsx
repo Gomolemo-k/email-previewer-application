@@ -27,7 +27,6 @@ interface EmailHeaders {
   date?: string;
 }
 
-
 // Parse headers + body from plain email text
 const parseEml = (content: string) => {
   const headers: EmailHeaders = { from: '', to: '', subject: '' };
@@ -61,14 +60,14 @@ const wrapHtmlContent = (content: string) => `
   <!DOCTYPE html>
   <html>
     <head>
-      <meta charset=\"UTF-8\">
+      <meta charset="UTF-8">
       <style>
         body { font-family: Arial,sans-serif; line-height:1.6; background:#f9f9f9; padding:20px; }
         .email-container { background:white; padding:30px; border-radius:8px; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
       </style>
     </head>
     <body>
-      <div class=\"email-container\">
+      <div class="email-container">
         ${content}
       </div>
     </body>
@@ -112,7 +111,6 @@ const injectHeaders = (htmlBody: string, headers: EmailHeaders) => {
   return headerHtml + htmlBody;
 };
 
-// ---- MAIN PAGE ----
 export default function EmailPreviewPage({ params }: { params: Promise<{ fileId: string }> }) {
   const resolvedParams = use(params);
   const fileId = resolvedParams.fileId;
@@ -183,12 +181,11 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
         }
         case 'html':
         case 'htm': {
-          // For HTML files, don't try to parse headers - just display the content
           htmlContent = wrapHtmlContent(content);
           break;
         }
         case 'txt': {
-          const parsed = parseEml(content); // Try parsing headers from top
+          const parsed = parseEml(content);
           headers = parsed.headers;
           htmlContent = injectHeaders(wrapTextInHtml(parsed.body), headers);
           break;
@@ -196,13 +193,13 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
         case 'msg':
         case 'pst':
         case 'ost': {
-          const parsedServer = JSON.parse(content); // { htmlContent, headers }
+          const parsedServer = JSON.parse(content);
           headers = parsedServer.headers || headers;
           htmlContent = injectHeaders(parsedServer.htmlContent, headers);
           break;
         }
         default: {
-          const parsed = parseEml(content); // fallback
+          const parsed = parseEml(content);
           headers = parsed.headers;
           htmlContent = injectHeaders(wrapTextInHtml(parsed.body), headers);
           break;
@@ -358,13 +355,23 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
                             {deviceId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
                           </span>
                         </div>
-                        <div className={`border-2 border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm ${deviceStyle.containerClass} w-full`}>
-                          <iframe
-                            srcDoc={emailHtml}
-                            className={deviceStyle.iframeClass}
-                            title={`Email preview on ${deviceId}`}
-                            sandbox="allow-same-origin allow-scripts"
-                          />
+                        <div className={`relative ${deviceStyle.containerClass} w-full flex items-center justify-center bg-slate-100`}>
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="w-full h-full overflow-hidden rounded-xl bg-white border-2 border-gray-200 shadow-sm">
+                              <iframe
+                                srcDoc={emailHtml}
+                                title={`Email preview on ${deviceId}`}
+                                sandbox="allow-same-origin allow-scripts"
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  border: '0',
+                                  transform: 'scale(1)',
+                                  transformOrigin: 'top left'
+                                }}
+                              />
+                            </div>
+                          </div>
                         </div>
                       </div>
                     );
