@@ -21,7 +21,7 @@ export default function StatsSection() {
             <p>{t('items.item-1.title')}</p>
           </div>
           <div className="space-y-4">
-            <div className="text-5xl font-bold text-primary">11</div>
+            <div className="text-5xl font-bold text-primary">9</div>
             <p>{t('items.item-2.title')}</p>
           </div>
           <div className="space-y-4">
