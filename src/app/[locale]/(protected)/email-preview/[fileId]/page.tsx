@@ -27,7 +27,6 @@ interface EmailHeaders {
   date?: string;
 }
 
-// ---- HELPERS ----
 
 // Parse headers + body from plain email text
 const parseEml = (content: string) => {
