@@ -49,8 +49,8 @@ export const getActiveSubscriptionAction = userActionClient
       // 2. Status is 'past_due' but period hasn't ended yet
       // 3. Status is 'unpaid' but period hasn't ended yet (temporary issue)
       const activeSubscription = subscriptionPayments.find((sub) => {
-        // Check if status is active or trialing
-        if (sub.status === 'active' || sub.status === 'trialing') {
+        // Check if status is active or trialing and paid
+        if ((sub.status === 'active' || sub.status === 'trialing') && sub.paid === true) {
           return true;
         }
         
@@ -58,11 +58,24 @@ export const getActiveSubscriptionAction = userActionClient
         if (sub.periodEnd) {
           const periodEnd = new Date(sub.periodEnd);
           const now = new Date();
-          return periodEnd > now && sub.paid === true;
-        } else {
+          // If period hasn't ended and it's paid, it's still valid
+          if (periodEnd > now && sub.paid === true) {
+            return true;
+          }
+        } else if (sub.paid === true) {
           // If no period end is set but it's paid, assume it's ongoing
-          return sub.paid === true;
+          return true;
         }
+
+        // Check for recently created unpaid subscriptions (within last 5 minutes)
+        // This handles the case where checkout completed but webhook hasn't processed yet
+        if (!sub.paid && sub.sessionId) {
+          const createdAt = new Date(sub.createdAt);
+          const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000); // 5 minutes ago
+          return createdAt > fiveMinutesAgo;
+        }
+
+        return false;
       });
 
       if (activeSubscription) {

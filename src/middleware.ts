@@ -112,39 +112,52 @@ export default async function middleware(req: NextRequest) {
   if (isLoggedIn && pathnameWithoutLocale === Routes.Dashboard) {
     // First check if there's a payment verification cookie
     const paymentVerifiedCookie = req.cookies.get('payment_verified');
-    if (paymentVerifiedCookie?.value === 'true') {
-      // If cookie exists and is valid, allow access to dashboard
-      console.log('<< middleware end, payment verified via cookie, allowing access to dashboard');
-    } else {
-      // If no cookie or invalid cookie, check database
-      try {
-        // Import auth and get user session directly
-        const { auth } = await import('@/lib/auth');
-        const session = await auth.api.getSession({
-          headers: {
-            cookie: req.headers.get('cookie') || '',
-          },
-        });
-        
-        if (session?.user?.id) {
+    const paymentVerifiedUserId = req.cookies.get('payment_verified_user_id');
+    
+    if (session?.user?.id) {
+      // If payment verified cookie exists and matches current user, allow access
+      if (paymentVerifiedCookie?.value === 'true' && paymentVerifiedUserId?.value === session.user.id) {
+        console.log('<< middleware end, payment verified via cookie for user, allowing access to dashboard');
+      } else {
+        // If no cookie or cookie doesn't match user, check database
+        try {
           // Import the payment check action
           const { checkUserPaymentStatusAction } = await import('@/actions/check-user-payment-status');
           const result = await checkUserPaymentStatusAction({ userId: session.user.id });
           
-          if (!result.success || !result.hasPaid) {
+          if (result.success && result.hasPaid) {
+            // Set payment verification cookie to avoid repeated DB checks
+            const response = intlMiddleware(req);
+            response.cookies.set('payment_verified', 'true', {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              maxAge: 60 * 60, // 1 hour - refresh after this time
+              sameSite: 'strict',
+              path: '/',
+            });
+            response.cookies.set('payment_verified_user_id', session.user.id, {
+              httpOnly: true,
+              secure: process.env.NODE_ENV === 'production',
+              maxAge: 60 * 60, // 1 hour - same as payment verification
+              sameSite: 'strict',
+              path: '/',
+            });
+            console.log('<< middleware end, payment verified via DB, setting cookie, allowing access to dashboard');
+            return response;
+          } else {
             console.log('<< middleware end, user has not paid, redirecting to landing page');
             return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
           }
-        } else {
-          // If we can't verify the user, be safe and redirect to landing
-          console.log('<< middleware end, could not verify user, redirecting to landing page');
+        } catch (error) {
+          // If there's an error checking payment status, be safe and redirect to landing
+          console.log('<< middleware end, error checking payment status, redirecting to landing page');
           return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
         }
-      } catch (error) {
-        // If there's an error checking payment status, be safe and redirect to landing
-        console.log('<< middleware end, error checking payment status, redirecting to landing page');
-        return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
       }
+    } else {
+      // If we can't verify the user, be safe and redirect to landing
+      console.log('<< middleware end, could not verify user, redirecting to landing page');
+      return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
     }
   }
 
