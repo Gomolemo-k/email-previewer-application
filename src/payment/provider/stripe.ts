@@ -460,9 +460,10 @@ export class StripeProvider implements PaymentProvider {
       } else if (eventType.startsWith('invoice.')) {
         // Handle invoice events
         switch (eventType) {
-          case 'invoice.paid': {
+          case 'invoice.paid':
+          case 'invoice.payment_succeeded': {
             const invoice = event.data.object as Stripe.Invoice;
-            console.log(`Processing invoice.paid event, invoice ID: ${invoice.id}, subscription ID: ${invoice.subscription}`);
+            console.log(`Processing invoice event (${eventType}), invoice ID: ${invoice.id}, subscription ID: ${invoice.subscription}`);
             await this.onInvoicePaid(invoice);
             break;
           }
