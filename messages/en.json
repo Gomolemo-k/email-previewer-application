@@ -871,8 +871,8 @@
           "description": "Test how your email designs adapt to different screen resolutions with our real-time responsive preview functionality."
         },
         "item-4": {
-          "title": "Email Client Compatibility",
-          "description": "Verify how your emails render across major email clients to ensure maximum deliverability and visual consistency."
+          "title": "Manageable User Accounts",
+          "description": "Easily manage user accounts with intuitive controls for permissions, settings, and preferences to ensure a personalized and secure experience for all users."
         }
       }
     },
