@@ -30,22 +30,22 @@ export default function FeaturesSection() {
 
   const images = {
     'item-1': {
-      image: '/blocks/charts-light.png',
-      darkImage: '/blocks/charts.png',
+      image: '/blocks/display-previews.png',
+      darkImage: '/blocks/display-previews.png',
       alt: 'Product Feature One',
     },
     'item-2': {
-      image: '/blocks/music-light.png',
-      darkImage: '/blocks/music.png',
+      image: '/blocks/dashbaord-png.png',
+      darkImage: '/blocks/dashbaord-png.png',
       alt: 'Product Feature Two',
     },
     'item-3': {
-      image: '/blocks/mail2-light.png',
-      darkImage: '/blocks/mail2.png',
+      image: '/blocks/filter-light.png',
+      darkImage: '/blocks/filter-light.png',
       alt: 'Product Feature Three',
     },
     'item-4': {
-      image: '/blocks/payments-light.png',
+      image: '/blocks/user-profile.png',
       darkImage: '/blocks/payments.png',
       alt: 'Product Feature Four',
     },
@@ -133,18 +133,18 @@ export default function FeaturesSection() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 6, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="size-full overflow-hidden rounded-2xl border bg-zinc-900 shadow-md"
+                  className="size-full overflow-hidden rounded-2xl border bg-background shadow-md flex items-center justify-center"
                 >
                   <Image
                     src={images[activeItem].image}
-                    className="size-full object-cover object-left-top dark:hidden"
+                    className="dark:hidden object-contain max-h-full max-w-full"
                     alt={images[activeItem].alt}
                     width={1207}
                     height={929}
                   />
                   <Image
                     src={images[activeItem].darkImage}
-                    className="size-full object-cover object-left-top dark:block hidden"
+                    className="hidden dark:block object-contain max-h-full max-w-full"
                     alt={images[activeItem].alt}
                     width={1207}
                     height={929}

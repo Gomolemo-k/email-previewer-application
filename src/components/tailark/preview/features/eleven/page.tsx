@@ -23,14 +23,14 @@ export default function Features() {
 
               <div className="bg-background overflow-hidden rounded-tl-lg border-l border-t pl-2 pt-2 dark:bg-zinc-950">
                 <Image
-                  src="/blocks/mail2.png"
+                  src="/blocks/filter-light.png"
                   className="hidden dark:block"
                   alt="payments illustration dark"
                   width={1207}
                   height={929}
                 />
                 <Image
-                  src="/blocks/mail2-light.png"
+                  src="/blocks/filter-light.png"
                   className="shadow dark:hidden"
                   alt="payments illustration light"
                   width={1207}

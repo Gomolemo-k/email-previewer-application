@@ -34,7 +34,7 @@ export default function FeaturesSection() {
                   height={1137}
                 />
                 <Image
-                  src="/blocks/mail-back-light.png"
+                  src="/blocks/filter-light.png"
                   className="dark:hidden"
                   alt="payments illustration light"
                   width={2797}

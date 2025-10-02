@@ -23,7 +23,7 @@ export default function Features() {
               <div className="aspect-76/59 p-1 px-6">
                 <DualModeImage
                   darkSrc="/blocks/payments.png"
-                  lightSrc="/blocks/payments-light.png"
+                  lightSrc="/blocks/user-profile.png"
                   alt="payments illustration"
                   width={1207}
                   height={929}

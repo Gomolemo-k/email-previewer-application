@@ -45,7 +45,7 @@ export default function FeaturesSection() {
                 height={929}
               />
               <Image
-                src="/blocks/payments-light.png"
+                src="/blocks/user-profile.png"
                 className="rounded-[15px] shadow dark:hidden"
                 alt="payments illustration light"
                 width={1207}
