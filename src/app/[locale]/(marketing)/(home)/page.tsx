@@ -1,6 +1,5 @@
 import FaqSection from '@/components/blocks/faqs/faqs';
 import FeaturesSection from '@/components/blocks/features/features';
-import Features2Section from '@/components/blocks/features/features2';
 import Features3Section from '@/components/blocks/features/features3';
 import HeroSection from '@/components/blocks/hero/hero';
 import LogoCloud from '@/components/blocks/logo-cloud/logo-cloud';
@@ -50,8 +49,6 @@ export default async function HomePage(props: HomePageProps) {
         <StatsSection />
 
         <FeaturesSection />
-
-        <Features2Section />
 
         <Features3Section />
 
