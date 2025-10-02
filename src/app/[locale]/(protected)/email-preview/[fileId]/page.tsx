@@ -216,7 +216,6 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
   };
 
   const handleEmailsChange = (emails: string[]) => setSelectedEmails(emails);
-  
   const handleDevicesChange = (devices: string[]) => setSelectedDevices(devices);
 
   const formatFileSize = (bytes: number) => {
@@ -229,6 +228,53 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
 
   const formatDate = (date: Date) =>
     new Date(date).toLocaleDateString() + ' ' + new Date(date).toLocaleTimeString();
+
+  // Function to get the appropriate icon for a device ID
+  const getDeviceIcon = (deviceId: string) => {
+    if (deviceId.includes('iphone') || deviceId.includes('samsung-phone') || deviceId.includes('pixel') || deviceId.includes('galaxy-s') || deviceId.includes('note')) {
+      return <Smartphone className="size-4" />;
+    } else if (deviceId.includes('ipad') || deviceId.includes('galaxy-tab') || deviceId.includes('tablet')) {
+      return <Tablet className="size-4" />;
+    } else if (deviceId.includes('macbook') || deviceId.includes('galaxy-book') || deviceId.includes('laptop')) {
+      return <Laptop className="size-4" />;
+    } else {
+      return <Monitor className="size-4" />;
+    }
+  };
+
+  // ✅ Adjusted sizes for better layout balance
+  const getDeviceStyle = (deviceId: string) => {
+    if (
+      deviceId.includes("iphone") ||
+      deviceId.includes("samsung-phone") ||
+      deviceId.includes("pixel") ||
+      deviceId.includes("galaxy-s") ||
+      deviceId.includes("note")
+    ) {
+      return {
+        containerClass:
+          // increased width and height for phones
+          "w-[380px] h-[720px] overflow-hidden rounded-lg border bg-white shadow",
+        iframeClass: "w-full h-full overflow-y-auto",
+      };
+    } else if (
+      deviceId.includes("ipad") ||
+      deviceId.includes("galaxy-tab") ||
+      deviceId.includes("tablet")
+    ) {
+      return {
+        containerClass:
+          "w-[640px] h-[850px] overflow-hidden rounded-lg border bg-white shadow",
+        iframeClass: "w-full h-full overflow-y-auto",
+      };
+    } else {
+      return {
+        containerClass:
+          "w-[960px] h-[600px] overflow-hidden rounded-lg border bg-white shadow",
+        iframeClass: "w-full h-full overflow-y-auto",
+      };
+    }
+  };
 
   if (loading) {
     return (
@@ -256,47 +302,6 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
       </div>
     );
   }
-
-  // Function to get the appropriate icon for a device ID
-  const getDeviceIcon = (deviceId: string) => {
-    if (deviceId.includes('iphone') || 
-        deviceId.includes('samsung-phone') || 
-        deviceId.includes('pixel') ||
-        deviceId.includes('galaxy-s') ||
-        deviceId.includes('note')) {
-      return <Smartphone className="size-4" />;
-    } else if (deviceId.includes('ipad') || 
-               deviceId.includes('galaxy-tab') ||
-               deviceId.includes('tablet')) {
-      return <Tablet className="size-4" />;
-    } else if (deviceId.includes('macbook') ||
-               deviceId.includes('galaxy-book') ||
-               deviceId.includes('laptop')) {
-      return <Laptop className="size-4" />;
-    } else {
-      return <Monitor className="size-4" />;
-    }
-  };
-
-  // Function to determine device aspect ratio and styling
-  const getDeviceStyle = (deviceId: string) => {
-    if (deviceId.includes('iphone') || deviceId.includes('samsung-phone') || deviceId.includes('pixel')) {
-      return {
-        containerClass: "aspect-[9/16] max-h-96", // Mobile aspect ratio
-        iframeClass: "w-full h-full"
-      };
-    } else if (deviceId.includes('ipad') || deviceId.includes('tablet')) {
-      return {
-        containerClass: "aspect-[4/3] max-h-80", // Tablet aspect ratio
-        iframeClass: "w-full h-full"
-      };
-    } else {
-      return {
-        containerClass: "aspect-video max-h-64", // Desktop aspect ratio (16:9)
-        iframeClass: "w-full h-full"
-      };
-    }
-  };
 
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
@@ -329,7 +334,7 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
         <CardContent>
           {emailHtml ? (
             <>
-              {/* Single preview if no devices selected or only 1 device */}
+              {/* Single preview if no devices selected */}
               {selectedDevices.length === 0 && (
                 <div className="border rounded-lg overflow-hidden bg-white">
                   <iframe
@@ -340,38 +345,28 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
                   />
                 </div>
               )}
-              
-              {/* Device previews if devices are selected */}
+
+              {/* Multi-device previews */}
               {selectedDevices.length > 0 && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <div className="flex flex-wrap justify-center gap-8">
                   {selectedDevices.map((deviceId) => {
                     const deviceStyle = getDeviceStyle(deviceId);
-                    
+
                     return (
                       <div key={deviceId} className="flex flex-col items-center">
                         <div className="flex items-center justify-center gap-2 mb-3 text-sm font-medium text-gray-700">
                           {getDeviceIcon(deviceId)}
                           <span className="text-xs">
-                            {deviceId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                            {deviceId.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
                           </span>
                         </div>
-                        <div className={`relative ${deviceStyle.containerClass} w-full flex items-center justify-center bg-slate-100`}>
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <div className="w-full h-full overflow-hidden rounded-xl bg-white border-2 border-gray-200 shadow-sm">
-                              <iframe
-                                srcDoc={emailHtml}
-                                title={`Email preview on ${deviceId}`}
-                                sandbox="allow-same-origin allow-scripts"
-                                style={{
-                                  width: '100%',
-                                  height: '100%',
-                                  border: '0',
-                                  transform: 'scale(1)',
-                                  transformOrigin: 'top left'
-                                }}
-                              />
-                            </div>
-                          </div>
+                        <div className={deviceStyle.containerClass}>
+                          <iframe
+                            srcDoc={emailHtml}
+                            title={`Email preview on ${deviceId}`}
+                            sandbox="allow-same-origin allow-scripts"
+                            className={deviceStyle.iframeClass}
+                          />
                         </div>
                       </div>
                     );
