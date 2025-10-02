@@ -4,7 +4,7 @@ import { getDb } from '@/db';
 import { payment } from '@/db/schema';
 import { PaymentTypes, type PaymentStatus } from '@/payment/types';
 import { userActionClient } from '@/lib/safe-action';
-import { and, eq, gte, or } from 'drizzle-orm';
+import { and, eq, gte, gt, isNull, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 const checkUserPaymentStatusSchema = z.object({
@@ -20,7 +20,7 @@ export const checkUserPaymentStatusAction = userActionClient
     try {
       const db = await getDb();
       
-      // Check for active subscriptions (recurring)
+      // Check for active subscriptions (recurring) - including temporary status issues
       const activeSubscriptions = await db
         .select()
         .from(payment)
@@ -28,17 +28,33 @@ export const checkUserPaymentStatusAction = userActionClient
           and(
             eq(payment.userId, userId),
             eq(payment.type, PaymentTypes.SUBSCRIPTION),
+            eq(payment.paid, true), // Ensure the payment was completed
             or(
               eq(payment.status, 'active'),
-              and(
-                eq(payment.status, 'trialing'),
-                // Trial is still valid if end date is in the future
-                payment.trialEnd ? gte(payment.trialEnd, new Date()) : undefined
-              )
+              eq(payment.status, 'trialing'),
+              // Include subscriptions that may have temporary status issues but are still in period
+              eq(payment.status, 'past_due'),
+              eq(payment.status, 'unpaid')
             )
           )
-        )
-        .limit(1);
+        );
+      
+      // Check if any of these active subscriptions are still valid based on period
+      const validActiveSubscriptions = activeSubscriptions.some(sub => {
+        if (sub.status === 'active' || sub.status === 'trialing') {
+          return true;
+        }
+        
+        // For temporary status issues, check if period is still valid
+        if (sub.periodEnd) {
+          const periodEnd = new Date(sub.periodEnd);
+          const now = new Date();
+          return periodEnd > now;
+        } else {
+          // If no period end set but paid, assume ongoing
+          return true;
+        }
+      });
       
       // Check for completed one-time payments (lifetime purchases)
       const completedOneTimePayments = await db
@@ -50,36 +66,15 @@ export const checkUserPaymentStatusAction = userActionClient
             eq(payment.type, PaymentTypes.ONE_TIME),
             eq(payment.status, 'completed')
           )
-        )
-        .limit(1);
+        );
       
-      // Check for paid subscriptions (in case status is not 'active' but paid is true)
-      const paidSubscriptions = await db
-        .select()
-        .from(payment)
-        .where(
-          and(
-            eq(payment.userId, userId),
-            eq(payment.paid, true),
-            eq(payment.type, PaymentTypes.SUBSCRIPTION)
-          )
-        )
-        .limit(1);
-      
-      // User has paid if they have:
-      // 1. An active subscription, OR
-      // 2. A trialing subscription that's still valid, OR
-      // 3. A completed one-time payment (lifetime), OR
-      // 4. Any paid subscription record
-      const hasPaid = 
-        activeSubscriptions.length > 0 || 
-        completedOneTimePayments.length > 0 ||
-        paidSubscriptions.length > 0;
+      // Determine if user has paid access
+      const hasPaid = validActiveSubscriptions || completedOneTimePayments.length > 0;
       
       console.log(`checkUserPaymentStatusAction for userId: ${userId}`, {
-        activeSubscriptions: activeSubscriptions.length,
+        validActiveSubscriptions: validActiveSubscriptions,
         completedOneTimePayments: completedOneTimePayments.length,
-        paidSubscriptions: paidSubscriptions.length,
+        totalActiveSubscriptions: activeSubscriptions.length,
         hasPaid
       });
       

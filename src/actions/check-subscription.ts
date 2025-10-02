@@ -15,7 +15,7 @@ const checkSubscriptionSchema = z.object({
  */
 export const checkSubscriptionAction = userActionClient
   .schema(checkSubscriptionSchema)
-  .action(async ({ parsedInput: { userId } }) {
+  .action(async ({ parsedInput: { userId } }) => {
     try {
       const db = await getDb();
       
@@ -32,23 +32,41 @@ export const checkSubscriptionAction = userActionClient
                 eq(payment.type, 'one_time'),
                 eq(payment.status, 'completed')
               ),
-              // Check for active subscriptions that haven't expired
+              // Check for active subscriptions that haven't expired (improved logic)
               and(
                 eq(payment.type, 'subscription'),
-                eq(payment.status, 'active'),
+                eq(payment.paid, true), // Ensure payment was completed
                 or(
-                  // Either period hasn't ended yet
-                  gt(payment.periodEnd, new Date()),
-                  // Or period end is null (ongoing subscription)
-                  isNull(payment.periodEnd)
+                  // Status is active or trialing
+                  eq(payment.status, 'active'),
+                  eq(payment.status, 'trialing'),
+                  // Include subscriptions with temporary status issues but still in period
+                  eq(payment.status, 'past_due'),
+                  eq(payment.status, 'unpaid')
                 )
               )
             )
           )
         );
 
-      // If we found any active subscriptions or lifetime purchases, user has premium access
-      const hasActiveSubscription = subscriptionRecords.length > 0;
+      // Check if any subscription records are still valid
+      const validSubscriptions = subscriptionRecords.some(record => {
+        if (record.type === 'one_time') {
+          return true; // One-time purchases are always valid once completed
+        }
+        
+        // For subscriptions, check if still in valid period
+        if (record.periodEnd) {
+          const periodEnd = new Date(record.periodEnd);
+          const now = new Date();
+          return periodEnd > now;
+        } else {
+          // If no period end set but paid, assume ongoing
+          return true;
+        }
+      });
+      
+      const hasActiveSubscription = validSubscriptions;
       
       console.log('Check subscription for user:', userId, 'result:', hasActiveSubscription);
 

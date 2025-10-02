@@ -9,7 +9,7 @@ import {
   PaymentTypes,
   type PlanInterval,
 } from '@/payment/types';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, gt, isNull, or } from 'drizzle-orm';
 import { z } from 'zod';
 
 // Input schema
@@ -21,7 +21,7 @@ const schema = z.object({
  * Get active subscription data
  *
  * If the user has multiple subscriptions,
- * it returns the most recent active or trialing one
+ * it returns the most recent active one based on proper criteria
  */
 export const getActiveSubscriptionAction = userActionClient
   .schema(schema)
@@ -44,10 +44,26 @@ export const getActiveSubscriptionAction = userActionClient
         )
         .orderBy(desc(payment.createdAt));
 
-      // Find the most recent active or trialing subscription
-      const activeSubscription = subscriptionPayments.find(
-        (sub) => sub.status === 'active' || sub.status === 'trialing'
-      );
+      // Find the most recent active subscription based on multiple criteria:
+      // 1. Status is 'active' or 'trialing'
+      // 2. Status is 'past_due' but period hasn't ended yet
+      // 3. Status is 'unpaid' but period hasn't ended yet (temporary issue)
+      const activeSubscription = subscriptionPayments.find((sub) => {
+        // Check if status is active or trialing
+        if (sub.status === 'active' || sub.status === 'trialing') {
+          return true;
+        }
+        
+        // Check if subscription should still be active based on period
+        if (sub.periodEnd) {
+          const periodEnd = new Date(sub.periodEnd);
+          const now = new Date();
+          return periodEnd > now && sub.paid === true;
+        } else {
+          // If no period end is set but it's paid, assume it's ongoing
+          return sub.paid === true;
+        }
+      });
 
       if (activeSubscription) {
         console.log('find active subscription for userId:', userId);

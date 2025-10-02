@@ -27,6 +27,7 @@ export async function checkPremiumAccess(userId: string): Promise<boolean> {
         priceId: payment.priceId,
         type: payment.type,
         status: payment.status,
+        paid: payment.paid,
         periodEnd: payment.periodEnd,
         cancelAtPeriodEnd: payment.cancelAtPeriodEnd,
       })
@@ -40,12 +41,17 @@ export async function checkPremiumAccess(userId: string): Promise<boolean> {
               eq(payment.type, PaymentTypes.ONE_TIME),
               eq(payment.status, 'completed')
             ),
-            // Check for active subscriptions that haven't expired
+            // Check for paid subscriptions that are still valid
             and(
               eq(payment.type, PaymentTypes.SUBSCRIPTION),
-              eq(payment.status, 'active'),
+              eq(payment.paid, true), // Ensure payment was completed
               or(
-                // Either period hasn't ended yet
+                // Status is one of the active-like statuses
+                eq(payment.status, 'active'),
+                eq(payment.status, 'trialing'),
+                eq(payment.status, 'past_due'),
+                eq(payment.status, 'unpaid'),
+                // Or period hasn't ended yet (handles transitions)
                 gt(payment.periodEnd, new Date()),
                 // Or period end is null (ongoing subscription)
                 isNull(payment.periodEnd)
@@ -68,16 +74,31 @@ export async function checkPremiumAccess(userId: string): Promise<boolean> {
       }
 
       // For subscriptions, check if they're active and not expired
-      if (p.type === PaymentTypes.SUBSCRIPTION && p.status === 'active') {
-        // If periodEnd is null, it's an ongoing subscription
-        if (!p.periodEnd) {
+      if (p.type === PaymentTypes.SUBSCRIPTION && p.paid === true) {
+        // If status is active or trialing, it's valid
+        if (p.status === 'active' || p.status === 'trialing') {
           return true;
         }
+        
+        // For temporary status issues, check if period is still valid
+        if (['past_due', 'unpaid'].includes(p.status)) {
+          if (!p.periodEnd) {
+            return true; // No end date and paid - assume ongoing
+          }
+          
+          const now = new Date();
+          const periodEnd = new Date(p.periodEnd);
+          return periodEnd > now; // Still in valid period
+        }
 
-        // Check if the subscription period hasn't ended yet
-        const now = new Date();
-        const periodEnd = new Date(p.periodEnd);
-        return periodEnd > now;
+        // Check if subscription period hasn't ended yet
+        if (p.periodEnd) {
+          const now = new Date();
+          const periodEnd = new Date(p.periodEnd);
+          return periodEnd > now;
+        }
+        
+        return true; // No end date and paid - ongoing subscription
       }
 
       return false;

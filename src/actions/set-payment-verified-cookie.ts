@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { userActionClient } from '@/lib/safe-action';
+import type { User } from '@/lib/auth-types';
 import { z } from 'zod';
 
 const setPaymentVerifiedCookieSchema = z.object({
@@ -13,8 +14,9 @@ const setPaymentVerifiedCookieSchema = z.object({
  */
 export const setPaymentVerifiedCookieAction = userActionClient
   .schema(setPaymentVerifiedCookieSchema)
-  .action(async ({ parsedInput: { verified } }) => {
+  .action(async ({ ctx, parsedInput: { verified } }) => {
     try {
+      const currentUser = (ctx as { user: User }).user;
       const cookieStore = await cookies();
       
       if (verified) {
@@ -22,10 +24,21 @@ export const setPaymentVerifiedCookieAction = userActionClient
           httpOnly: true,
           secure: process.env.NODE_ENV === 'production',
           maxAge: 60 * 60 * 24 * 7, // 1 week
+          sameSite: 'strict',
+          path: '/',
+        });
+        
+        // Also set the user ID to ensure cookie belongs to the current user
+        cookieStore.set('payment_verified_user_id', currentUser.id, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          maxAge: 60 * 60 * 24 * 7, // 1 week
+          sameSite: 'strict',
           path: '/',
         });
       } else {
         cookieStore.delete('payment_verified');
+        cookieStore.delete('payment_verified_user_id');
       }
 
       return {

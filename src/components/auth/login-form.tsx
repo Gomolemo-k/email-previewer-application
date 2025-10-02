@@ -156,6 +156,10 @@ export const LoginForm = ({
               
               if (result?.hasPaid) {
                 // User has an active subscription, redirect to dashboard
+                // Set payment verification since we just confirmed it
+                document.cookie = 'payment_verified=true; path=/; max-age=3600; secure; samesite=strict';
+                document.cookie = `payment_verified_user_id=${ctx.data?.user?.id}; path=/; max-age=3600; secure; samesite=strict`;
+                
                 window.location.href = '/dashboard';
               } else {
                 // User doesn't have an active subscription, redirect to landing page

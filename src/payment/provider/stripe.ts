@@ -431,21 +431,28 @@ export class StripeProvider implements PaymentProvider {
       const eventType = event.type;
       console.log(`handle webhook event, type: ${eventType}`);
 
+      // Log event data for debugging
+      console.log(`Processing event ID: ${event.id}, type: ${eventType}`);
+
       // Handle subscription events
       if (eventType.startsWith('customer.subscription.')) {
         const stripeSubscription = event.data.object as Stripe.Subscription;
+        console.log(`Processing subscription event: ${eventType}, subscription ID: ${stripeSubscription.id}`);
 
         // Process based on subscription status and event type
         switch (eventType) {
           case 'customer.subscription.created': {
+            console.log('Processing customer.subscription.created event');
             await this.onCreateSubscription(stripeSubscription);
             break;
           }
           case 'customer.subscription.updated': {
+            console.log('Processing customer.subscription.updated event');
             await this.onUpdateSubscription(stripeSubscription);
             break;
           }
           case 'customer.subscription.deleted': {
+            console.log('Processing customer.subscription.deleted event');
             await this.onDeleteSubscription(stripeSubscription);
             break;
           }
@@ -455,6 +462,7 @@ export class StripeProvider implements PaymentProvider {
         switch (eventType) {
           case 'invoice.paid': {
             const invoice = event.data.object as Stripe.Invoice;
+            console.log(`Processing invoice.paid event, invoice ID: ${invoice.id}, subscription ID: ${invoice.subscription}`);
             await this.onInvoicePaid(invoice);
             break;
           }
@@ -463,11 +471,14 @@ export class StripeProvider implements PaymentProvider {
         // Handle checkout events
         if (eventType === 'checkout.session.completed') {
           const session = event.data.object as Stripe.Checkout.Session;
+          console.log(`Processing checkout.session.completed event, session ID: ${session.id}, customer: ${session.customer}`);
           await this.onCheckoutCompleted(session);
         }
       }
     } catch (error) {
       console.error('handle webhook event error:', error);
+      console.error('Webhook signature:', signature);
+      console.error('Webhook payload:', payload.substring(0, 200) + '...'); // Log first 200 chars of payload
       throw new Error('Failed to handle webhook event');
     }
   }
@@ -784,7 +795,7 @@ export class StripeProvider implements PaymentProvider {
       userId: paymentRecord.userId,
       amount: Number.parseInt(credits),
       type: CREDIT_TRANSACTION_TYPE.PURCHASE_PACKAGE,
-      description: `+${credits} credits for package ${packageId} ($${amount.toLocaleString()})`,
+      description: `+${credits} credits for package ${packageId} (${amount.toLocaleString()})`,
       paymentId: invoice.id,
       expireDays: creditPackage.expireDays,
     });
