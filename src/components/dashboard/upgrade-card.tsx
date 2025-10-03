@@ -31,22 +31,17 @@ export function UpgradeCard() {
     setMounted(true);
   }, []);
 
-  // Check if the user has a paid plan (Pro or Lifetime)
-  // A user is considered to have a paid plan if:
-  // 1. They have a lifetime plan (isLifetime = true), or
-  // 2. They have a subscription to a non-free plan (isFree = false)
-  const hasPaidPlan = paymentData?.currentPlan && (
-    paymentData.currentPlan.isLifetime || 
-    (!paymentData.currentPlan.isFree && paymentData.subscription)
-  );
+  // Don't show the upgrade card if the user has a lifetime membership or a subscription
+  const isMember =
+    paymentData?.currentPlan?.isLifetime || !!paymentData?.subscription;
 
   // Ensure the upgrade card is only shown when the data is loaded
   if (!mounted || isLoading || !paymentData) {
     return null;
   }
 
-  // If the user has a paid plan, don't show the upgrade card
-  if (hasPaidPlan) {
+  // If the user is a member, don't show the upgrade card
+  if (isMember) {
     return null;
   }
 
@@ -60,10 +55,8 @@ export function UpgradeCard() {
         <CardDescription>{t('description')}</CardDescription>
       </CardHeader>
       <CardContent>
-        <Button className="cursor-pointer w-full shadow-none" size="sm" asChild>
-          <LocaleLink href={`${Routes.SettingsBilling}?callback=${Routes.Dashboard}`}>
-            {t('button')}
-          </LocaleLink>
+        <Button className="cursor-pointer w-full shadow-none" size="sm">
+          <LocaleLink href={Routes.SettingsBilling}>{t('button')}</LocaleLink>
         </Button>
       </CardContent>
     </Card>
