@@ -147,30 +147,30 @@ export const LoginForm = ({
           // console.log("login, success:", ctx.data);
           // setSuccess("Login successful");
           // If no callbackUrl was provided, we need to determine where to redirect the user
-          if (!callbackUrl || callbackUrl === defaultCallbackUrl) {
-            // Check if the user has an active subscription
-            try {
-              // Fetch the user's subscription status using the session
-              const response = await fetch('/api/check-payment-status');
-              const result = await response.json();
-              
-              if (result?.hasPaid) {
-                // User has an active subscription, redirect to dashboard
-                // Set payment verification since we just confirmed it
-                document.cookie = 'payment_verified=true; path=/; max-age=3600; secure; samesite=strict';
-                document.cookie = `payment_verified_user_id=${ctx.data?.user?.id}; path=/; max-age=3600; secure; samesite=strict`;
-                
-                window.location.href = '/dashboard';
-              } else {
-                // User doesn't have an active subscription, redirect to landing page
-                window.location.href = '/';
+              if (!callbackUrl || callbackUrl === defaultCallbackUrl) {
+                // Check if the user has an active subscription
+                try {
+                  // Fetch the user's subscription status using the session
+                  const response = await fetch('/api/check-payment-status');
+                  const result = await response.json();
+                  
+                  if (result?.hasPaid) {
+                    // User has an active subscription, redirect to dashboard
+                    // Set payment verification since we just confirmed it
+                    document.cookie = 'payment_verified=true; path=/; max-age=3600; secure; samesite=strict';
+                    document.cookie = `payment_verified_user_id=${ctx.data?.user?.id}; path=/; max-age=3600; secure; samesite=strict`;
+                    
+                    window.location.href = '/dashboard';
+                  } else {
+                    // User doesn't have an active subscription, redirect to landing page
+                    window.location.href = '/landing';
+                  }
+                } catch (error) {
+                  console.error('Error checking subscription status:', error);
+                  // Fallback to dashboard if there's an error
+                  window.location.href = '/dashboard';
+                }
               }
-            } catch (error) {
-              console.error('Error checking subscription status:', error);
-              // Fallback to dashboard if there's an error
-              window.location.href = '/dashboard';
-            }
-          }
           // If a callbackUrl was provided, the auth client will handle the redirect automatically
         },
         onError: (ctx) => {
