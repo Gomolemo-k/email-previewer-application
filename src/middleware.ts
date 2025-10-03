@@ -77,18 +77,36 @@ export default async function middleware(req: NextRequest) {
   // If the route can not be accessed by logged in users, redirect if the user is logged in
   if (isLoggedIn) {
     const isNotAllowedRoute = routesNotAllowedByLoggedInUsers.some((route) =>
-      new RegExp(`^${route}$`).test(pathnameWithoutLocale)
+      new RegExp(`^${route}`).test(pathnameWithoutLocale)
     );
     if (isNotAllowedRoute) {
+      // Check if the user has an active subscription to determine where to redirect
+      let redirectPath = DEFAULT_LOGIN_REDIRECT;
+      if (session?.user?.id) {
+        try {
+          // Import the subscription check action
+          const { checkSubscriptionAction } = await import('@/actions/check-subscription');
+          const result = await checkSubscriptionAction({ userId: session.user.id });
+          
+          if (result.success && result.hasActiveSubscription) {
+            redirectPath = Routes.Dashboard;
+          }
+        } catch (error) {
+          console.error('Error checking subscription status for redirect:', error);
+          // If there's an error, default to the configured redirect
+          redirectPath = DEFAULT_LOGIN_REDIRECT;
+        }
+      }
       console.log(
-        '<< middleware end, not allowed route, already logged in, redirecting to dashboard'
+        '<< middleware end, not allowed route, already logged in, redirecting to',
+        redirectPath
       );
-      return NextResponse.redirect(new URL(DEFAULT_LOGIN_REDIRECT, nextUrl));
+      return NextResponse.redirect(new URL(redirectPath, nextUrl));
     }
   }
 
   const isProtectedRoute = protectedRoutes.some((route) =>
-    new RegExp(`^${route}$`).test(pathnameWithoutLocale)
+    new RegExp(`^${route}`).test(pathnameWithoutLocale)
   );
   // console.log('middleware, isProtectedRoute', isProtectedRoute);
 
