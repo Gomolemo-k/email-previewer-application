@@ -10,7 +10,10 @@ import { toast } from 'sonner';
 import { authClient } from '@/lib/auth-client';
 import FilterSection from '@/components/FilterSection';
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
-import { Monitor, Smartphone, Tablet, Laptop } from 'lucide-react';
+import { Monitor, Smartphone, Tablet, Laptop, RotateCcw } from 'lucide-react';
+import { useCurrentPlan } from '@/hooks/use-payment';
+import { Routes } from '@/routes';
+import Link from 'next/link';
 
 interface EmailFile {
   id: string;
@@ -117,16 +120,78 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
 
   const t = useTranslations('Dashboard.email-preview');
   const router = useRouter();
-
-  const [file, setFile] = useState<EmailFile | null>(null);
-  const [emailHtml, setEmailHtml] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
+  const [emailHtml, setEmailHtml] = useState<string | null>(null);
+  const [file, setFile] = useState<EmailFile | null>(null);
+  const [loading, setLoading] = useState(true);
   const [selectedEmails, setSelectedEmails] = useState<string[]>([fileId]);
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [availableEmails, setAvailableEmails] = useState<EmailFile[]>([]);
 
-  useEffect(() => { fetchFileData(); }, [fileId]);
+  // Get session to access user ID for payment check
+  useEffect(() => {
+    authClient.getSession().then(sessionData => {
+      setSession(sessionData);
+    });
+  }, []);
+
+  // Get user ID from session for payment hook
+  const userId = session?.data?.user?.id;
+  const { data: paymentData, isLoading: isPaymentLoading } = useCurrentPlan(userId);
+
+  // ✅ Simplified payment check: only Pro Monthly or Pro Yearly (no lifetime)
+  const hasPaidPlan = Boolean(
+    paymentData?.subscription?.status === 'active' &&
+    paymentData?.currentPlan &&
+    !paymentData.currentPlan.isFree
+  );
+
+  // Redirect to payment required page if user doesn't have a paid plan
+  useEffect(() => {
+    if (!isPaymentLoading && paymentData && !hasPaidPlan) {
+      router.push(Routes.PaymentRequired);
+    }
+  }, [paymentData, isPaymentLoading, hasPaidPlan, router]);
+
+  // Show loading state while checking payment status
+  if (isPaymentLoading) {
+    return (
+      <div className="flex flex-1 flex-col p-4 md:p-6">
+        <DashboardHeader breadcrumbs={[{ label: t('title'), isCurrentPage: true }]} />
+        <Card className="w-full mt-4">
+          <CardContent className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Redirect to payment required page if user doesn't have a paid plan
+  if (!hasPaidPlan) {
+    return (
+      <div className="flex flex-1 flex-col p-4 md:p-6">
+        <DashboardHeader breadcrumbs={[{ label: t('title'), isCurrentPage: true }]} />
+        <Card className="w-full mt-4">
+          <CardContent className="flex flex-col justify-center items-center h-64 gap-4">
+            <p className="text-muted-foreground">{t('payment-required')}</p>
+            <div className="flex gap-4">
+              <Button asChild>
+                <Link href={Routes.SettingsBilling}>Upgrade Now</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href={Routes.Dashboard}>Back to Dashboard</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  useEffect(() => {
+    fetchFileData();
+  }, [fileId]);
 
   const fetchFileData = async () => {
     try {
@@ -229,7 +294,6 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
   const formatDate = (date: Date) =>
     new Date(date).toLocaleDateString() + ' ' + new Date(date).toLocaleTimeString();
 
-  // Function to get the appropriate icon for a device ID
   const getDeviceIcon = (deviceId: string) => {
     if (deviceId.includes('iphone') || deviceId.includes('samsung-phone') || deviceId.includes('pixel') || deviceId.includes('galaxy-s') || deviceId.includes('note')) {
       return <Smartphone className="size-4" />;
@@ -242,35 +306,20 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
     }
   };
 
-  // ✅ Adjusted sizes for better layout balance
   const getDeviceStyle = (deviceId: string) => {
-    if (
-      deviceId.includes("iphone") ||
-      deviceId.includes("samsung-phone") ||
-      deviceId.includes("pixel") ||
-      deviceId.includes("galaxy-s") ||
-      deviceId.includes("note")
-    ) {
+    if (deviceId.includes("iphone") || deviceId.includes("samsung-phone") || deviceId.includes("pixel") || deviceId.includes("galaxy-s") || deviceId.includes("note")) {
       return {
-        containerClass:
-          // increased width and height for phones
-          "w-[380px] h-[720px] overflow-hidden rounded-lg border bg-white shadow",
+        containerClass: "w-[380px] h-[720px] overflow-hidden rounded-lg border bg-white shadow",
         iframeClass: "w-full h-full overflow-y-auto",
       };
-    } else if (
-      deviceId.includes("ipad") ||
-      deviceId.includes("galaxy-tab") ||
-      deviceId.includes("tablet")
-    ) {
+    } else if (deviceId.includes("ipad") || deviceId.includes("galaxy-tab") || deviceId.includes("tablet")) {
       return {
-        containerClass:
-          "w-[640px] h-[850px] overflow-hidden rounded-lg border bg-white shadow",
+        containerClass: "w-[640px] h-[850px] overflow-hidden rounded-lg border bg-white shadow",
         iframeClass: "w-full h-full overflow-y-auto",
       };
     } else {
       return {
-        containerClass:
-          "w-[960px] h-[600px] overflow-hidden rounded-lg border bg-white shadow",
+        containerClass: "w-[960px] h-[600px] overflow-hidden rounded-lg border bg-white shadow",
         iframeClass: "w-full h-full overflow-y-auto",
       };
     }
@@ -319,22 +368,33 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
 
       <Card className="w-full mt-4">
         <CardHeader>
-          <div>
-            <CardTitle>{file.filename}</CardTitle>
-            <CardDescription>
-              <div className="flex flex-wrap gap-4 mt-2 text-sm">
-                <span>{t('file-type')}: {file.fileType.toUpperCase()}</span>
-                <span>{t('file-size')}: {formatFileSize(file.fileSize)}</span>
-                <span>{t('upload-date')}: {formatDate(file.createdAt)}</span>
-              </div>
-            </CardDescription>
+          <div className="flex flex-row justify-between items-center">
+            <div>
+              <CardTitle>{file.filename}</CardTitle>
+              <CardDescription>
+                <div className="flex flex-wrap gap-4 mt-2 text-sm">
+                  <span>{t('file-type')}: {file.fileType.toUpperCase()}</span>
+                  <span>{t('file-size')}: {formatFileSize(file.fileSize)}</span>
+                  <span>{t('upload-date')}: {formatDate(file.createdAt)}</span>
+                </div>
+              </CardDescription>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={fetchFileData}
+              disabled={loading}
+              className="flex items-center gap-2"
+            >
+              <RotateCcw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+              {t('refresh')}
+            </Button>
           </div>
         </CardHeader>
 
         <CardContent>
           {emailHtml ? (
             <>
-              {/* Single preview if no devices selected */}
               {selectedDevices.length === 0 && (
                 <div className="border rounded-lg overflow-hidden bg-white">
                   <iframe
@@ -346,7 +406,6 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
                 </div>
               )}
 
-              {/* Multi-device previews */}
               {selectedDevices.length > 0 && (
                 <div className="flex flex-wrap justify-center gap-8">
                   {selectedDevices.map((deviceId) => {
