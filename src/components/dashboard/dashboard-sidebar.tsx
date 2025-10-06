@@ -44,6 +44,16 @@ export function DashboardSidebar({
     if (link.authorizeOnly) {
       return link.authorizeOnly.includes(currentUser?.role || '');
     }
+    // Filter out dashboard and email-preview links if user doesn't have a paid plan
+    if (link.href === Routes.Dashboard || 
+        link.href === `${Routes.Dashboard}#email-preview`) {
+      // Check if the user has a paid plan
+      const hasPaidPlan = paymentData?.currentPlan && (
+        paymentData.currentPlan.isLifetime || 
+        (!paymentData.currentPlan.isFree && paymentData.subscription)
+      );
+      return hasPaidPlan || false; // Return false if they don't have a paid plan
+    }
     return true;
   });
 
