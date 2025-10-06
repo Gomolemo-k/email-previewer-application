@@ -123,8 +123,17 @@
         "select-emails": "Select Emails",
         "select-emails-placeholder": "Select email files to preview",
         "select-resolutions": "Select Resolutions",
-        "select-resolutions-placeholder": "Select screen resolutions to preview"
+        "select-resolutions-placeholder": "Select screen resolutions to preview",
+        "payment-required": "Payment is required to access email preview",
+        "refresh": "Refresh"
       },
+    "paymentRequired": {
+      "title": "Payment Required",
+      "description": "You need to upgrade your account to access this feature",
+      "message": "This feature requires a paid subscription to access. Please upgrade your account to continue.",
+      "upgradeNow": "Upgrade Now",
+      "backToDashboard": "Back to Dashboard"
+    },
     "landing": {
       "title": "Welcome",
       "welcomeTitle": "Welcome to Email Previewer",

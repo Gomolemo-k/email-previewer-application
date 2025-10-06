@@ -375,6 +375,13 @@
         }
       }
     },
+    "paymentRequired": {
+      "title": "需要支付",
+      "description": "您需要升级账户才能访问此功能",
+      "message": "此功能需要付费订阅才能访问。请升级您的账户以继续。",
+      "upgradeNow": "立即升级",
+      "backToDashboard": "返回仪表盘"
+    },
     "upgrade": {
       "title": "升级",
       "description": "升级到Pro以获取所有功能",
