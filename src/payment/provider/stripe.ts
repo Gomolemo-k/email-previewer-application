@@ -927,6 +927,9 @@ export class StripeProvider implements PaymentProvider {
   ): Promise<void> {
     console.log('>> Handle subscription deletion:', stripeSubscription.id);
 
+    // Get cancellation reason from subscription metadata or default to 'canceled_by_user'
+    const cancelReason = stripeSubscription.metadata?.cancelReason || 'canceled_by_user';
+    
     const db = await getDb();
     const result = await db
       .update(payment)
@@ -934,6 +937,8 @@ export class StripeProvider implements PaymentProvider {
         status: this.mapSubscriptionStatusToPaymentStatus(
           stripeSubscription.status
         ),
+        canceledAt: new Date(), // Track when the subscription was actually canceled
+        cancelReason, // Store the reason for cancellation
         updatedAt: new Date(),
       })
       .where(eq(payment.subscriptionId, stripeSubscription.id))

@@ -9,7 +9,7 @@ import {
   PaymentTypes,
   type PlanInterval,
 } from '@/payment/types';
-import { and, desc, eq } from 'drizzle-orm';
+import { and, desc, eq, isNull } from 'drizzle-orm';
 import { z } from 'zod';
 
 // Input schema
@@ -39,14 +39,15 @@ export const getActiveSubscriptionAction = userActionClient
           and(
             eq(payment.userId, userId),
             eq(payment.type, PaymentTypes.SUBSCRIPTION),
-            eq(payment.paid, true)
+            eq(payment.paid, true),
+            isNull(payment.canceledAt) // Only include subscriptions that haven't been fully canceled
           )
         )
         .orderBy(desc(payment.createdAt));
 
-      // Find the most recent active or trialing subscription
+      // Find the most recent active or trialing subscription (excluding fully canceled ones)
       const activeSubscription = subscriptionPayments.find(
-        (sub) => sub.status === 'active' || sub.status === 'trialing'
+        (sub) => sub.status === 'active' || sub.status === 'trialing' || sub.cancelAtPeriodEnd
       );
 
       if (activeSubscription) {

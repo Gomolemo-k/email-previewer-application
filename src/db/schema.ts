@@ -63,36 +63,38 @@ export const verification = pgTable("verification", {
 	updatedAt: timestamp('updated_at')
 });
 
-export const payment = pgTable("payment", {
-	id: text("id").primaryKey(),
-	priceId: text('price_id').notNull(),
-	type: text('type').notNull(),
-	interval: text('interval'),
-	userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
-	customerId: text('customer_id').notNull(),
-	subscriptionId: text('subscription_id'),
-	sessionId: text('session_id'),
-	invoiceId: text('invoice_id').unique(), // unique constraint for avoiding duplicate processing
-	status: text('status').notNull(),
-	paid: boolean('paid').notNull().default(false), // indicates whether payment is completed (set in invoice.paid event)
-	periodStart: timestamp('period_start'),
-	periodEnd: timestamp('period_end'),
-	cancelAtPeriodEnd: boolean('cancel_at_period_end'),
-	trialStart: timestamp('trial_start'),
-	trialEnd: timestamp('trial_end'),
-	createdAt: timestamp('created_at').notNull().defaultNow(),
-	updatedAt: timestamp('updated_at').notNull().defaultNow(),
-}, (table) => ({
-	paymentTypeIdx: index("payment_type_idx").on(table.type),
-	paymentPriceIdIdx: index("payment_price_id_idx").on(table.priceId),
-	paymentUserIdIdx: index("payment_user_id_idx").on(table.userId),
-	paymentCustomerIdIdx: index("payment_customer_id_idx").on(table.customerId),
-	paymentStatusIdx: index("payment_status_idx").on(table.status),
-	paymentPaidIdx: index("payment_paid_idx").on(table.paid),
-	paymentSubscriptionIdIdx: index("payment_subscription_id_idx").on(table.subscriptionId),
-	paymentSessionIdIdx: index("payment_session_id_idx").on(table.sessionId),
-	paymentInvoiceIdIdx: index("payment_invoice_id_idx").on(table.invoiceId),
-}));
+	export const payment = pgTable("payment", {
+		id: text("id").primaryKey(),
+		priceId: text('price_id').notNull(),
+		type: text('type').notNull(),
+		interval: text('interval'),
+		userId: text('user_id').notNull().references(() => user.id, { onDelete: 'cascade' }),
+		customerId: text('customer_id').notNull(),
+		subscriptionId: text('subscription_id'),
+		sessionId: text('session_id'),
+		invoiceId: text('invoice_id').unique(), // unique constraint for avoiding duplicate processing
+		status: text('status').notNull(),
+		paid: boolean('paid').notNull().default(false), // indicates whether payment is completed (set in invoice.paid event)
+		periodStart: timestamp('period_start'),
+		periodEnd: timestamp('period_end'),
+		cancelAtPeriodEnd: boolean('cancel_at_period_end'),
+		canceledAt: timestamp('canceled_at'), // Timestamp when the subscription was actually canceled
+		cancelReason: text('cancel_reason'), // Reason for cancellation
+		trialStart: timestamp('trial_start'),
+		trialEnd: timestamp('trial_end'),
+		createdAt: timestamp('created_at').notNull().defaultNow(),
+		updatedAt: timestamp('updated_at').notNull().defaultNow(),
+	}, (table) => ({
+		paymentTypeIdx: index("payment_type_idx").on(table.type),
+		paymentPriceIdIdx: index("payment_price_id_idx").on(table.priceId),
+		paymentUserIdIdx: index("payment_user_id_idx").on(table.userId),
+		paymentCustomerIdIdx: index("payment_customer_id_idx").on(table.customerId),
+		paymentStatusIdx: index("payment_status_idx").on(table.status),
+		paymentPaidIdx: index("payment_paid_idx").on(table.paid),
+		paymentSubscriptionIdIdx: index("payment_subscription_id_idx").on(table.subscriptionId),
+		paymentSessionIdIdx: index("payment_session_id_idx").on(table.sessionId),
+		paymentInvoiceIdIdx: index("payment_invoice_id_idx").on(table.invoiceId),
+	}));
 
 export const userCredit = pgTable("user_credit", {
 	id: text("id").primaryKey(),

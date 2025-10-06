@@ -30,6 +30,7 @@ export async function checkPremiumAccess(userId: string): Promise<boolean> {
         paid: payment.paid,
         periodEnd: payment.periodEnd,
         cancelAtPeriodEnd: payment.cancelAtPeriodEnd,
+        canceledAt: payment.canceledAt, // Include cancellation date
       })
       .from(payment)
       .where(
@@ -55,6 +56,11 @@ export async function checkPremiumAccess(userId: string): Promise<boolean> {
                 gt(payment.periodEnd, new Date()),
                 // Or period end is null (ongoing subscription)
                 isNull(payment.periodEnd)
+              ),
+              // Exclude subscriptions that have been fully canceled
+              or(
+                isNull(payment.canceledAt), // Subscription not canceled
+                eq(payment.cancelAtPeriodEnd, true) // Cancelled at period end but still valid until end date
               )
             )
           )
@@ -75,6 +81,11 @@ export async function checkPremiumAccess(userId: string): Promise<boolean> {
 
       // For subscriptions, check if they're active and not expired
       if (p.type === PaymentTypes.SUBSCRIPTION && p.paid === true) {
+        // If subscription was fully canceled, it's not valid regardless of other conditions
+        if (p.canceledAt) {
+          return false;
+        }
+
         // If status is active or trialing, it's valid
         if (p.status === 'active' || p.status === 'trialing') {
           return true;
@@ -92,6 +103,16 @@ export async function checkPremiumAccess(userId: string): Promise<boolean> {
         }
 
         // Check if subscription period hasn't ended yet
+        if (p.cancelAtPeriodEnd) {
+          // If subscription is set to cancel at period end, it's still valid until that date
+          if (p.periodEnd) {
+            const now = new Date();
+            const periodEnd = new Date(p.periodEnd);
+            return periodEnd > now;
+          }
+          return true; // No end date but set to cancel at period end
+        }
+        
         if (p.periodEnd) {
           const now = new Date();
           const periodEnd = new Date(p.periodEnd);

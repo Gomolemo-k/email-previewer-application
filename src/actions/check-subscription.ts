@@ -43,6 +43,11 @@ export const checkSubscriptionAction = userActionClient
                   // Include subscriptions with temporary status issues but still in period
                   eq(payment.status, 'past_due'),
                   eq(payment.status, 'unpaid')
+                ),
+                // Exclude subscriptions that have been fully canceled
+                or(
+                  isNull(payment.canceledAt), // Subscription not canceled
+                  eq(payment.cancelAtPeriodEnd, true) // Cancelled at period end but still valid until end date
                 )
               )
             )
@@ -55,13 +60,25 @@ export const checkSubscriptionAction = userActionClient
           return true; // One-time purchases are always valid once completed
         }
         
-        // For subscriptions, check if still in valid period
+        // For subscriptions, check if still in valid period and not fully canceled
+        if (record.canceledAt) {
+          // Subscription was fully canceled, so it's not valid regardless of period end
+          return false;
+        }
+
         if (record.periodEnd) {
           const periodEnd = new Date(record.periodEnd);
           const now = new Date();
+          
+          // If subscription is set to cancel at period end, it's still valid until that date
+          if (record.cancelAtPeriodEnd) {
+            return periodEnd > now;
+          }
+          
+          // Otherwise, check if period hasn't ended yet
           return periodEnd > now;
         } else {
-          // If no period end set but paid, assume ongoing
+          // If no period end set but paid, assume ongoing (unless fully canceled)
           return true;
         }
       });
