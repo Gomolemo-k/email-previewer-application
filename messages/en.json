@@ -136,8 +136,8 @@
       },
     "paymentRequired": {
       "title": "Payment Required",
-      "description": "You need to upgrade your account to access this feature",
-      "message": "This feature requires a paid subscription to access. Please upgrade your account to continue.",
+      "description": "This feature is available only on upgraded plans.",
+      "message": "To unlock this feature, please upgrade your account to a paid subscription.",
       "upgradeNow": "Upgrade Now",
       "backToDashboard": "Back to Dashboard"
     },
