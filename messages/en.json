@@ -125,7 +125,14 @@
         "select-resolutions": "Select Resolutions",
         "select-resolutions-placeholder": "Select screen resolutions to preview",
         "payment-required": "Payment is required to access email preview",
-        "refresh": "Refresh"
+        "refresh": "Refresh",
+        "subscription-required": {
+          "title": "Subscription Required",
+          "description": "You need a subscription to access this feature",
+          "message": "This feature requires a paid subscription to access. Please upgrade your account to continue.",
+          "upgradeNow": "Upgrade Now",
+          "backToDashboard": "Back to Dashboard"
+        }
       },
     "paymentRequired": {
       "title": "Payment Required",
