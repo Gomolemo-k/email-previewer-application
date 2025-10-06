@@ -308,7 +308,7 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
             <p className="text-muted-foreground">{t('payment-required')}</p>
             <div className="flex gap-4">
               <Button asChild>
-                <Link href={Routes.SettingsBilling}>Upgrade Now</Link>
+                <Link href={Routes.Pricing}>Upgrade Now</Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href={Routes.Dashboard}>Back to Dashboard</Link>
