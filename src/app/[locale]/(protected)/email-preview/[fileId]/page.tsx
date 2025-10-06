@@ -15,6 +15,8 @@ import { useCurrentPlan } from '@/hooks/use-payment';
 import { Routes } from '@/routes';
 import Link from 'next/link';
 
+// --------------------- Utility functions ---------------------
+
 interface EmailFile {
   id: string;
   filename: string;
@@ -30,7 +32,6 @@ interface EmailHeaders {
   date?: string;
 }
 
-// Parse headers + body from plain email text
 const parseEml = (content: string) => {
   const headers: EmailHeaders = { from: '', to: '', subject: '' };
   let body = content;
@@ -51,14 +52,12 @@ const parseEml = (content: string) => {
   return { headers, body };
 };
 
-// Parse .mbox/.mbx (use first email block)
 const parseMbox = (content: string) => {
   const emails = content.split(/\n(?=From )/);
   const firstEmail = emails[0] || content;
   return parseEml(firstEmail);
 };
 
-// For HTML files - wrap the content directly without trying to parse headers
 const wrapHtmlContent = (content: string) => `
   <!DOCTYPE html>
   <html>
@@ -77,7 +76,6 @@ const wrapHtmlContent = (content: string) => `
   </html>
 `;
 
-// Wrap plain text into HTML
 const wrapTextInHtml = (text: string) => `
   <!DOCTYPE html>
   <html>
@@ -97,7 +95,6 @@ const wrapTextInHtml = (text: string) => `
   </html>
 `;
 
-// Add headers into HTML preview
 const injectHeaders = (htmlBody: string, headers: EmailHeaders) => {
   const headerHtml = `
     <div style="background:#f8f9fa;padding:15px;border-radius:8px 8px 0 0;border-bottom:1px solid #dee2e6;font-size:14px;">
@@ -107,12 +104,13 @@ const injectHeaders = (htmlBody: string, headers: EmailHeaders) => {
       ${headers.date ? `<p><strong>Date:</strong> ${headers.date}</p>` : ''}
     </div>
   `;
-
   if (htmlBody.includes('<body')) {
     return htmlBody.replace(/<body[^>]*>/i, match => `${match}${headerHtml}`);
   }
   return headerHtml + htmlBody;
 };
+
+// --------------------- Component ---------------------
 
 export default function EmailPreviewPage({ params }: { params: Promise<{ fileId: string }> }) {
   const resolvedParams = use(params);
@@ -120,6 +118,8 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
 
   const t = useTranslations('Dashboard.email-preview');
   const router = useRouter();
+
+  // ---------- Hooks (must always be called) ----------
   const [session, setSession] = useState<any>(null);
   const [emailHtml, setEmailHtml] = useState<string | null>(null);
   const [file, setFile] = useState<EmailFile | null>(null);
@@ -128,70 +128,25 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
   const [selectedDevices, setSelectedDevices] = useState<string[]>([]);
   const [availableEmails, setAvailableEmails] = useState<EmailFile[]>([]);
 
-  // Get session to access user ID for payment check
   useEffect(() => {
-    authClient.getSession().then(sessionData => {
-      setSession(sessionData);
-    });
+    authClient.getSession().then(sessionData => setSession(sessionData));
   }, []);
 
-  // Get user ID from session for payment hook
   const userId = session?.data?.user?.id;
   const { data: paymentData, isLoading: isPaymentLoading } = useCurrentPlan(userId);
 
-  // ✅ Simplified payment check: only Pro Monthly or Pro Yearly (no lifetime)
   const hasPaidPlan = Boolean(
     paymentData?.subscription?.status === 'active' &&
     paymentData?.currentPlan &&
     !paymentData.currentPlan.isFree
   );
 
-  // Redirect to payment required page if user doesn't have a paid plan
+  // Always call hooks — even if they might redirect or not
   useEffect(() => {
     if (!isPaymentLoading && paymentData && !hasPaidPlan) {
       router.push(Routes.PaymentRequired);
     }
   }, [paymentData, isPaymentLoading, hasPaidPlan, router]);
-
-  // Show loading state while checking payment status
-  if (isPaymentLoading) {
-    return (
-      <div className="flex flex-1 flex-col p-4 md:p-6">
-        <DashboardHeader breadcrumbs={[{ label: t('title'), isCurrentPage: true }]} />
-        <Card className="w-full mt-4">
-          <CardContent className="flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  // Redirect to payment required page if user doesn't have a paid plan
-  if (!hasPaidPlan) {
-    return (
-      <div className="flex flex-1 flex-col p-4 md:p-6">
-        <DashboardHeader breadcrumbs={[{ label: t('title'), isCurrentPage: true }]} />
-        <Card className="w-full mt-4">
-          <CardContent className="flex flex-col justify-center items-center h-64 gap-4">
-            <p className="text-muted-foreground">{t('payment-required')}</p>
-            <div className="flex gap-4">
-              <Button asChild>
-                <Link href={Routes.SettingsBilling}>Upgrade Now</Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href={Routes.Dashboard}>Back to Dashboard</Link>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    );
-  }
-
-  useEffect(() => {
-    fetchFileData();
-  }, [fileId]);
 
   const fetchFileData = async () => {
     try {
@@ -280,6 +235,11 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
     }
   };
 
+  useEffect(() => {
+    fetchFileData();
+  }, [fileId]);
+
+  // ---------- Helper handlers ----------
   const handleEmailsChange = (emails: string[]) => setSelectedEmails(emails);
   const handleDevicesChange = (devices: string[]) => setSelectedDevices(devices);
 
@@ -325,6 +285,41 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
     }
   };
 
+  // ---------- Conditional rendering (safe now) ----------
+  if (isPaymentLoading) {
+    return (
+      <div className="flex flex-1 flex-col p-4 md:p-6">
+        <DashboardHeader breadcrumbs={[{ label: t('title'), isCurrentPage: true }]} />
+        <Card className="w-full mt-4">
+          <CardContent className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!hasPaidPlan) {
+    return (
+      <div className="flex flex-1 flex-col p-4 md:p-6">
+        <DashboardHeader breadcrumbs={[{ label: t('title'), isCurrentPage: true }]} />
+        <Card className="w-full mt-4">
+          <CardContent className="flex flex-col justify-center items-center h-64 gap-4">
+            <p className="text-muted-foreground">{t('payment-required')}</p>
+            <div className="flex gap-4">
+              <Button asChild>
+                <Link href={Routes.SettingsBilling}>Upgrade Now</Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href={Routes.Dashboard}>Back to Dashboard</Link>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex flex-1 flex-col p-4 md:p-6">
@@ -352,6 +347,7 @@ export default function EmailPreviewPage({ params }: { params: Promise<{ fileId:
     );
   }
 
+  // ---------- Main render ----------
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
       <DashboardHeader
