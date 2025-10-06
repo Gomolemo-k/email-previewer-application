@@ -126,7 +126,7 @@ export default async function middleware(req: NextRequest) {
     );
   }
 
-  // If user is logged in but trying to access dashboard without payment, redirect to landing
+  // For dashboard access, allow it but set payment verification cookie
   if (isLoggedIn && pathnameWithoutLocale === Routes.Dashboard) {
     // First check if there's a payment verification cookie
     const paymentVerifiedCookie = req.cookies.get('payment_verified');
@@ -163,19 +163,16 @@ export default async function middleware(req: NextRequest) {
             console.log('<< middleware end, payment verified via DB, setting cookie, allowing access to dashboard');
             return response;
           } else {
-            console.log('<< middleware end, user has not paid, redirecting to landing page');
-            return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
+            // User doesn't have paid subscription, but still allow access to dashboard
+            // Payment status will be handled on the client side for feature access
+            console.log('<< middleware end, user has not paid, but allowing access to dashboard');
           }
         } catch (error) {
-          // If there's an error checking payment status, be safe and redirect to landing
-          console.log('<< middleware end, error checking payment status, redirecting to landing page');
-          return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
+          console.log('<< middleware end, error checking payment status, but allowing access to dashboard');
         }
       }
     } else {
-      // If we can't verify the user, be safe and redirect to landing
-      console.log('<< middleware end, could not verify user, redirecting to landing page');
-      return NextResponse.redirect(new URL(Routes.Landing, nextUrl));
+      console.log('<< middleware end, could not verify user, but allowing access to dashboard');
     }
   }
 
