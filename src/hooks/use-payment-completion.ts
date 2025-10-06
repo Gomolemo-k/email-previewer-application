@@ -28,11 +28,15 @@ export function usePaymentCompletion(
       }
       console.log('>>> Check payment completion');
       const result = await checkPaymentCompletionAction({ sessionId });
+      
+      // Instead of throwing an error when the action fails, we treat it as "not paid yet"
+      // This prevents the query from going into an error state and allows polling to continue
       if (!result?.data?.success) {
-        console.log('<<< Check payment failed');
-        throw new Error(
-          result?.data?.error || 'Failed to check payment completion'
-        );
+        console.log('<<< Check payment failed, treating as not paid yet:', result?.data?.error);
+        // Don't throw an error, just return isPaid: false to continue polling
+        return {
+          isPaid: false,
+        };
       }
 
       const { isPaid } = result.data;
@@ -60,6 +64,9 @@ export function usePaymentCompletion(
     refetchIntervalInBackground: true,
     refetchOnWindowFocus: true,
     refetchOnReconnect: true,
+    // Retry configuration to prevent infinite retries on permanent errors
+    retry: 3,
+    retryDelay: 1000, // 1 second delay between retries
   });
   
   // Reset retry count when sessionId changes
