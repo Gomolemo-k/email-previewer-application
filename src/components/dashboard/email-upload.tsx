@@ -206,7 +206,11 @@ export function EmailUpload({ onUploadSuccess }: EmailUploadProps) {
                 {t('file-types')}
               </p>
             </div>
-            <Button variant="secondary" disabled={isUploading}>
+            <Button 
+              variant="default" 
+              disabled={isUploading}
+              className="bg-primary hover:bg-primary/90 text-primary-foreground shadow-md hover:shadow-lg transition-shadow"
+            >
               {isUploading ? t('uploading') : t('browse-files')}
             </Button>
             <p className="text-xs text-muted-foreground mt-2">
