@@ -56,7 +56,7 @@
       "description": "Upload your email files for preview.",
       "drag-and-drop": "Drag and drop your email files here",
       "drop-here": "Drop your email files here",
-      "browse-files": "Browse Files",
+      "browse-files": "Browse and Upload Files",
       "file-types": "Supports .eml, .msg, .mbox, .mbx, .html, .htm, .txt, .pst, .ost files",
       "max-file-size": "Maximum file size: 10MB",
       "uploading": "Uploading...",
