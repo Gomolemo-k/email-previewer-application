@@ -13,7 +13,6 @@ import LocaleSwitcher from '../layout/locale-switcher';
 import { ModeSwitcher } from '../layout/mode-switcher';
 import { ThemeSelector } from '../layout/theme-selector';
 import { UpgradeButton } from '../layout/upgrade-button';
-import TicketCreator from '../aidbase-ticket/aidbase-ticket';
 
 interface DashboardBreadcrumbItem {
   label: string;
@@ -73,8 +72,6 @@ export function DashboardHeader({
         {/* dashboard header actions on the right side */}
         <div className="ml-auto flex items-center gap-3 pl-4">
           {actions}
-
-          <TicketCreator />
           <UpgradeButton />
           <ModeSwitcher />
           <LocaleSwitcher />
