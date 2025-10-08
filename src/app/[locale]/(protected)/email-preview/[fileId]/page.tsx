@@ -14,6 +14,7 @@ import { Monitor, Smartphone, Tablet, Laptop, RotateCcw } from 'lucide-react';
 import { useCurrentPlan } from '@/hooks/use-payment';
 import { Routes } from '@/routes';
 import Link from 'next/link';
+import TicketCreator from '@/components/aidbase-ticket/aidbase-ticket';
 
 // --------------------- Utility functions ---------------------
 

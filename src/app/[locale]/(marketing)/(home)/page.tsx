@@ -8,6 +8,7 @@ import StatsSection from '@/components/blocks/stats/stats';
 import TestimonialsSection from '@/components/blocks/testimonials/testimonials';
 import CrispChat from '@/components/layout/crisp-chat';
 import { NewsletterCard } from '@/components/newsletter/newsletter-card';
+import TicketCreator from '@/components/aidbase-ticket/aidbase-ticket';
 import { constructMetadata } from '@/lib/metadata';
 import { getUrlWithLocale } from '@/lib/urls/urls';
 import type { Metadata } from 'next';
@@ -45,6 +46,12 @@ export default async function HomePage(props: HomePageProps) {
     <>
       <div className="flex flex-col">
         <HeroSection />
+
+        <div className="container mx-auto py-8 px-4">
+          <div className="flex justify-center">
+            <TicketCreator />
+          </div>
+        </div>
 
         <StatsSection />
 
