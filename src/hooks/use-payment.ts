@@ -1,5 +1,4 @@
 import { getActiveSubscriptionAction } from '@/actions/get-active-subscription';
-import { getLifetimeStatusAction } from '@/actions/get-lifetime-status';
 import { getAllPricePlans } from '@/lib/price-plan';
 import type { PricePlan, Subscription } from '@/payment/types';
 import { useQuery } from '@tanstack/react-query';
@@ -9,8 +8,6 @@ export const paymentKeys = {
   all: ['payment'] as const,
   subscription: (userId: string) =>
     [...paymentKeys.all, 'subscription', userId] as const,
-  lifetime: (userId: string) =>
-    [...paymentKeys.all, 'lifetime', userId] as const,
   currentPlan: (userId: string) =>
     [...paymentKeys.all, 'currentPlan', userId] as const,
 };
@@ -35,40 +32,13 @@ export function useActiveSubscription(userId: string | undefined) {
   });
 }
 
-// Hook to fetch lifetime status
-export function useLifetimeStatus(userId: string | undefined) {
-  return useQuery({
-    queryKey: paymentKeys.lifetime(userId || ''),
-    queryFn: async (): Promise<boolean> => {
-      if (!userId) {
-        throw new Error('User ID is required');
-      }
-      console.log('useLifetimeStatus start');
-      const result = await getLifetimeStatusAction({ userId });
-      if (!result?.data?.success) {
-        throw new Error(
-          result?.data?.error || 'Failed to fetch lifetime status'
-        );
-      }
-      console.log('useLifetimeStatus success');
-      return result.data.isLifetimeMember || false;
-    },
-    enabled: !!userId,
-  });
-}
-
-// Hook to get current plan based on subscription and lifetime status
+// Hook to get current plan based on subscription
 export function useCurrentPlan(userId: string | undefined) {
   const {
     data: subscription,
     isLoading: isLoadingSubscription,
     error: subscriptionError,
   } = useActiveSubscription(userId);
-  const {
-    data: isLifetimeMember,
-    isLoading: isLoadingLifetime,
-    error: lifetimeError,
-  } = useLifetimeStatus(userId);
 
   return useQuery({
     queryKey: paymentKeys.currentPlan(userId || ''),
@@ -77,23 +47,15 @@ export function useCurrentPlan(userId: string | undefined) {
       subscription: Subscription | null;
     }> => {
       const plans: PricePlan[] = getAllPricePlans();
-      const freePlan = plans.find((plan) => plan.isFree);
-      const lifetimePlan = plans.find((plan) => plan.isLifetime);
 
-      // If lifetime member, return lifetime plan
-      if (isLifetimeMember) {
-        console.log('useCurrentPlan, lifetimePlan');
-        return {
-          currentPlan: lifetimePlan || null,
-          subscription: null,
-        };
-      }
+      // Filter only Pro plans (monthly or yearly)
+      const proPlans = plans.filter((plan) => !plan.isFree && !plan.isLifetime);
 
       // If has active subscription, find the corresponding plan
       if (subscription) {
         console.log('useCurrentPlan, subscription');
         const plan =
-          plans.find((p) =>
+          proPlans.find((p) =>
             p.prices.find((price) => price.priceId === subscription.priceId)
           ) || null;
         return {
@@ -102,13 +64,13 @@ export function useCurrentPlan(userId: string | undefined) {
         };
       }
 
-      // Default to free plan
-      console.log('useCurrentPlan, freePlan');
+      // No subscription → return null
+      console.log('useCurrentPlan, no subscription');
       return {
-        currentPlan: freePlan || null,
+        currentPlan: null,
         subscription: null,
       };
     },
-    enabled: !!userId && !isLoadingSubscription && !isLoadingLifetime,
+    enabled: !!userId && !isLoadingSubscription,
   });
 }
