@@ -104,32 +104,23 @@ export function PaymentCard() {
   useEffect(() => {
     if (status === 'success') {
       const handleRedirect = async () => {
-        // Invalidate relevant cache
+        // Set payment verified cookie first
+        await setPaymentVerifiedCookieAction({ verified: true });
+        
+        // Invalidate payment cache to ensure fresh data after redirect
         queryClient.invalidateQueries({
-          queryKey: ['payment'],
+          predicate: (query) => 
+            query.queryKey[0] === 'payment'
         });
         console.log('Invalidated payment cache');
         
-        // Also invalidate the specific current plan query for this user
-        if (sessionId) {
-          // We don't have the user ID directly, but we can invalidate all payment-related queries
-          queryClient.invalidateQueries({
-            predicate: (query) => 
-              query.queryKey[0] === 'payment'
-          });
-        }
-        console.log('Invalidated specific payment queries');
-        
-        // Set payment verified cookie
-        await setPaymentVerifiedCookieAction({ verified: true });
+        // Small delay to allow any pending webhooks to process
+        // This helps ensure subscription status is updated before redirect
+        await new Promise(resolve => setTimeout(resolve, 1000));
         
         // Redirect to callback url if provided, otherwise redirect to dashboard
         const redirectUrl = callback || Routes.Dashboard;
-        // If we're redirecting to the dashboard, we want to ensure the user can access it now
-        if (redirectUrl === Routes.Dashboard) {
-          // We set a cookie to indicate payment verification
-          console.log('Payment successful, redirecting to dashboard');
-        }
+        console.log('Payment successful, redirecting to dashboard');
         localeRouter.push(redirectUrl);
       };
       
