@@ -382,6 +382,15 @@
       "upgradeNow": "立即升级",
       "backToDashboard": "返回仪表盘"
     },
+    "support": {
+      "tickets": {
+        "title": "支持工单",
+        "create-ticket": "创建新工单",
+        "create-ticket-button": "创建工单",
+        "my-tickets": "我的工单",
+        "loading": "加载中..."
+      }
+    },
     "upgrade": {
       "title": "升级",
       "description": "升级到Pro以获取所有功能",

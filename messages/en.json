@@ -410,6 +410,16 @@
       "title": "Upgrade",
       "description": "Upgrade to Pro to access all features",
       "button": "Upgrade"
+    },
+    "support": {
+      "tickets": {
+        "title": "Support Tickets",
+        "support title": "Support",
+        "tickets title": "Tickets",
+        "create-ticket-button": "Create Ticket",
+        "my-tickets": "My Tickets",
+        "loading": "Loading..."
+      }
     }
   },
   "PricingPage": {
