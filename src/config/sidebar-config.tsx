@@ -13,6 +13,7 @@ import {
   SettingsIcon,
   UsersRoundIcon,
   MailIcon, // <-- We'll use this for email preview
+  MessageSquareIcon,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { websiteConfig } from './website';
@@ -77,6 +78,12 @@ export function useSidebarLinks(): NestedMenuItem[] {
           external: false,
         },
       ],
+    },
+    {
+      title: t('support.tickets.title'),
+      icon: <MessageSquareIcon className="size-4 shrink-0" />,
+      href: `${Routes.Dashboard}/tickets`,
+      external: false,
     },
   ];
 }
