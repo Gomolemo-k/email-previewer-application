@@ -37,9 +37,11 @@ export const checkSubscriptionAction = userActionClient
                 eq(payment.type, 'subscription'),
                 eq(payment.paid, true), // Ensure payment was completed
                 or(
-                  // Status is active or trialing
+                  // Status is active, trialing, or incomplete (in process of becoming active)
                   eq(payment.status, 'active'),
                   eq(payment.status, 'trialing'),
+                  eq(payment.status, 'incomplete'),
+                  eq(payment.status, 'incomplete_expired'),
                   // Include subscriptions with temporary status issues but still in period
                   eq(payment.status, 'past_due'),
                   eq(payment.status, 'unpaid')
@@ -64,6 +66,10 @@ export const checkSubscriptionAction = userActionClient
         if (record.canceledAt) {
           // Subscription was fully canceled, so it's not valid regardless of period end
           return false;
+        }
+
+        if (record.status === 'active' || record.status === 'trialing' || record.status === 'incomplete' || record.status === 'incomplete_expired') {
+          return true; // These subscription statuses are considered valid if paid
         }
 
         if (record.periodEnd) {

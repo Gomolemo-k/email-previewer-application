@@ -32,6 +32,8 @@ export const checkUserPaymentStatusAction = userActionClient
             or(
               eq(payment.status, 'active'),
               eq(payment.status, 'trialing'),
+              eq(payment.status, 'incomplete'),
+              eq(payment.status, 'incomplete_expired'),
               // Include subscriptions that may have temporary status issues but are still in period
               eq(payment.status, 'past_due'),
               eq(payment.status, 'unpaid')
@@ -41,7 +43,7 @@ export const checkUserPaymentStatusAction = userActionClient
       
       // Check if any of these active subscriptions are still valid based on period
       const validActiveSubscriptions = activeSubscriptions.some(sub => {
-        if (sub.status === 'active' || sub.status === 'trialing') {
+        if (sub.status === 'active' || sub.status === 'trialing' || sub.status === 'incomplete' || sub.status === 'incomplete_expired') {
           return true;
         }
         

@@ -9,8 +9,9 @@ import {
   PaymentTypes,
   type PlanInterval,
 } from '@/payment/types';
-import { and, desc, eq, isNull } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { z } from 'zod';
+import { getPaymentProvider } from '@/payment';
 
 // Input schema
 const schema = z.object({
@@ -32,26 +33,57 @@ export const getActiveSubscriptionAction = userActionClient
     try {
       // Query the database for subscription payments
       const db = await getDb();
-      const subscriptionPayments = await db
+      
+      // First, try to get paid subscriptions
+      let subscriptionPayments = await db
         .select()
         .from(payment)
         .where(
           and(
             eq(payment.userId, userId),
             eq(payment.type, PaymentTypes.SUBSCRIPTION),
-            eq(payment.paid, true),
-            isNull(payment.canceledAt) // Only include subscriptions that haven't been fully canceled
+            eq(payment.paid, true)
           )
         )
         .orderBy(desc(payment.createdAt));
 
-      // Find the most recent active or trialing subscription (excluding fully canceled ones)
-      const activeSubscription = subscriptionPayments.find(
-        (sub) => sub.status === 'active' || sub.status === 'trialing' || sub.cancelAtPeriodEnd
+      // Find the most recent active or trialing subscription
+      let activeSubscription = subscriptionPayments.find(
+        (sub) => sub.status === 'active' || sub.status === 'trialing'
       );
 
+      // If no paid active subscription found, check for subscriptions that may be active 
+      // but haven't been updated by webhook yet (common race condition issue)
+      if (!activeSubscription) {
+        console.log('No paid active subscription found, checking for potentially active subscriptions');
+        
+        // Query for subscriptions that should be active but might not have paid=true yet
+        const potentiallyActiveSubscriptions = await db
+          .select()
+          .from(payment)
+          .where(
+            and(
+              eq(payment.userId, userId),
+              eq(payment.type, PaymentTypes.SUBSCRIPTION)
+            )
+          )
+          .orderBy(desc(payment.createdAt));
+        
+        // Look for subscriptions with active/trialing status 
+        activeSubscription = potentiallyActiveSubscriptions.find(
+          (sub) => sub.status === 'active' || sub.status === 'trialing'
+        );
+
+        // If we found a potentially active subscription that isn't marked as paid yet,
+        // it might be due to a race condition with the webhook. This could indicate 
+        // the webhook hasn't processed yet, so we return this one too.
+        if (activeSubscription) {
+          console.log('Found potentially active subscription with status:', activeSubscription.status, 'but paid status is:', activeSubscription.paid);
+        }
+      }
+
       if (activeSubscription) {
-        console.log('find active subscription for userId:', userId);
+        console.log('Found active subscription for userId:', userId);
         // Map to Subscription interface format
         const subscriptionData = {
           id: activeSubscription.id!,
@@ -73,6 +105,7 @@ export const getActiveSubscriptionAction = userActionClient
           data: subscriptionData,
         };
       }
+      
       console.log('no active subscription found for userId:', userId);
       return {
         success: true,
