@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import { DashboardHeader } from '@/components/dashboard/dashboard-header';
 
 // Dynamically import the AidbaseWrapper with SSR disabled
-const AidbaseWrapper = dynamic(() => import('@/components/AidbaseWrapper'), {
+const AidbaseWrapper = dynamic(() => import('@/components/support-ticket/AidbaseWrapper'), {
   ssr: false,
   loading: () => (
     <div className="container mx-auto py-10">
