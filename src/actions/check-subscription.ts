@@ -46,11 +46,7 @@ export const checkSubscriptionAction = userActionClient
                   eq(payment.status, 'past_due'),
                   eq(payment.status, 'unpaid')
                 ),
-                // Exclude subscriptions that have been fully canceled
-              or(
-                isNull(payment.canceledAt), // Subscription not canceled
-                eq(payment.cancelAtPeriodEnd, true) // Cancelled at period end but still valid until end date
-              )
+                isNull(payment.canceledAt) // Subscription not fully canceled
               )
             )
           )
