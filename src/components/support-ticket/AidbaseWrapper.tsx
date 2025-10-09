@@ -21,30 +21,48 @@ const AidbaseWrapper = ({ ticketFormID }: AidbaseWrapperProps) => {
   const userProfileImage = session?.user?.image || '';
 
   useEffect(() => {
+    // Check if scripts are already loaded to avoid duplicate loading
+    const existingScripts = document.querySelectorAll('script[src*="aidbase"]');
+    if (existingScripts.length > 0) {
+      setScriptsLoaded(true);
+      return;
+    }
+
     const loadScripts = async () => {
-      // Create ticket script
-      const createTicketScript = document.createElement('script');
-      createTicketScript.async = true;
-      createTicketScript.src = 'https://client.aidbase.ai/create-ticket.ab.js';
-      document.body.appendChild(createTicketScript);
+      const scripts = [
+        'https://client.aidbase.ai/create-ticket.ab.js',
+        'https://client.aidbase.ai/tickets-table.ab.js'
+      ];
 
-      // Tickets table script
-      const ticketsTableScript = document.createElement('script');
-      ticketsTableScript.async = true;
-      ticketsTableScript.src = 'https://client.aidbase.ai/tickets-table.ab.js';
-      document.body.appendChild(ticketsTableScript);
+      const loadPromises = scripts.map(src => {
+        return new Promise((resolve, reject) => {
+          const script = document.createElement('script');
+          script.async = true;
+          script.src = src;
+          script.onload = resolve;
+          script.onerror = reject;
+          document.body.appendChild(script);
+        });
+      });
 
-      // Wait a bit for scripts to load
-      createTicketScript.onload = ticketsTableScript.onload = () => {
+      try {
+        await Promise.all(loadPromises);
         setScriptsLoaded(true);
-      };
+      } catch (error) {
+        console.error('Failed to load Aidbase scripts:', error);
+      }
     };
 
     loadScripts();
 
     return () => {
-      // Cleanup scripts
       document.querySelectorAll('script[src*="aidbase"]').forEach(s => s.remove());
+      
+      // Clean up custom elements
+      const createTicketEl = document.querySelector('ab-create-ticket');
+      const ticketsTableEl = document.querySelector('ab-tickets-table');
+      createTicketEl?.remove();
+      ticketsTableEl?.remove();
     };
   }, []);
 
@@ -62,6 +80,7 @@ const AidbaseWrapper = ({ ticketFormID }: AidbaseWrapperProps) => {
       <h1 className="mb-8 text-3xl font-bold">{t('support.tickets.title')}</h1>
 
       <div className="mb-10">
+        {/* @ts-ignore */}
         <ab-create-ticket
           ticketFormID={ticketFormID}
           userID={userId}
@@ -77,6 +96,7 @@ const AidbaseWrapper = ({ ticketFormID }: AidbaseWrapperProps) => {
 
       <div>
         <h2 className="mb-4 text-xl font-semibold">{t('support.tickets.my-tickets')}</h2>
+        {/* @ts-ignore */}
         <ab-tickets-table
           ticketFormID={ticketFormID}
           userID={userId}
